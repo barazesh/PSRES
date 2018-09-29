@@ -12,7 +12,7 @@ namespace pwmtest1
     {
         static void Main(string[] args)
         {
-            byte[] val = {0b0101_0101, 32 };
+            byte[] val = {0b0010_1111, 0b0101_0101, 32 };
             SerialPort newport = new SerialPort
             {
                 PortName = "COM5",
@@ -29,8 +29,8 @@ namespace pwmtest1
                 Console.WriteLine("Please insert an integer value between 0 to 100");
                 success = byte.TryParse(Console.ReadLine(), out light);
                 Console.WriteLine(Convert.ToString(light,2));
-                val[0] = light;
-                newport.Write(val, 0, 2);
+                val[2] = light;
+                newport.Write(val, 0, 3);
 
             } while (success);
             
