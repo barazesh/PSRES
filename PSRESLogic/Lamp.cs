@@ -8,9 +8,17 @@ namespace PSRESLogic
 {
     public class Lamp
     {
-        public int currentIllumination { get; set; }
-        public int parent { get; set; }
-        public int zone { get; set; }
-        public int position { get; set; }
+        public byte CurrentIllumination { get; set; }
+        public byte Parent { get; set; }
+        public byte Zone { get; set; }
+        public int Position { get; set; }
+
+
+        public void Dim(byte dimValue)
+        {
+            ushort address = Parent << 4;
+            string address = Convert.ToString(Zone, 2);
+
+        }
     }
 }
