@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PSRESLogic\PSRESLogic.csproj">
+      <Project>{fe87fd3e-d8b1-4c3c-8d0f-9b388975b744}</Project>
+      <Name>PSRESLogic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

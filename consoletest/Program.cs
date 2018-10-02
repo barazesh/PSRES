@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PSRESLogic;
+
 
 namespace consoletest
 {
@@ -30,6 +32,9 @@ namespace consoletest
             Console.Write(" ");
             Console.WriteLine(Convert.ToString(shiftedParent+shiftedPWM, 2));
             Console.ReadKey();
+            Lamp newlamp = new Lamp();
+            newlamp.Dim(10);
+            
 
         }
     }

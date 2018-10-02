@@ -27,5 +27,15 @@ namespace PSRESLogic
             data[0] = (byte)address;
 
         }
+
+        public Lamp( int val)
+        {
+            Parent = val;
+        }
+
+        public Lamp()
+        {
+
+        }
     }
 }
