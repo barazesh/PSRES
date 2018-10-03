@@ -28,7 +28,7 @@ namespace PSRESLogic
 
         }
 
-        public Lamp( int val)
+        public Lamp(int val)
         {
             Parent = val;
         }
