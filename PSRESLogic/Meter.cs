@@ -6,36 +6,35 @@ using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Threading;
 using System.IO;
+using System.Diagnostics;
 
 namespace PSRESLogic
 {
-    class Meter
+    public class Meter
     {
 
         //the name, which is the serial number written on the body of the meter
-        public int Name { get; private set; }
-
+        public string Name { get; private set; }
+        Stopwatch watch = new Stopwatch();
+        //instantiate a port for communication with the meter.
+        SerialPort mySerialPort1 = new SerialPort(SerialPort.GetPortNames()[1], 9600, Parity.Even, 7, StopBits.One);
         public void Read()
         {
-            //instantiate a port for communication with the meter. the first couple of messages are sent with baud rate 300
-            SerialPort mySerialPort1 = new SerialPort("COM5", 300, Parity.Even, 7, StopBits.One);
-            mySerialPort1.Handshake = Handshake.None;
+            watch.Start();
 
             //subscribe the DataRecievedHandler method to DataRecieved Event
             mySerialPort1.DataReceived += (DataReceivedHandler);
 
             //generate the string required to call the meter
-            string call = "/?" + Name.ToString() + "!\r\n";
+            //string call = "/?" + Name + "!\r\n";
 
             //calling the meter
             mySerialPort1.Open();
-            mySerialPort1.WriteLine(call);
-
-            //Console.ReadKey();
-            //mySerialPort1.Close();
-
+            //mySerialPort1.WriteLine(call);
+            mySerialPort1.WriteLine("/?" + Name + "!\r\n");
 
         }
+
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
@@ -43,25 +42,28 @@ namespace PSRESLogic
             string indata = sp.ReadExisting();
             if (indata.Contains("/TFC5"))//receiving the first message from the meter
             {
-                //creating the Acknowledgment message
-                string ack = Char.ConvertFromUtf32(Convert.ToInt32("06", 16)) + "050\r\n";
+                //the Acknowledgment message
+                string ack = Char.ConvertFromUtf32(0x06) + "050\r\n";
 
                 //sending the acknowledgment message
                 sp.WriteLine(ack);
 
-                //changing the baud rate to 9600 for faster communication after 200 milliseconds
-                Thread.Sleep(200);
-                sp.BaudRate = 9600;
             }
-            else if (indata.Contains("1-0:0.0.0.255"))//receiving the last line of readout
+            else if (indata.Contains("0-0:96.54.0.255"))//receiving the last line of readout
             {
-                Thread.Sleep(200);
-                sp.BaudRate = 300;
-                sp.WriteLine("/?18119713646209!\r\n");
+                watch.Stop();
+                long time = watch.ElapsedMilliseconds;
+                Console.WriteLine(time);
+
+                //sp.WriteLine(Name);
                 
             }
-            File.AppendAllText(@"C:\Users\MRB\Documents\new.txt", indata);
-            Console.WriteLine(indata);
+            //File.AppendAllText(@"C:\Users\MRB\Documents\new.txt", indata);
+            //Console.WriteLine(indata);
+        }
+        public Meter(string name)
+        {
+            Name = name;
         }
 
 
