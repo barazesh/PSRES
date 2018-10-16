@@ -15,7 +15,7 @@ namespace consoletest
         static void Main(string[] args)
         {
             
-            Meter meter1 = new Meter("18119713646209");
+            Meter meter1 = new Meter("test",18119713646209);
             meter1.Read();
             Console.ReadKey();
 
