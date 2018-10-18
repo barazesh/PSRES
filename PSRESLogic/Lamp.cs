@@ -15,7 +15,7 @@ namespace PSRESLogic
         public int PWMpin { get; set; }
 
 
-        public void Dim(byte dimValue)
+        public byte[] Dim(byte dimValue)
         {
             //prepare the date part for the message that is going to be sent. the data part consists of two bytes. the first byte is the address of the receiving end and the second byte is the actual message.
 
@@ -25,12 +25,21 @@ namespace PSRESLogic
             int address = Parent << 6;
             address += (PWMpin << 3);
             data[0] = (byte)address;
+            return data;
 
         }
 
-        public Lamp(int val)
+        public static byte[] DimAll(byte dimValue, int parent)
         {
-            Parent = val;
+            byte[] data = { 0, dimValue };
+            int address = parent << 6;
+            data[0] = (byte)address;
+            return data;
+        }
+
+        public Lamp(int parent)
+        {
+            Parent = parent;
         }
 
         public Lamp()
