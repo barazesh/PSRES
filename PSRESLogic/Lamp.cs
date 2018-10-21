@@ -37,6 +37,26 @@ namespace PSRESLogic
             return data;
         }
 
+        public byte[] changeFreqency(byte frequency)
+        {
+            byte[] data = { 0, frequency };
+            int address = Parent << 6;
+            address += (PWMpin << 3);
+            address += 4;
+            data[0] = (byte)address;
+            return data;
+        }
+
+        public static byte[] changeFrequencyAll(byte frequency, int parent)
+        {
+            byte[] data = { 0, frequency };
+            int address = parent << 6;
+            address += 4;
+            data[0] = (byte)address;
+            return data;
+        }
+
+
         public Lamp(int parent)
         {
             Parent = parent;
