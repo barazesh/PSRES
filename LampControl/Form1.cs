@@ -16,10 +16,11 @@ namespace LampControl
     {
         int lampnumber;
         byte[] data;
-        SerialPort mySerialPort1 = new SerialPort(SerialPort.GetPortNames()[1], 115200, Parity.None, 8, StopBits.One);
+        SerialPort sp = new SerialPort(SerialPort.GetPortNames()[1], 115200, Parity.None, 8, StopBits.One);
         public Form1()
         {
             InitializeComponent();
+            sp.Open();
         }
         Lamp[] lamps = new Lamp[5];
 
@@ -45,12 +46,8 @@ namespace LampControl
             }
             
          
+            sp.Write(data, 0, 2);
 
-
-            
-            mySerialPort1.Open();
-            mySerialPort1.Write(data, 0, 2);
-            mySerialPort1.Close();
         }
 
         private void btnfrequency_Click(object sender, EventArgs e)
@@ -71,9 +68,8 @@ namespace LampControl
                 data = lamps[lampnumber].changeFreqency(byte.Parse(txtfrequency.Text));
             }
 
-            mySerialPort1.Open();
-            mySerialPort1.Write(data, 0, 2);
-            mySerialPort1.Close();
+            sp.Write(data, 0, 2);
+
 
         }
     }
