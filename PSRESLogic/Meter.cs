@@ -22,25 +22,34 @@ namespace PSRESLogic
         public decimal instantPower { get; private set; }
         public decimal instantPowerFactor { get; private set; }
         public decimal instantReactivePower { get; private set; }
+        public decimal instantFrequency { get; private set; }
+        public string voltageCuttBegining { get; private set; }
+        public string voltageReturn { get; private set; }
+        public bool reciveCompeleted { get; private set; }
 
 
         Stopwatch watch = new Stopwatch();
 
-        //instantiate a port for communication with the meter.
-        SerialPort mySerialPort1 = new SerialPort(SerialPort.GetPortNames()[1], 9600, Parity.Even, 7, StopBits.One);
+    
 
 
 
-        public void Read()
+        public decimal Read(SerialPort mySerialPort1)
         {
+            reciveCompeleted = false;
             watch.Start();
 
             //subscribe the DataRecievedHandler method to DataRecieved Event
             mySerialPort1.DataReceived += (DataReceivedHandler);
 
             //calling the meter
-            mySerialPort1.Open();
+            
             mySerialPort1.WriteLine("/?" + serialnumber.ToString() + "!\r\n");
+            while (!reciveCompeleted)
+            {
+
+            }
+            return activeEnergy;
 
         }
 
@@ -50,6 +59,7 @@ namespace PSRESLogic
 
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadExisting();
+            string message;
             if (indata.Contains("/TFC5"))//receiving the first message from the meter
             {
                 //the Acknowledgment message
@@ -58,78 +68,90 @@ namespace PSRESLogic
                 //sending the acknowledgment message
                 sp.WriteLine(ack);
 
+
             }
             else if (indata.Contains("1-0:1.8.0.255"))//total active energy kWh
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 9);
+                message = indata.Substring(indata.IndexOf("(") + 1, 9);
                 totalActiveEnergy = decimal.Parse(message);
-                Console.WriteLine(totalActiveEnergy);
+                activeEnergy = lastTotalActiveEnergy - totalActiveEnergy;
+                lastTotalActiveEnergy = totalActiveEnergy;
+                //Console.WriteLine(totalActiveEnergy);
 
             }
             else if (indata.Contains("1-0:3.8.0.255"))//total reactive energy kVArh
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 9);
+                message = indata.Substring(indata.IndexOf("(") + 1, 9);
                 totalReactiveEnergy = decimal.Parse(message);
-                Console.WriteLine(totalReactiveEnergy);
+                reactiveEnergy = lastTotalReactiveEnergy - totalReactiveEnergy;
+                lastTotalReactiveEnergy = totalReactiveEnergy;
+                //Console.WriteLine(totalReactiveEnergy);
 
             }
             else if (indata.Contains("0-0:96.1.0.255"))//last 8 digits of meter serial number
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 8);
-                Console.WriteLine(message);
+                message = indata.Substring(indata.IndexOf("(") + 1, 8);
+                //Console.WriteLine(message);
             }
             else if (indata.Contains("1-0:32.7.0.255"))//instant voltage V
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 6);
+                message = indata.Substring(indata.IndexOf("(") + 1, 6);
                 instantVoltage = decimal.Parse(message);
-                Console.WriteLine(instantVoltage);
+                //Console.WriteLine(instantVoltage);
             }
             else if (indata.Contains("1-0:31.7.0.255"))//instant current A
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 6);
+                message = indata.Substring(indata.IndexOf("(") + 1, 6);
                 instantCurrent = decimal.Parse(message);
-                Console.WriteLine(instantCurrent);
+                //Console.WriteLine(instantCurrent);
             }
             else if (indata.Contains("1-0:15.7.0.255"))//instant active power kW
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 6);
+                message = indata.Substring(indata.IndexOf("(") + 1, 6);
                 instantPower = decimal.Parse(message);
-                Console.WriteLine(instantPower);
+                //Console.WriteLine(instantPower);
             }
             else if (indata.Contains("1-0:13.7.0.255"))//instant power factor
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 4);
+                message = indata.Substring(indata.IndexOf("(") + 1, 4);
                 instantPowerFactor = decimal.Parse(message);
-                Console.WriteLine(instantPowerFactor);
+                //Console.WriteLine(instantPowerFactor);
             }
             else if (indata.Contains("1-0:3.7.0.255"))//instant reactive power kVAr
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 6);
+                message = indata.Substring(indata.IndexOf("(") + 1, 6);
                 instantReactivePower = decimal.Parse(message);
-                Console.WriteLine(instantReactivePower);
+                //Console.WriteLine(instantReactivePower);
 
             }
-            else if (indata.Contains("96.7.10.255"))//unknown
+            else if (indata.Contains("1-0:14.7.0.255"))//instant Frequency Hz
             {
-                
-                string message = indata.Substring(indata.IndexOf("(")+1, 12);
-                Console.WriteLine(message);
+                message = indata.Substring(indata.IndexOf("(") + 1, 5);
+                instantFrequency = decimal.Parse(message);
+                //Console.WriteLine(instantReactivePower);
 
             }
-            else if (indata.Contains("96.54.0.255"))//unknown
+            else if (indata.Contains("96.7.10.255"))//beginning date and time of the last voltage fall out
             {
-                string message = indata.Substring(indata.IndexOf("(") + 1, 12);
-                Console.WriteLine(message);
+                voltageCuttBegining = indata.Substring(indata.IndexOf("(")+1, 12);
+                //Console.WriteLine(message);
+            }
+            else if (indata.Contains("96.54.0.255"))//voltage return date and time
+            {
+                voltageReturn = indata.Substring(indata.IndexOf("(") + 1, 12);
+                //Console.WriteLine(message);
 
             }
             else //receiving the last line of readout
             {
                 watch.Stop();
                 long time = watch.ElapsedMilliseconds;
-                Console.WriteLine(time);
+                //Console.WriteLine(time);
+                reciveCompeleted = true;
+
             }
-            File.AppendAllText(@"C:\Users\MRB\Documents\new.txt", indata);
-            //Console.WriteLine(indata);
+           // File.AppendAllText(@"C:\Users\MRB\Documents\new.txt", (indata+"\r\n"));
+            Console.WriteLine(indata);
         }
         public Meter(string name, long serial)
         {

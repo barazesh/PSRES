@@ -14,34 +14,18 @@ namespace consoletest
     {
         static void Main(string[] args)
         {
-            Lamp[] lamps = new Lamp[5];
-            for (int i = 0; i < 5; i++)
-            {
-                lamps[i]=new Lamp(2);
-                lamps[i].PWMpin = i + 1;
-            }
-
-            Console.WriteLine("enter lamp number");
-            string lampnumber = Console.ReadLine();
-            Console.WriteLine("enter dim value");
-            string dimvalue = Console.ReadLine();
-            byte[] data;
-            if (int.TryParse(lampnumber,out int lnumber))
-            {
-                data=lamps[lnumber].Dim(byte.Parse(dimvalue));
-            }
-            else
-            {
-                data = Lamp.DimAll(byte.Parse(dimvalue),2);
-            }
-            SerialPort mySerialPort1 = new SerialPort(SerialPort.GetPortNames()[1], 115200, Parity.None, 8, StopBits.One);
-            mySerialPort1.Open();
-            mySerialPort1.Write(data, 0, 2);
-
+            Console.WriteLine("enter meter serial number last 2 digits");
+            long serial = 18119713646200 + int.Parse(Console.ReadLine());
+            Meter meter = new Meter("bigroomPCs",serial);
+            Console.WriteLine("enter port number");
+            string port = "COM" + Console.ReadLine();
+            //instantiate a port for communication with the meter.
+            SerialPort sp = new SerialPort(port, 9600, Parity.Even, 7, StopBits.One);
+            sp.Open();
+            meter.Read(sp);
             Console.ReadKey();
-            mySerialPort1.Close();
 
-
+            
 
 
         }
