@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PSRESLogic
 {
-    class MeterRecording
+    public class MeterRecording
     {
         public int Id { get; set; }
         public int MeterId { get; set; }
-        public int DateTimeId { get; set; }
+        public int TimeDateId { get; set; }
         public decimal activeEnergy { get; set; }
         public decimal reactiveEnergy { get; set; }
         public int activePower { get; set; }

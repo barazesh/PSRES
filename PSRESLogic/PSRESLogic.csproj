@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TimeDate.cs" />
     <Compile Include="Lamp.cs" />
     <Compile Include="Meter.cs" />
     <Compile Include="MeterRecording.cs" />

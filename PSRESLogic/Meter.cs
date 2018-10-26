@@ -50,10 +50,8 @@ namespace PSRESLogic
             //calling the meter
             
             mySerialPort1.WriteLine("/?" + serialnumber.ToString() + "!\r\n");
-            while (!reciveCompeleted)
-            {
+            while (!reciveCompeleted) { }
 
-            }
             extractData();
 
         }
@@ -246,7 +244,10 @@ namespace PSRESLogic
         {
             Name = name;
             serialnumber = serial;
+            recievedData = new List<string>();
         }
+
+
 
 
     }
