@@ -3,6 +3,8 @@ using System.IO.Ports;
 using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace PSRESLogic
 {
@@ -13,25 +15,29 @@ namespace PSRESLogic
         public int Id { get; set; }
         public string Name { get; private set; }
         public long serialnumber { get; private set; }
-        public bool reciveCompeleted { get; private set; }
-        public List<string> recievedData { get; private set; }
+
+        private bool reciveCompeleted;
+        private List<string> recievedData;
+        private string[] recievedstring=new string[11];
+        private StringBuilder sb = new StringBuilder();
 
 
-        public decimal totalActiveEnergy { get; private set; }
-        public decimal lastTotalActiveEnergy { get; private set; }
-        public decimal activeEnergy { get; private set; }
-        public decimal totalReactiveEnergy { get; private set; }
-        public decimal lastTotalReactiveEnergy { get; private set; }
-        public decimal reactiveEnergy { get; private set; }
-        public decimal instantVoltage { get; private set; }
-        public decimal instantCurrent { get; private set; }
-        public decimal instantPower { get; private set; }
-        public decimal instantPowerFactor { get; private set; }
-        public decimal instantReactivePower { get; private set; }
-        public decimal instantFrequency { get; private set; }
-        public string voltageCuttBegining { get; private set; }
-        public string voltageReturn { get; private set; }
 
+        private decimal totalActiveEnergy;
+        private decimal lastTotalActiveEnergy;
+        private decimal activeEnergy;
+        private decimal totalReactiveEnergy;
+        private decimal lastTotalReactiveEnergy;
+        private decimal reactiveEnergy;
+        private decimal instantVoltage;
+        private decimal instantCurrent;
+        private decimal instantPower;
+        private decimal instantPowerFactor;
+        private decimal instantReactivePower;
+        private decimal instantFrequency;
+        private string voltageCuttBegining;
+        private string voltageReturn;
+                                                  
 
         Stopwatch watch = new Stopwatch();
 
@@ -51,65 +57,66 @@ namespace PSRESLogic
             
             mySerialPort1.WriteLine("/?" + serialnumber.ToString() + "!\r\n");
             while (!reciveCompeleted) { }
-
+            Console.WriteLine(recievedstring);
             extractData();
 
         }
 
         private void extractData()
         {
-            foreach (var item in recievedData)
+            string pattern = @"\([0-9]*.[0-9]{2}\*|\([0-9].[0-9]{2}\)|\([0-9]{8}\)|\([0-9]{12}\)";
+            MatchCollection matches = Regex.Matches(sb.ToString(), pattern);
+            char[] charstoTrim = { '(', '*', ')' };
+            for (int i = 0; i < 11; i++)
             {
-                if (item.Contains("1-0:1.8.0.255"))//total active energy kWh
-                {
-                     totalActiveEnergy = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 9));
-                    activeEnergy = 1000*(lastTotalActiveEnergy - totalActiveEnergy);
-                    lastTotalActiveEnergy = totalActiveEnergy;
+                recievedstring[i] = matches[i].Value.Trim(charstoTrim);
 
-                }
-                else if (item.Contains("1-0:3.8.0.255"))//total reactive energy kVArh
+                switch (i)
                 {
-                    totalReactiveEnergy = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 9));
+                    case 0:
+                        totalActiveEnergy = decimal.Parse(recievedstring[i]);
+                        activeEnergy = 1000 * (lastTotalActiveEnergy - totalActiveEnergy);
+                        lastTotalActiveEnergy = totalActiveEnergy;
+                        break;
+                    case 1:
+                        totalReactiveEnergy = decimal.Parse(recievedstring[i]);
+                        reactiveEnergy = 1000 * (lastTotalReactiveEnergy - totalReactiveEnergy);
+                        lastTotalReactiveEnergy = totalReactiveEnergy;
 
-                    reactiveEnergy = 1000 * (lastTotalReactiveEnergy - totalReactiveEnergy);
-                    lastTotalReactiveEnergy = totalReactiveEnergy;
-
+                        break;
+                    case 2:
+                        //serial number
+                        break;
+                    case 3:
+                        instantVoltage = decimal.Parse(recievedstring[i]);
+                        break;
+                    case 4:
+                        instantCurrent = decimal.Parse(recievedstring[i]);
+                        break;
+                    case 5:
+                        instantPower = decimal.Parse(recievedstring[i]);
+                        break;
+                    case 6:
+                        instantPowerFactor = decimal.Parse(recievedstring[i]);
+                        break;
+                    case 7:
+                        instantFrequency = decimal.Parse(recievedstring[i]);
+                        break;
+                    case 8:
+                        instantReactivePower = decimal.Parse(recievedstring[i]);
+                        break;
+                    case 9:
+                        voltageCuttBegining = recievedstring[i];
+                        break;
+                    case 10:
+                        voltageReturn = recievedstring[i];
+                        break;
+                    default:
+                        break;
                 }
-
-                else if (item.Contains("1-0:32.7.0.255"))//instant voltage V
-                {
-                    instantVoltage = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 6));
-                }
-                else if (item.Contains("1-0:31.7.0.255"))//instant current A
-                {
-                    instantCurrent = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 6));
-                }
-                else if (item.Contains("1-0:15.7.0.255"))//instant active power kW
-                {
-                    instantPower = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 6));
-                }
-                else if (item.Contains("1-0:13.7.0.255"))//instant power factor
-                {
-                    instantPowerFactor = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 4));
-                }
-                else if (item.Contains("1-0:3.7.0.255"))//instant reactive power kVAr
-                {
-                    instantReactivePower = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 6));
-                }
-                else if (item.Contains("1-0:14.7.0.255"))//instant Frequency Hz
-                {
-                    instantFrequency = decimal.Parse(item.Substring(item.IndexOf("(") + 1, 5));
-                }
-                else if (item.Contains("96.7.10.255"))//beginning date and time of the last voltage fall out
-                {
-                    voltageCuttBegining = item.Substring(item.IndexOf("(") + 1, 12);
-                }
-                else if (item.Contains("96.54.0.255"))//voltage return date and time
-                {
-                    voltageReturn = item.Substring(item.IndexOf("(") + 1, 12);
-                }
-
             }
+
+            
         }
 
 
@@ -127,118 +134,20 @@ namespace PSRESLogic
                 sp.WriteLine(ack);
 
             }
-            else if (indata.Contains("!"))
+            else if (indata.Contains(char.ConvertFromUtf32(0x03)))
             {
                 reciveCompeleted = true;
-                recievedData.Add(indata);
+                sb.Append(indata);
 
             }
             else
             {
-                
-                recievedData.Add(indata);
+                sb.Append(indata);
             }
             
         }
 
-        private void DataReceivedHandler1(object sender, SerialDataReceivedEventArgs e)
-        {
-
-            SerialPort sp = (SerialPort)sender;
-            string indata = sp.ReadExisting();
-            string message;
-            if (indata.Contains("/TFC5"))//receiving the first message from the meter
-            {
-                //the Acknowledgment message
-                string ack = Char.ConvertFromUtf32(0x06) + "050\r\n";
-
-                //sending the acknowledgment message
-                sp.WriteLine(ack);
-
-            }
-            else if (indata.Contains("1-0:1.8.0.255"))//total active energy kWh
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 9);
-                totalActiveEnergy = decimal.Parse(message);
-                activeEnergy = lastTotalActiveEnergy - totalActiveEnergy;
-                lastTotalActiveEnergy = totalActiveEnergy;
-                //Console.WriteLine(totalActiveEnergy);
-
-            }
-            else if (indata.Contains("1-0:3.8.0.255"))//total reactive energy kVArh
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 9);
-                totalReactiveEnergy = decimal.Parse(message);
-                reactiveEnergy = lastTotalReactiveEnergy - totalReactiveEnergy;
-                lastTotalReactiveEnergy = totalReactiveEnergy;
-                //Console.WriteLine(totalReactiveEnergy);
-
-            }
-            else if (indata.Contains("0-0:96.1.0.255"))//last 8 digits of meter serial number
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 8);
-                //Console.WriteLine(message);
-            }
-            else if (indata.Contains("1-0:32.7.0.255"))//instant voltage V
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 6);
-                instantVoltage = decimal.Parse(message);
-                //Console.WriteLine(instantVoltage);
-            }
-            else if (indata.Contains("1-0:31.7.0.255"))//instant current A
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 6);
-                instantCurrent = decimal.Parse(message);
-                //Console.WriteLine(instantCurrent);
-            }
-            else if (indata.Contains("1-0:15.7.0.255"))//instant active power kW
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 6);
-                instantPower = decimal.Parse(message);
-                //Console.WriteLine(instantPower);
-            }
-            else if (indata.Contains("1-0:13.7.0.255"))//instant power factor
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 4);
-                instantPowerFactor = decimal.Parse(message);
-                //Console.WriteLine(instantPowerFactor);
-            }
-            else if (indata.Contains("1-0:3.7.0.255"))//instant reactive power kVAr
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 6);
-                instantReactivePower = decimal.Parse(message);
-                //Console.WriteLine(instantReactivePower);
-
-            }
-            else if (indata.Contains("1-0:14.7.0.255"))//instant Frequency Hz
-            {
-                message = indata.Substring(indata.IndexOf("(") + 1, 5);
-                instantFrequency = decimal.Parse(message);
-                //Console.WriteLine(instantReactivePower);
-
-            }
-            else if (indata.Contains("96.7.10.255"))//beginning date and time of the last voltage fall out
-            {
-                voltageCuttBegining = indata.Substring(indata.IndexOf("(") + 1, 12);
-                //Console.WriteLine(message);
-            }
-            else if (indata.Contains("96.54.0.255"))//voltage return date and time
-            {
-                voltageReturn = indata.Substring(indata.IndexOf("(") + 1, 12);
-                //Console.WriteLine(message);
-
-            }
-            else //receiving the last line of readout
-            {
-                watch.Stop();
-                long time = watch.ElapsedMilliseconds;
-                Console.WriteLine(time);
-                reciveCompeleted = true;
-
-            }
-            // File.AppendAllText(@"C:\Users\MRB\Documents\new.txt", (indata+"\r\n"));
-            Console.WriteLine(indata);
-        }
+        
 
         public Meter(string name, long serial)
         {
