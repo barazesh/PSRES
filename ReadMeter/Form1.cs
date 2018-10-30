@@ -17,8 +17,8 @@ namespace ReadMeter
         SerialPort sp = new SerialPort("COM10", 9600, Parity.Even, 7, StopBits.One);
         Meter[] meter =
         {
-            new Meter("Main Room HVAC",18119713646205),
-            new Meter("Main Room PCs",18119713646206)
+            new Meter(),
+            new Meter()
         };
         
 
@@ -53,20 +53,20 @@ namespace ReadMeter
                 {
                     meter1 = meter[1];
                 }
-                meter1.Read(sp);
+                MeterRecording mr= meter1.Read(sp);
 
                 decimal[] values =
                 {
-                    meter1.activeEnergy,
-                    meter1.reactiveEnergy,
-                    meter1.instantVoltage,
-                    meter1.instantCurrent,
-                    meter1.instantFrequency,
-                    meter1.instantPower,
-                    meter1.instantReactivePower,
-                    meter1.instantPowerFactor,
+                    mr.activeEnergy,
+                    mr.reactiveEnergy,
+                    mr.voltage,
+                    mr.current,
+                    mr.frequency,
+                    mr.activePower,
+                    mr.reactivePower,
+                    mr.powerFactor,
                 };
-                populateFrom(values, meter1.serialnumber, meter1.voltageCuttBegining, meter1.voltageReturn);
+                populateFrom(values, meter1.Serialcode);
             }
             else
             {
@@ -75,10 +75,9 @@ namespace ReadMeter
 
 
         }
-        private void populateFrom(decimal[] values, long serialnumber,string begin,string end)
+        private void populateFrom(decimal[] values, long serialnumber)
         {
-            txtBegin.Text = begin;
-            txtEnd.Text = end;
+
 
             txtSerial.Text = serialnumber.ToString();
 

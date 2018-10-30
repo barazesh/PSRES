@@ -16,7 +16,8 @@ namespace consoletest
         {
             Console.WriteLine("enter meter serial number last 2 digits");
             long serial = 18119713646200 + int.Parse(Console.ReadLine());
-            Meter meter = new Meter("bigroomPCs",serial);
+            Meter meter = new Meter();
+            meter.Serialcode = serial;
             Console.WriteLine("enter port number");
             string port = "COM" + Console.ReadLine();
             //instantiate a port for communication with the meter.

@@ -16,6 +16,13 @@ namespace PSRES.Data
         public DbSet<Meter> Meters { get; set; }
 
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database=PSRESDataTest; Trusted_Connection = True;");
+            base.OnConfiguring(optionsBuilder);
+        }
+
+
     }
 }
  
