@@ -9,7 +9,9 @@ namespace PSRESLogic
     public class MeterRecording
     {
         public int Id { get; set; }
+        public Meter meter { get; set; }
         public int MeterId { get; set; }
+        public TimeDate datetime { get; set; }
         public int TimeDateId { get; set; }
         public decimal activeEnergy { get; set; }
         public decimal reactiveEnergy { get; set; }

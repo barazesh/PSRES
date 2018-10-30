@@ -14,6 +14,7 @@ namespace PSRESLogic
         public byte day { get; set; }
         public byte hour { get; set; }
         public byte minute { get; set; }
+        public List<MeterRecording> Recordings { get; set; }
 
     }
 }

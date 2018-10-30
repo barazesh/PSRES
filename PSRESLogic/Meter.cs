@@ -15,6 +15,7 @@ namespace PSRESLogic
         public int Id { get; set; }
         public string Name { get; set; }
         public long Serialcode { get; set; }
+        public List<MeterRecording> Recording { get; set; }
 
         private bool reciveCompeleted;
         private StringBuilder sb = new StringBuilder();
