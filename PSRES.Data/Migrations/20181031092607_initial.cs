@@ -25,6 +25,20 @@ namespace PSRES.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Meters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Serialcode = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meters", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MeterRecordings",
                 columns: table => new
                 {
@@ -44,33 +58,41 @@ namespace PSRES.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MeterRecordings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MeterRecordings_Meters_MeterId",
+                        column: x => x.MeterId,
+                        principalTable: "Meters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MeterRecordings_Dates_TimeDateId",
+                        column: x => x.TimeDateId,
+                        principalTable: "Dates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Meters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Serialcode = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Meters", x => x.Id);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_MeterRecordings_MeterId",
+                table: "MeterRecordings",
+                column: "MeterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeterRecordings_TimeDateId",
+                table: "MeterRecordings",
+                column: "TimeDateId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Dates");
-
-            migrationBuilder.DropTable(
                 name: "MeterRecordings");
 
             migrationBuilder.DropTable(
                 name: "Meters");
+
+            migrationBuilder.DropTable(
+                name: "Dates");
         }
     }
 }

@@ -9,18 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using PSRESLogic;
+using PSRES.Data;
 
 namespace ReadMeter
 {
     public partial class Form1 : Form
     {
         SerialPort sp = new SerialPort("COM10", 9600, Parity.Even, 7, StopBits.One);
-        Meter[] meter =
-        {
-            new Meter(),
-            new Meter()
-        };
-        
+        Meter meter = new Meter();
 
         public Form1()
         {
@@ -43,17 +39,21 @@ namespace ReadMeter
         {
             if (sp.IsOpen)
             {
-                Meter meter1;
 
                 if (cmboxMeters.Text.Equals("Big Room HVAC"))
                 {
-                    meter1 = meter[0];
+                    meter.Serialcode = 18119713646205;
                 }
                 else
                 {
-                    meter1 = meter[1];
+                    meter.Serialcode = 18119713646206;
                 }
-                MeterRecording mr= meter1.Read(sp);
+                MeterRecording mr= meter.Read(sp);
+                using (var context=new PSRESContext())
+                {
+                    context.MeterRecordings.Add(mr);
+                    context.SaveChanges();
+                }
 
                 decimal[] values =
                 {
@@ -66,7 +66,7 @@ namespace ReadMeter
                     mr.reactivePower,
                     mr.powerFactor,
                 };
-                populateFrom(values, meter1.Serialcode);
+                populateFrom(values, meter.Serialcode);
             }
             else
             {

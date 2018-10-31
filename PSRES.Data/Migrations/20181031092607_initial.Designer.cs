@@ -9,8 +9,8 @@ using PSRES.Data;
 namespace PSRES.Data.Migrations
 {
     [DbContext(typeof(PSRESContext))]
-    [Migration("20181030154307_second")]
-    partial class second
+    [Migration("20181031092607_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

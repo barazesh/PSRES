@@ -1,6 +1,6 @@
 ﻿namespace PSRESLogic
 {
-    class SensoringStation
+    public class SensoringStation
     {
         public int Id { get; set; }
         public int Zone { get; set; }

@@ -39,6 +39,7 @@ namespace PSRESLogic
         public MeterRecording Read(SerialPort mySerialPort1)
         {
             reciveCompeleted = false;
+            sb.Clear();
             watch.Start();
 
             //subscribe the DataRecievedHandler method to DataRecieved Event
