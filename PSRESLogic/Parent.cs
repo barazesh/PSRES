@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -19,17 +20,29 @@ namespace PSRESLogic
         private bool datarecieved;
 
 
-        public void readSensorData()
+        public void readSensorData(SerialPort sp)
         {
+            Stopwatch watch = new Stopwatch();
+            
             datarecieved = false;
-            SerialPort sp = new SerialPort(SerialPort.GetPortNames()[2], 115200, Parity.None, 8, StopBits.One);
-            sp.Open();
+
             sp.DataReceived += sensorDataReceivedEventHandler;
+            sp.Open();
+            watch.Start();
 
             //byte[] message = { (byte)((Position << 6)+2) };
             //sp.Write(message, 0, 1);
-            while (!datarecieved) { }
+            while (!datarecieved) { Console.WriteLine(watch.ElapsedMilliseconds); }
+            sp.Close();
 
+
+
+                //Console.WriteLine(watch.ElapsedMilliseconds);
+
+        }
+
+        public SensorRecording[] extractSensorData(byte[] buffer)
+        {
             SensorRecording[] sr = new SensorRecording[3];
             for (int i = 0; i < 3; i++)
             {
@@ -40,7 +53,6 @@ namespace PSRESLogic
 
                 //extracting the temperature value
 
-                double temperature;
                 int temp = ((buffer[(i * 6)] << 8) | (buffer[(i * 6) + 1]));
                 bool minus = false;
 
@@ -54,7 +66,7 @@ namespace PSRESLogic
                 int digit = temp >> 4;
                 digit |= ((temp >> 8) & 0x07) << 4;
 
-                temperature = (temp & 0x0F) * 0.0625;
+                double temperature = (temp & 0x0F) * 0.0625;
 
 
                 temperature = digit + temperature;
@@ -69,28 +81,26 @@ namespace PSRESLogic
                 if (buffer[(i * 6) + 4] >= 0x80)
                 {
                     sr[i].Presence = true;
-                    sr[i].Distance = ((buffer[(i * 6) + 4] - 128) << 8) + buffer[(i * 6) + 5];
+                    sr[i].Distance = (((buffer[(i * 6) + 4] - 128) << 8) + buffer[(i * 6) + 5]) * 0.017;
                 }
                 else
                 {
                     sr[i].Presence = false;
-                    sr[i].Distance = (buffer[(i * 6) + 4] << 8) + buffer[(i * 6) + 5];
+                    sr[i].Distance = ((buffer[(i * 6) + 4] << 8) + buffer[(i * 6) + 5]) * 0.017;
                 }
-                Console.WriteLine(  sr[i].ToString());
+                //Console.WriteLine(sr[i].ToString());
 
             }
+            return sr;
 
         }
-        
+
         private void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
 
             sp.Read(buffer, 0,buffer.Length);
             datarecieved = true;
-
-            
-
 
         }
     }

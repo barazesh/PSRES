@@ -37,9 +37,33 @@ namespace consoletest
             //meter.Read(sp);
             //Console.ReadKey();
 
-            Parent p = new Parent();
-            p.readSensorData();
+            //Parent p = new Parent();
+            //bool cont = true;
+            //SensorRecording[] sr = new SensorRecording[3];
+            //while (cont)
+            //{
+            //    sr=p.readSensorData();
+            //    foreach (var s in sr)
+            //    {
+            //        Console.WriteLine(s.ToString());
+            //    }
+
+
+            //    if (Console.ReadLine().Equals(""))
+            //    {
+            //        cont = true;
+            //    }
+            //    else
+            //    {
+            //        cont = false;
+
+            //    }
+
+            //}
+            int a = 80;
+            Console.WriteLine(Convert.ToString(a,2));
             Console.ReadKey();
+
 
 
 
