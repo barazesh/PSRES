@@ -15,15 +15,17 @@ namespace PSRESLogic
         public double Illumination { get; set; }
         public double Distance { get; set; }
         public bool Presence { get; set; }
+        public bool Reliable { get; set; }
 
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Temperature: "+Temperature.ToString());
-            sb.AppendLine("Illumination: " + Illumination.ToString());
-            sb.AppendLine("Distance: " + Distance.ToString());
-            sb.AppendLine("Presence: " + Presence.ToString());
+            sb.Append(Temperature.ToString()+",");
+            sb.Append(Illumination.ToString() + ",");
+            sb.Append(Distance.ToString() + ",");
+            sb.Append(Presence.ToString()+",");
+            sb.Append(Reliable.ToString() + ",");
             return sb.ToString();
         }
     }

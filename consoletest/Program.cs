@@ -7,67 +7,98 @@ using System.Text;
 using System.Threading.Tasks;
 using PSRES.Data;
 using PSRESLogic;
+using System.IO;
 
 
 namespace consoletest
 {
     class Program
     {
+        static byte[] buffer = new byte[18];
+        static Parent parent = new Parent();
+        static SensorRecording[] sr = new SensorRecording[3];
+        static TimeDate timeDate = new TimeDate();
+        static SensoringStation[] sensoringStations = new SensoringStation[3];
+
+
+
+
+
         static void Main(string[] args)
         {
-            //Console.WriteLine("enter meter serial number last 2 digits");
-            //long serial = 18119713646200 + int.Parse(Console.ReadLine());
-            //Console.WriteLine("enter meter Name");
-            //string name = Console.ReadLine();
-            //Meter meter = new Meter();
-            //meter.Name = name;
-            //meter.Serialcode = serial;
+          /* using (var context= new PSRESContext())
+            {
+                timeDate.year = DateTime.Now.Year;
+                timeDate.month= (byte)DateTime.Now.Month;
+                timeDate.day = (byte)DateTime.Now.Day;
+                timeDate.hour= (byte)DateTime.Now.Hour;
+                timeDate.minute = (byte)DateTime.Now.Minute;
+                context.Dates.Add(timeDate);
 
-            //using (var context = new PSRESContext())
-            //{
-            //    context.Meters.Add(meter);
-            //    context.SaveChanges();
-            //}
-            //Console.WriteLine("added to database");
-            //Console.WriteLine("enter port number");
-            //string port = "COM" + Console.ReadLine();
-            ////instantiate a port for communication with the meter.
-            //SerialPort sp = new SerialPort(port, 9600, Parity.Even, 7, StopBits.One);
-            //sp.Open();
-            //meter.Read(sp);
-            //Console.ReadKey();
+                for (int i = 0; i < 3; i++)
+                {
+                    sensoringStations[i] = new SensoringStation();
+                    sensoringStations[i].ParentId = 1;
+                    sensoringStations[i].ParentPin = i;
+                    sensoringStations[i].PositionId = 1;
+                    sensoringStations[i].Zone = 1;
 
-            //Parent p = new Parent();
-            //bool cont = true;
-            //SensorRecording[] sr = new SensorRecording[3];
-            //while (cont)
-            //{
-            //    sr=p.readSensorData();
-            //    foreach (var s in sr)
-            //    {
-            //        Console.WriteLine(s.ToString());
-            //    }
+                }
+                context.SensoringStations.AddRange(sensoringStations);
+                context.SaveChanges();
 
 
-            //    if (Console.ReadLine().Equals(""))
-            //    {
-            //        cont = true;
-            //    }
-            //    else
-            //    {
-            //        cont = false;
+            }*/
 
-            //    }
 
-            //}
-            int a = 80;
-            Console.WriteLine(Convert.ToString(a,2));
+            SerialPort myport = new SerialPort(SerialPort.GetPortNames()[2], 115200, Parity.None, 8,StopBits.One);
+            myport.DataReceived += sensorDataRecievedHandler;
+            myport.Open();
             Console.ReadKey();
+            myport.Close();
+
+            
 
 
+        }
+
+        private static void sensorDataRecievedHandler(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort sp = (SerialPort)sender;
+            bool reliable = sp.BytesToRead == 18; ;
 
 
+                sp.Read(buffer, 0, sp.BytesToRead);
+                sr=parent.extractSensorData(buffer);
+                File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", DateTime.Now.ToString()+",");
 
+            for (int i = 0; i < 3; i++)
+            {
+                sr[i].SensoringStationId = i+10;
+                sr[i].TimeDateId = 4;
+                sr[i].Reliable = reliable;
+                File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", sr[i].ToString());
+            }
+            addsensordata(sr);
+
+            foreach (var b in buffer)
+            {
+                File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", Convert.ToString(b,2)+",");
+
+            }
+
+            File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", "\r\n");
+
+            }
+
+        private static void addsensordata(SensorRecording[] sensorRecording)
+        {
+            using (var context=new PSRESContext())
+            {
+                context.SensorRecordings.AddRange(sensorRecording);
+                context.SaveChanges();
+
+            }
         }
     }
 }

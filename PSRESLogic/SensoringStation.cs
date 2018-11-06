@@ -1,4 +1,6 @@
-﻿namespace PSRESLogic
+﻿using System.Collections.Generic;
+
+namespace PSRESLogic
 {
     public class SensoringStation
     {
@@ -6,9 +8,7 @@
         public int Zone { get; set; }
         public int ParentId { get; set; }
         public int ParentPin { get; set; }
-        public bool Light { get; set; }
-        public bool Temperature { get; set; }
-        public bool Presence { get; set; }
-        public bool distance { get; set; }
+        public int PositionId { get; set; }
+        public List<SensorRecording> Recordings { get; set; }
     }
 }

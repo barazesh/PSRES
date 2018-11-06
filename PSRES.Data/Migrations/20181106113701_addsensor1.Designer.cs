@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSRES.Data;
 
 namespace PSRES.Data.Migrations
 {
     [DbContext(typeof(PSRESContext))]
-    partial class PSRESContextModelSnapshot : ModelSnapshot
+    [Migration("20181106113701_addsensor1")]
+    partial class addsensor1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,13 +76,19 @@ namespace PSRES.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Light");
+
                     b.Property<int>("ParentId");
 
                     b.Property<int>("ParentPin");
 
-                    b.Property<int>("PositionId");
+                    b.Property<bool>("Presence");
+
+                    b.Property<bool>("Temperature");
 
                     b.Property<int>("Zone");
+
+                    b.Property<bool>("distance");
 
                     b.HasKey("Id");
 
@@ -99,8 +107,6 @@ namespace PSRES.Data.Migrations
 
                     b.Property<bool>("Presence");
 
-                    b.Property<bool>("Reliable");
-
                     b.Property<int>("SensoringStationId");
 
                     b.Property<double>("Temperature");
@@ -110,8 +116,6 @@ namespace PSRES.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SensoringStationId");
-
-                    b.HasIndex("TimeDateId");
 
                     b.ToTable("SensorRecordings");
                 });
@@ -145,7 +149,7 @@ namespace PSRES.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PSRESLogic.TimeDate", "datetime")
-                        .WithMany("meterRecordings")
+                        .WithMany("Recordings")
                         .HasForeignKey("TimeDateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -155,11 +159,6 @@ namespace PSRES.Data.Migrations
                     b.HasOne("PSRESLogic.SensoringStation")
                         .WithMany("Recordings")
                         .HasForeignKey("SensoringStationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("PSRESLogic.TimeDate")
-                        .WithMany("sensorRecordings")
-                        .HasForeignKey("TimeDateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
