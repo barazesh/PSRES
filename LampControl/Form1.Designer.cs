@@ -33,7 +33,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtdutycycle = new System.Windows.Forms.TextBox();
             this.btndutycycle = new System.Windows.Forms.Button();
-            this.txtlampselector = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.btnfrequency = new System.Windows.Forms.Button();
             this.txtfrequency = new System.Windows.Forms.TextBox();
@@ -85,16 +84,23 @@
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.btnReadSensor = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cmboxPorts = new System.Windows.Forms.ComboBox();
+            this.btnPort = new System.Windows.Forms.Button();
+            this.cmboxLamps = new System.Windows.Forms.ComboBox();
+            this.btnRefreshPortNames = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 32);
+            this.label1.Location = new System.Drawing.Point(24, 32);
             this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(112, 20);
@@ -104,7 +110,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(348, 32);
+            this.label2.Location = new System.Drawing.Point(255, 32);
             this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 20);
@@ -114,16 +120,16 @@
             // txtdutycycle
             // 
             this.txtdutycycle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtdutycycle.Location = new System.Drawing.Point(331, 76);
+            this.txtdutycycle.Location = new System.Drawing.Point(259, 76);
             this.txtdutycycle.Margin = new System.Windows.Forms.Padding(5);
             this.txtdutycycle.Name = "txtdutycycle";
-            this.txtdutycycle.Size = new System.Drawing.Size(221, 29);
+            this.txtdutycycle.Size = new System.Drawing.Size(187, 29);
             this.txtdutycycle.TabIndex = 3;
             // 
             // btndutycycle
             // 
             this.btndutycycle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btndutycycle.Location = new System.Drawing.Point(455, 22);
+            this.btndutycycle.Location = new System.Drawing.Point(349, 22);
             this.btndutycycle.Margin = new System.Windows.Forms.Padding(5);
             this.btndutycycle.Name = "btndutycycle";
             this.btndutycycle.Size = new System.Drawing.Size(97, 43);
@@ -132,29 +138,22 @@
             this.btndutycycle.UseVisualStyleBackColor = true;
             this.btndutycycle.Click += new System.EventHandler(this.btndutycycle_Click);
             // 
-            // txtlampselector
-            // 
-            this.txtlampselector.Location = new System.Drawing.Point(15, 77);
-            this.txtlampselector.Margin = new System.Windows.Forms.Padding(5);
-            this.txtlampselector.Name = "txtlampselector";
-            this.txtlampselector.Size = new System.Drawing.Size(227, 26);
-            this.txtlampselector.TabIndex = 5;
-            // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(145, 33);
+            this.checkBox1.Location = new System.Drawing.Point(143, 33);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(97, 24);
             this.checkBox1.TabIndex = 6;
             this.checkBox1.Text = "All Lamps";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // btnfrequency
             // 
             this.btnfrequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnfrequency.Location = new System.Drawing.Point(766, 22);
+            this.btnfrequency.Location = new System.Drawing.Point(556, 22);
             this.btnfrequency.Margin = new System.Windows.Forms.Padding(5);
             this.btnfrequency.Name = "btnfrequency";
             this.btnfrequency.Size = new System.Drawing.Size(94, 44);
@@ -166,16 +165,16 @@
             // txtfrequency
             // 
             this.txtfrequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtfrequency.Location = new System.Drawing.Point(641, 76);
+            this.txtfrequency.Location = new System.Drawing.Point(461, 76);
             this.txtfrequency.Margin = new System.Windows.Forms.Padding(5);
             this.txtfrequency.Name = "txtfrequency";
-            this.txtfrequency.Size = new System.Drawing.Size(218, 29);
+            this.txtfrequency.Size = new System.Drawing.Size(189, 29);
             this.txtfrequency.TabIndex = 8;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(658, 33);
+            this.label3.Location = new System.Drawing.Point(462, 33);
             this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 20);
@@ -184,6 +183,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmboxLamps);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.btnfrequency);
             this.groupBox1.Controls.Add(this.label1);
@@ -192,12 +192,11 @@
             this.groupBox1.Controls.Add(this.txtdutycycle);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.btndutycycle);
-            this.groupBox1.Controls.Add(this.txtlampselector);
             this.groupBox1.Location = new System.Drawing.Point(20, 10);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(871, 138);
+            this.groupBox1.Size = new System.Drawing.Size(670, 138);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Lamp Control";
@@ -659,11 +658,79 @@
             // 
             this.serialPort1.BaudRate = 115200;
             // 
+            // btnReadSensor
+            // 
+            this.btnReadSensor.Location = new System.Drawing.Point(20, 475);
+            this.btnReadSensor.Name = "btnReadSensor";
+            this.btnReadSensor.Size = new System.Drawing.Size(875, 34);
+            this.btnReadSensor.TabIndex = 16;
+            this.btnReadSensor.Text = "Read Sensors";
+            this.btnReadSensor.UseVisualStyleBackColor = true;
+            this.btnReadSensor.Click += new System.EventHandler(this.btnReadSensor_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btnRefreshPortNames);
+            this.groupBox5.Controls.Add(this.btnPort);
+            this.groupBox5.Controls.Add(this.cmboxPorts);
+            this.groupBox5.Location = new System.Drawing.Point(697, 10);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(198, 138);
+            this.groupBox5.TabIndex = 17;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Port";
+            // 
+            // cmboxPorts
+            // 
+            this.cmboxPorts.FormattingEnabled = true;
+            this.cmboxPorts.Location = new System.Drawing.Point(6, 75);
+            this.cmboxPorts.Name = "cmboxPorts";
+            this.cmboxPorts.Size = new System.Drawing.Size(172, 28);
+            this.cmboxPorts.TabIndex = 0;
+            // 
+            // btnPort
+            // 
+            this.btnPort.Location = new System.Drawing.Point(6, 32);
+            this.btnPort.Name = "btnPort";
+            this.btnPort.Size = new System.Drawing.Size(81, 37);
+            this.btnPort.TabIndex = 1;
+            this.btnPort.Text = "Set Port";
+            this.btnPort.UseVisualStyleBackColor = true;
+            this.btnPort.Click += new System.EventHandler(this.btnPort_Click);
+            // 
+            // cmboxLamps
+            // 
+            this.cmboxLamps.FormattingEnabled = true;
+            this.cmboxLamps.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"});
+            this.cmboxLamps.Location = new System.Drawing.Point(8, 75);
+            this.cmboxLamps.Name = "cmboxLamps";
+            this.cmboxLamps.Size = new System.Drawing.Size(232, 28);
+            this.cmboxLamps.TabIndex = 2;
+            // 
+            // btnRefreshPortNames
+            // 
+            this.btnRefreshPortNames.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnRefreshPortNames.Location = new System.Drawing.Point(93, 32);
+            this.btnRefreshPortNames.Name = "btnRefreshPortNames";
+            this.btnRefreshPortNames.Size = new System.Drawing.Size(85, 37);
+            this.btnRefreshPortNames.TabIndex = 2;
+            this.btnRefreshPortNames.Text = "Refresh";
+            this.btnRefreshPortNames.UseVisualStyleBackColor = false;
+            this.btnRefreshPortNames.Click += new System.EventHandler(this.btnRefreshPortNames_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(944, 487);
+            this.ClientSize = new System.Drawing.Size(919, 521);
+            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.btnReadSensor);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -680,6 +747,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -690,7 +758,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtdutycycle;
         private System.Windows.Forms.Button btndutycycle;
-        private System.Windows.Forms.TextBox txtlampselector;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button btnfrequency;
         private System.Windows.Forms.TextBox txtfrequency;
@@ -742,6 +809,12 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label24;
         private System.IO.Ports.SerialPort serialPort1;
+        private System.Windows.Forms.Button btnReadSensor;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button btnPort;
+        private System.Windows.Forms.ComboBox cmboxPorts;
+        private System.Windows.Forms.ComboBox cmboxLamps;
+        private System.Windows.Forms.Button btnRefreshPortNames;
     }
 }
 

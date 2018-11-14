@@ -14,36 +14,36 @@ namespace PSRESLogic
         public int Zone { get; set; }
         public ICollection<Lamp> LampsUnderCover { get; set; }
         public ICollection<SensoringStation> SensoringStationsUnderCover { get; set; }
-        public int Position { get; set; }
+        public int parentNumber { get; set; }
 
-        private byte[] buffer = new byte[18];
+        public byte[] buffer = new byte[18];
         private bool datarecieved;
+        private byte[] readRequestMessage = new byte[2];
+        private Stopwatch watch = new Stopwatch();
+        private SensorRecording[] sr = new SensorRecording[3];
+        
 
 
-        public void readSensorData(SerialPort sp)
+        public SensorRecording[] readSensorData(SerialPort sp)
         {
-            Stopwatch watch = new Stopwatch();
             
             datarecieved = false;
 
-            sp.DataReceived += sensorDataReceivedEventHandler;
             sp.Open();
-            watch.Start();
 
-            //byte[] message = { (byte)((Position << 6)+2) };
-            //sp.Write(message, 0, 1);
-            while (!datarecieved) { Console.WriteLine(watch.ElapsedMilliseconds); }
-            sp.Close();
+            sp.Write(readRequestMessage, 0, 2);
+            watch.Restart();
 
-
-
-                //Console.WriteLine(watch.ElapsedMilliseconds);
-
+            while (!datarecieved) {}
+            return sr;
+            
         }
 
-        public SensorRecording[] extractSensorData(byte[] buffer)
+        
+
+        private void extractSensorData(byte[] buffer)
         {
-            SensorRecording[] sr = new SensorRecording[3];
+
             for (int i = 0; i < 3; i++)
             {
                 //extracting the illumination value
@@ -91,16 +91,29 @@ namespace PSRESLogic
                 //Console.WriteLine(sr[i].ToString());
 
             }
-            return sr;
 
         }
 
-        private void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e)
+        public void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e)
         {
+            
+            long a = watch.ElapsedMilliseconds;
             SerialPort sp = (SerialPort)sender;
-
+            
             sp.Read(buffer, 0,buffer.Length);
+            sp.Close();
+            extractSensorData(buffer);
+
             datarecieved = true;
+
+        }
+
+
+        public Parent(int parentnumber)
+        {
+            parentNumber = parentnumber;
+            readRequestMessage[0] = (byte)((parentNumber << 6) + 56);
+            readRequestMessage[1] = (byte)~readRequestMessage[0];
 
         }
     }
