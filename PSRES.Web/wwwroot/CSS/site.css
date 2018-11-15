@@ -1,6 +1,8 @@
 ﻿body {
     font-family: Arial, Helvetica, sans-serif;
-    background-image: url('../enterpage/smartcity.jpg');
+    background-image: url('../img/shared/smartcity.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 /* Full-width input fields */
@@ -131,3 +133,8 @@ span.psw {
         width: 100%;
     }
 }
+
+menu>ul>li {
+    display: inline;
+}
+

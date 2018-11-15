@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>PSRES MicroGrid: @ViewBag.Title</title>
+    <link href="~/CSS/site.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <h1>Welcome To PSRES Lab. MicroGrid</h1>
+        <menu>
+            <ul>
+                <li><a href="/">HomePage</a></li>
+                <li><a href="/Login/login">Login</a></li>
+                <li><a href="/app/about">About</a></li>
+                <li><a href="/app/meters">Meters</a></li>
+                <li><a href="/app/sensors">Sensors</a></li>
+            </ul>
+        </menu>
+
+    </header>
+    <section>
+        <h1>@ViewBag.Title</h1>
+        @RenderBody()
+    </section>
+
+    <footer>Ferdowsi University of Mashhad, Faculty of Engineering, Power System Studies \& Restructuring Lab.</footer>
+
+
+  
+
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/js/sensorform.js"></script>
+</body>
+</html>
