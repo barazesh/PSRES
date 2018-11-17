@@ -1,1 +1,20 @@
-﻿<h1>@ViewBag.title</h1>
+﻿@{ 
+    ViewBag.Title = "Consumption Meters";
+}
+
+<div class="col-6 offset-3">
+        <form method="post">
+            <div class="form-group">
+                <label>Select Meter:</label>
+                <select  class="form-control">
+                    <option value="1">First Meter</option>
+                    <option value="2">Second Meter</option>
+                    <option value="3">Third Meter</option>
+                    <option value="4">Forth Meter</option>
+                    <option value="5">fifth Meter</option>
+
+                </select>
+            </div>
+            <input class="form-group" type="submit" name="getData" value="get Data" />
+        </form>
+</div>

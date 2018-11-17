@@ -14,14 +14,21 @@ namespace PSRES.Web.Controllers
         public IActionResult Sensors()
         {
             return View();
-        }   
+        }
 
+        //[HttpGet("meters")]
         public IActionResult Meters()
         {
-            ViewBag.Title = "Energy Consumption Monitoring";
-
             return View();
         }
+
+        [HttpPost("data/meters")]
+        public IActionResult Meters(object model)
+        {
+            return View();
+        }
+
+
 
 
     }

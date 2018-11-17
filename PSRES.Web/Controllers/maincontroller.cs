@@ -9,6 +9,7 @@ namespace PSRES.Web.Controllers
 {
     public class maincontroller: Controller
     {
+        //[HttpGet("Home")]
         public IActionResult Index()
         {
             return View();
