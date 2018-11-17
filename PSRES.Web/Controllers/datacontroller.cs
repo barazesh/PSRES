@@ -7,11 +7,22 @@ using System.Threading.Tasks;
 
 namespace PSRES.Web.Controllers
 {
-    public class logincontroller: Controller
+    public class datacontroller: Controller
     {
-        public IActionResult Login()
+       
+
+        public IActionResult Sensors()
         {
             return View();
+        }   
+
+        public IActionResult Meters()
+        {
+            ViewBag.Title = "Energy Consumption Monitoring";
+
+            return View();
         }
+
+
     }
 }

@@ -31,7 +31,7 @@ namespace PSRES.Web
             {
                 cfg.MapRoute("Default",
                     "/{controller}/{action}/{id?}",
-                    new { controller = "app", action = "Index" });
+                    new { controller = "main", action = "Index" });
             });
 
         }
