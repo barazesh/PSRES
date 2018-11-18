@@ -133,6 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseSeeder.cs" />
     <Compile Include="Migrations\20181031092607_initial.cs" />
     <Compile Include="Migrations\20181031092607_initial.designer.cs">
       <DependentUpon>20181031092607_initial.cs</DependentUpon>

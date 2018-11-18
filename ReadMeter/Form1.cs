@@ -17,6 +17,7 @@ namespace ReadMeter
     {
         SerialPort sp = new SerialPort("COM10", 9600, Parity.Even, 7, StopBits.One);
         Meter meter = new Meter();
+        //PSRESContext context = new PSRESContext();
 
         public Form1()
         {
@@ -26,6 +27,7 @@ namespace ReadMeter
         private void Form1_Load(object sender, EventArgs e)
         {
             cmboxPorts.Items.AddRange(SerialPort.GetPortNames());
+             
 
         }
 
@@ -37,20 +39,27 @@ namespace ReadMeter
 
         private void btnReadMeter_Click(object sender, EventArgs e)
         {
+            int id;
             if (sp.IsOpen)
             {
 
                 if (cmboxMeters.Text.Equals("Big Room HVAC"))
                 {
                     meter.Serialcode = 18119713646205;
+                    id  = 2;
                 }
                 else
                 {
                     meter.Serialcode = 18119713646206;
+                    id = 3;
                 }
                 MeterRecording mr= meter.Read(sp);
                 using (var context=new PSRESContext())
                 {
+                    var meters = context.Meters.ToList();
+                    var lasttimedate = context.Dates.Last().Id;
+                    mr.MeterId = id;
+                    mr.TimeDateId = lasttimedate;
                     context.MeterRecordings.Add(mr);
                     context.SaveChanges();
                 }

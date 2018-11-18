@@ -1,17 +1,19 @@
-﻿@{ 
-    ViewBag.Title = "Consumption Meters";
+﻿@model List<PSRESLogic.Meter>
+@{ 
+    ViewBag.Title = "Meters";
 }
 
 <div class="col-6 offset-3">
         <form method="post">
             <div class="form-group">
                 <label>Select Meter:</label>
-                <select  class="form-control">
-                    <option value="1">First Meter</option>
-                    <option value="2">Second Meter</option>
-                    <option value="3">Third Meter</option>
-                    <option value="4">Forth Meter</option>
-                    <option value="5">fifth Meter</option>
+                <select class="form-control">
+                    @foreach (var meter in Model)
+                    {
+                        <option value="1"> @meter.Name </option>
+
+                    }
+
 
                 </select>
             </div>
