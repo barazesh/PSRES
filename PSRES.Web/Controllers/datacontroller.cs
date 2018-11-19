@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSRES.Data;
+using PSRES.Web.ViewModels;
+using PSRESLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,16 +27,21 @@ namespace PSRES.Web.Controllers
         public IActionResult Meters()
         {
             var meters = from m in _context.Meters orderby m.Serialcode select m;
+            ViewMeter meter = new ViewMeter();
+            meter.Meters = meters.ToList();
                          
-            return View(meters.ToList());
+            return View(meter);
         }
 
         [HttpPost("data/meters")]
-        public IActionResult Meters(object model)
+        public IActionResult Meters(ViewMeter model)
         {
-            var recording = _context.MeterRecordings.Last();
 
-            return View("MeterData", recording);
+            var recording = from r in _context.MeterRecordings where r.MeterId == model.Value select r;
+
+
+
+            return View("MeterData", recording.Last());
         }
 
 

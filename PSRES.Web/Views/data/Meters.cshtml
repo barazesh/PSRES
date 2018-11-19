@@ -1,4 +1,4 @@
-﻿@model List<PSRESLogic.Meter>
+﻿@model ViewMeter
 @{ 
     ViewBag.Title = "Meters";
 }
@@ -7,10 +7,10 @@
         <form method="post">
             <div class="form-group">
                 <label>Select Meter:</label>
-                <select class="form-control">
-                    @foreach (var meter in Model)
+                <select class="form-control" asp-for="@Model.Value">
+                    @foreach (var meter in Model.Meters)
                     {
-                        <option value="1"> @meter.Name </option>
+                        <option value="@meter.Id"> @meter.Name </option>
 
                     }
 
