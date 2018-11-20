@@ -17,18 +17,61 @@ namespace ReadMeter
     {
         SerialPort sp = new SerialPort("COM10", 9600, Parity.Even, 7, StopBits.One);
         Meter meter = new Meter();
-        //PSRESContext context = new PSRESContext();
-
+        MeterRecording mr = new MeterRecording();
+        private bool dataok;
+        private int id;
         public Form1()
         {
             InitializeComponent();
         }
 
+        private void MeterDataReadyEventHandler(bool recived, MeterRecording data)
+        {
+            dataok = recived;
+            mr = data;
+            Invoke(new EventHandler(populate));
+            
+        }
+
+        private void populate(object sender, EventArgs e)
+        {
+
+            if (dataok)
+            {
+                using (var context = new PSRESContext())
+                {
+                    var meters = context.Meters.ToList();
+                    var lasttimedate = context.Dates.Last().Id;
+                    mr.MeterId = id;
+                    mr.TimeDateId = lasttimedate;
+                    context.MeterRecordings.Add(mr);
+                    context.SaveChanges();
+                }
+
+
+                txtSerial.Text = meter.Serialcode.ToString();
+                txtActive.Text = mr.activeEnergy.ToString();
+                txtReact.Text = mr.reactiveEnergy.ToString();
+                txtVolt.Text = mr.voltage.ToString();
+                txtAmpre.Text = mr.current.ToString();
+                txtFreq.Text = mr.frequency.ToString();
+                txtInstantActive.Text = mr.activePower.ToString();
+                txtInstantReact.Text = mr.reactivePower.ToString();
+                txtPF.Text = mr.powerFactor.ToString(); 
+            }
+            else
+            {
+                MessageBox.Show("No Data Received");
+            }
+
+
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             cmboxPorts.Items.AddRange(SerialPort.GetPortNames());
-             
-
+            meter.MeterDataReady += MeterDataReadyEventHandler;
+            sp.DataReceived += meter.DataReceivedHandler;
         }
 
         private void btnOpenPort_Click(object sender, EventArgs e)
@@ -39,7 +82,7 @@ namespace ReadMeter
 
         private void btnReadMeter_Click(object sender, EventArgs e)
         {
-            int id;
+
             if (sp.IsOpen)
             {
 
@@ -53,53 +96,14 @@ namespace ReadMeter
                     meter.Serialcode = 18119713646206;
                     id = 3;
                 }
-                MeterRecording mr= meter.Read(sp);
-                using (var context=new PSRESContext())
-                {
-                    var meters = context.Meters.ToList();
-                    var lasttimedate = context.Dates.Last().Id;
-                    mr.MeterId = id;
-                    mr.TimeDateId = lasttimedate;
-                    context.MeterRecordings.Add(mr);
-                    context.SaveChanges();
-                }
-
-                decimal[] values =
-                {
-                    mr.activeEnergy,
-                    mr.reactiveEnergy,
-                    mr.voltage,
-                    mr.current,
-                    mr.frequency,
-                    mr.activePower,
-                    mr.reactivePower,
-                    mr.powerFactor,
-                };
-                populateFrom(values, meter.Serialcode);
+                meter.Read(sp);
             }
             else
             {
                 MessageBox.Show("Serial port is not open");
             }
 
-
         }
-        private void populateFrom(decimal[] values, long serialnumber)
-        {
 
-
-            txtSerial.Text = serialnumber.ToString();
-
-            txtActive.Text = values[0].ToString();
-            txtReact.Text =values[1].ToString();
-            txtVolt.Text = values[2].ToString();
-            txtAmpre.Text = values[3].ToString();
-            txtFreq.Text = values[4].ToString();
-            txtInstantActive.Text = values[5].ToString();
-            txtInstantReact.Text = values[6].ToString();
-            txtPF.Text = values[7].ToString();
-
-
-        }
     }
 }

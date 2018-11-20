@@ -5,9 +5,12 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace PSRESLogic
 {
+    public delegate void SensorDataReadyHandler(bool recived, SensorRecording[] recording);
+
     public class Parent
     {
         public int Id { get; set; }
@@ -21,10 +24,12 @@ namespace PSRESLogic
         private byte[] readRequestMessage = new byte[2];
         private Stopwatch watch = new Stopwatch();
         private SensorRecording[] sr = new SensorRecording[3];
+        private Timer timer = new Timer(100);
+        public event SensorDataReadyHandler SensorDataReady;
         
 
 
-        public SensorRecording[] readSensorData(SerialPort sp)
+        public void readSensorData(SerialPort sp)
         {
             
             datarecieved = false;
@@ -32,14 +37,24 @@ namespace PSRESLogic
             sp.Open();
 
             sp.Write(readRequestMessage, 0, 2);
-            watch.Restart();
-
-            while (!datarecieved) {}
-            return sr;
-            
+            timer.Elapsed += timerelapsed;
+            timer.AutoReset = false;
+            timer.Start();
         }
 
-        
+        private void timerelapsed(object sender, ElapsedEventArgs e)
+        {
+            if (datarecieved)
+            {
+                extractSensorData(buffer);
+            }
+
+            onDataReady(datarecieved,sr);
+
+
+        }
+
+
 
         private void extractSensorData(byte[] buffer)
         {
@@ -102,12 +117,15 @@ namespace PSRESLogic
             
             sp.Read(buffer, 0,buffer.Length);
             sp.Close();
-            extractSensorData(buffer);
 
             datarecieved = true;
 
         }
 
+        protected virtual void onDataReady(bool recived, SensorRecording[] data)
+        {
+            (SensorDataReady as SensorDataReadyHandler)?.Invoke(recived, data);
+        }
 
         public Parent(int parentnumber)
         {

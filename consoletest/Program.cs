@@ -8,24 +8,22 @@ using System.Threading.Tasks;
 using PSRES.Data;
 using PSRESLogic;
 using System.IO;
-
+using System.Timers;
 
 namespace consoletest
 {
     class Program
     {
         static byte[] buffer = new byte[18];
-        static Parent parent = new Parent();
+        static Parent parent = new Parent(2);
         static SensorRecording[] sr = new SensorRecording[3];
         static TimeDate timeDate = new TimeDate();
         static SensoringStation[] sensoringStations = new SensoringStation[3];
-
-
-
-
-
+        static Timer timer = new Timer(60000);
+                          
         static void Main(string[] args)
         {
+            timer.Elapsed += oneMinuteMark;
           /* using (var context= new PSRESContext())
             {
                 timeDate.year = DateTime.Now.Year;
@@ -60,6 +58,11 @@ namespace consoletest
             
 
 
+        }
+
+        private static void oneMinuteMark(object sender, ElapsedEventArgs e)
+        {
+            //save data
         }
 
         private static void sensorDataRecievedHandler(object sender, SerialDataReceivedEventArgs e)

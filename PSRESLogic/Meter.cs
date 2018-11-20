@@ -5,9 +5,12 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Timers;
 
 namespace PSRESLogic
 {
+    public delegate void MeterDataReadyHandler(bool recived, MeterRecording data);
+
     public class Meter
     {
 
@@ -17,42 +20,51 @@ namespace PSRESLogic
         public long Serialcode { get; set; }
         public List<MeterRecording> Recording { get; set; }
 
-        private bool reciveCompeleted;
         private StringBuilder sb = new StringBuilder();
 
 
-
+        private bool reciveCompeleted;
         private decimal totalActiveEnergy;
         private decimal lastTotalActiveEnergy;
         private decimal totalReactiveEnergy;
         private decimal lastTotalReactiveEnergy;
         private string voltageCuttBegining;
         private string voltageReturn;
+        public event MeterDataReadyHandler MeterDataReady;
                                                   
 
-        Stopwatch watch = new Stopwatch();
-
-    
-
+        private Stopwatch watch = new Stopwatch();
+        private Timer timer = new Timer(1100);
 
 
-        public MeterRecording Read(SerialPort mySerialPort1)
+        public void Read(SerialPort mySerialPort1)
         {
             reciveCompeleted = false;
             sb.Clear();
             watch.Start();
 
-            //subscribe the DataRecievedHandler method to DataRecieved Event
-            mySerialPort1.DataReceived += (DataReceivedHandler);
-
             //calling the meter
             
             mySerialPort1.WriteLine("/?" + Serialcode.ToString() + "!\r\n");
-            while (!reciveCompeleted) { }
-            MeterRecording mr = new MeterRecording();
-            extractData(mr);
-            return mr;
 
+        }
+
+        private void timerelapsed(object sender, ElapsedEventArgs e)
+        {
+            MeterRecording mr = new MeterRecording();
+
+            if (reciveCompeleted)
+            {
+                extractData(mr);
+            }
+
+            onDataReady(reciveCompeleted, mr);
+            ;
+        }
+
+        protected virtual void onDataReady(bool reciveCompeleted, MeterRecording mr)
+        {
+            (MeterDataReady as MeterDataReadyHandler)?.Invoke(reciveCompeleted, mr);
         }
 
         private void extractData(MeterRecording mr)
@@ -112,7 +124,7 @@ namespace PSRESLogic
         }
 
 
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        public void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
 
             SerialPort sp = (SerialPort)sender;
@@ -124,6 +136,8 @@ namespace PSRESLogic
 
                 //sending the acknowledgment message
                 sp.WriteLine(ack);
+                timer.Start();
+
 
             }
             else if (indata.Contains(char.ConvertFromUtf32(0x03)))
@@ -139,6 +153,11 @@ namespace PSRESLogic
             
         }
 
+        public Meter()
+        {
+            timer.Elapsed += timerelapsed;
+            timer.AutoReset = false;
+        }
 
     }
 }
