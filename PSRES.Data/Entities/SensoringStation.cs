@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PSRESLogic
+namespace PSRES.Data.Entities
 {
     public class SensoringStation
     {

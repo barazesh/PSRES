@@ -9,25 +9,26 @@ using System.Timers;
 
 namespace PSRESLogic
 {
-    public delegate void MeterDataReadyHandler(bool recived, MeterRecording data);
+    public delegate void MeterDataReadyHandler(bool recived);
 
     public class Meter
     {
-
-        //the name, which is the serial number written on the body of the meter
         public int Id { get; set; }
-        public string Name { get; set; }
-        public long Serialcode { get; set; }
-        public List<MeterRecording> Recording { get; set; }
+        public long SerialCode { get; set; }
+
 
         private StringBuilder sb = new StringBuilder();
 
 
+        private decimal Voltage;
+        private decimal Current;
+        private int ActivePower;
+        private decimal PowerFactor;
+        private decimal Frequency;
+        private int ReactivePower;
         private bool reciveCompeleted;
         private decimal totalActiveEnergy;
-        private decimal lastTotalActiveEnergy;
         private decimal totalReactiveEnergy;
-        private decimal lastTotalReactiveEnergy;
         private string voltageCuttBegining;
         private string voltageReturn;
         public event MeterDataReadyHandler MeterDataReady;
@@ -45,29 +46,28 @@ namespace PSRESLogic
 
             //calling the meter
             
-            mySerialPort1.WriteLine("/?" + Serialcode.ToString() + "!\r\n");
+            mySerialPort1.WriteLine("/?" + SerialCode.ToString() + "!\r\n");
 
         }
 
         private void timerelapsed(object sender, ElapsedEventArgs e)
         {
-            MeterRecording mr = new MeterRecording();
 
             if (reciveCompeleted)
             {
-                extractData(mr);
+                extractData();
             }
 
-            onDataReady(reciveCompeleted, mr);
+            onDataReady(reciveCompeleted);
             ;
         }
 
-        protected virtual void onDataReady(bool reciveCompeleted, MeterRecording mr)
+        protected virtual void onDataReady(bool reciveCompeleted)
         {
-            (MeterDataReady as MeterDataReadyHandler)?.Invoke(reciveCompeleted, mr);
+            (MeterDataReady as MeterDataReadyHandler)?.Invoke(reciveCompeleted);
         }
 
-        private void extractData(MeterRecording mr)
+        private void extractData()
         {
             string pattern = @"\([0-9]*.[0-9]{2}\*|\([0-9].[0-9]{2}\)|\([0-9]{8}\)|\([0-9]{12}\)";
             MatchCollection matches = Regex.Matches(sb.ToString(), pattern);
@@ -78,36 +78,31 @@ namespace PSRESLogic
                 switch (i)
                 {
                     case 0:
-                        totalActiveEnergy = decimal.Parse(matches[i].Value.Trim(charstoTrim));
-                        mr.activeEnergy = 1000 * (lastTotalActiveEnergy - totalActiveEnergy);
-                        lastTotalActiveEnergy = totalActiveEnergy;
+                        totalActiveEnergy = 1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 1:
-                        totalReactiveEnergy = decimal.Parse(matches[i].Value.Trim(charstoTrim));
-                        mr.reactiveEnergy = 1000 * (lastTotalReactiveEnergy - totalReactiveEnergy);
-                        lastTotalReactiveEnergy = totalReactiveEnergy;
-
+                        totalReactiveEnergy = 1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 2:
                         //serial number
                         break;
                     case 3:
-                        mr.voltage = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        Voltage = decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 4:
-                        mr.current = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        Current = decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 5:
-                        mr.activePower = (int)(1000*decimal.Parse(matches[i].Value.Trim(charstoTrim)));
+                        ActivePower = (int)(1000*decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 6:
-                        mr.powerFactor = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        PowerFactor = decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 7:
-                        mr.frequency = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        Frequency = decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 8:
-                        mr.reactivePower = (int)(1000 *decimal.Parse(matches[i].Value.Trim(charstoTrim)));
+                        ReactivePower = (int)(1000 *decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 9:
                         voltageCuttBegining = matches[i].Value.Trim(charstoTrim);
@@ -119,7 +114,6 @@ namespace PSRESLogic
                         break;
                 }
             }
-
             
         }
 

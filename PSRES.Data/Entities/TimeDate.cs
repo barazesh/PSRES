@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace PSRESLogic
+namespace PSRES.Data.Entities
 {
     public class TimeDate
     {
@@ -16,6 +12,5 @@ namespace PSRESLogic
         public byte minute { get; set; }
         public List<MeterRecording> meterRecordings { get; set; }
         public List<SensorRecording> sensorRecordings { get; set; }
-
     }
 }

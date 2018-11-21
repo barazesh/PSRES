@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PSRESLogic;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using PSRES.Data.Entities;
 
 namespace PSRES.Data
 {

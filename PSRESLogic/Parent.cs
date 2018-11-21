@@ -9,21 +9,26 @@ using System.Timers;
 
 namespace PSRESLogic
 {
-    public delegate void SensorDataReadyHandler(bool recived, SensorRecording[] recording);
+    public delegate void SensorDataReadyHandler(bool recived);
 
     public class Parent
     {
         public int Id { get; set; }
         public int Zone { get; set; }
-        public ICollection<Lamp> LampsUnderCover { get; set; }
-        public ICollection<SensoringStation> SensoringStationsUnderCover { get; set; }
         public int parentNumber { get; set; }
+
+        private List<double> Temperature;
+        private List<double> Illumination;
+        private List<double> Distance;
+        private bool Presence;
+
+
+
 
         public byte[] buffer = new byte[18];
         private bool datarecieved;
         private byte[] readRequestMessage = new byte[2];
         private Stopwatch watch = new Stopwatch();
-        private SensorRecording[] sr = new SensorRecording[3];
         private Timer timer = new Timer(100);
         public event SensorDataReadyHandler SensorDataReady;
         
@@ -49,7 +54,7 @@ namespace PSRESLogic
                 extractSensorData(buffer);
             }
 
-            onDataReady(datarecieved,sr);
+            onDataReady(datarecieved);
 
 
         }
@@ -62,8 +67,7 @@ namespace PSRESLogic
             for (int i = 0; i < 3; i++)
             {
                 //extracting the illumination value
-                sr[i] = new SensorRecording();
-                sr[i].Illumination = ((buffer[(i * 6) + 2] << 8) | (buffer[(i * 6) + 3])) / 1.2;
+                Illumination.Add(((buffer[(i * 6) + 2] << 8) | (buffer[(i * 6) + 3])) / 1.2);
 
 
                 //extracting the temperature value
@@ -89,21 +93,20 @@ namespace PSRESLogic
                 {
                     temperature = 0 - temperature;
                 }
-                sr[i].Temperature = temperature;
+                Temperature.Add(temperature);
 
                 //extracting the distance and presence
 
                 if (buffer[(i * 6) + 4] >= 0x80)
                 {
-                    sr[i].Presence = true;
-                    sr[i].Distance = (((buffer[(i * 6) + 4] - 128) << 8) + buffer[(i * 6) + 5]) * 0.017;
+                    Presence = true;
+                    Distance.Add((((buffer[(i * 6) + 4] - 128) << 8) + buffer[(i * 6) + 5]) * 0.017);
                 }
                 else
                 {
-                    sr[i].Presence = false;
-                    sr[i].Distance = ((buffer[(i * 6) + 4] << 8) + buffer[(i * 6) + 5]) * 0.017;
+                    Presence = false;
+                    Distance.Add(((buffer[(i * 6) + 4] << 8) + buffer[(i * 6) + 5]) * 0.017);
                 }
-                //Console.WriteLine(sr[i].ToString());
 
             }
 
@@ -122,9 +125,9 @@ namespace PSRESLogic
 
         }
 
-        protected virtual void onDataReady(bool recived, SensorRecording[] data)
+        protected virtual void onDataReady(bool recived)
         {
-            (SensorDataReady as SensorDataReadyHandler)?.Invoke(recived, data);
+            (SensorDataReady as SensorDataReadyHandler)?.Invoke(recived);
         }
 
         public Parent(int parentnumber)

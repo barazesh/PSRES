@@ -19,11 +19,9 @@ namespace consoletest
 
         static byte[] buffer = new byte[18];
         static Parent parent = new Parent(2);
-        static SensorRecording[] sr = new SensorRecording[3];
-        static SensoringStation[] sensoringStations = new SensoringStation[3];
 
 
-        static TimeDate timeDate = new TimeDate();
+
 
         static Timer timer = new Timer(60000);
 
@@ -38,11 +36,11 @@ namespace consoletest
 
 
             Meters[0].Id = 1;
-            Meters[0].Serialcode = 205;
+            Meters[0].SerialCode = 205;
             Meters[0].MeterDataReady += MeterDataHandler;
 
             Meters[1].Id = 2;
-            Meters[1].Serialcode = 206;
+            Meters[1].SerialCode = 206;
             Meters[1].MeterDataReady += MeterDataHandler;
 
             parent.SensorDataReady += SensorDataHandler;
@@ -63,14 +61,24 @@ namespace consoletest
 
         }
 
-        private static void SensorDataHandler(bool recived, SensorRecording[] recording)
+        private static void SensorDataHandler(bool recived)
         {
             throw new NotImplementedException();
         }
 
-        private static void MeterDataHandler(bool recived, MeterRecording data)
+        private static void MeterDataHandler(bool recived)
         {
-            throw new NotImplementedException();
+            switch (recived)
+            {
+                case true:
+                    //add to previous data
+
+                    break;
+                case false:
+                    //do nothing
+
+                    break;
+            }
         }
 
         private static void oneMinuteMark(object sender, ElapsedEventArgs e)
@@ -81,12 +89,7 @@ namespace consoletest
             {
 
                 // add a new entry to timedate table 
-                timeDate.year = DateTime.Now.Year;
-                timeDate.month = (byte)DateTime.Now.Month;
-                timeDate.day = (byte)DateTime.Now.Day;
-                timeDate.hour = (byte)DateTime.Now.Hour;
-                timeDate.minute = (byte)DateTime.Now.Minute;
-                context.Dates.Add(timeDate);
+
 
                 // add sensor recordings
 
@@ -98,33 +101,7 @@ namespace consoletest
             }
         }
 
-        private static void sensorDataRecievedHandler(object sender, SerialDataReceivedEventArgs e)
-        {
-            SerialPort sp = (SerialPort)sender;
-            bool reliable = sp.BytesToRead == 18; ;
 
-
-                sp.Read(buffer, 0, sp.BytesToRead);
-                sr=parent.extractSensorData(buffer);
-                File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", DateTime.Now.ToString()+",");
-
-            for (int i = 0; i < 3; i++)
-            {
-                sr[i].SensoringStationId = i+10;
-                sr[i].TimeDateId = 4;
-                sr[i].Reliable = reliable;
-                File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", sr[i].ToString());
-            }
-
-            foreach (var b in buffer)
-            {
-                File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", Convert.ToString(b,2)+",");
-
-            }
-
-            File.AppendAllText(@"C:\Users\MRB\Documents\sensordata.csv", "\r\n");
-
-            }
 
 
     }
