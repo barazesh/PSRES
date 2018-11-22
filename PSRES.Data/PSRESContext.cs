@@ -14,11 +14,11 @@ namespace PSRES.Data
         });
 
 
-        public DbSet<MeterRecording> MeterRecordings { get; set; }
-        public DbSet<TimeDate> Dates { get; set; }
-        public DbSet<Meter> Meters { get; set; }
-        public DbSet<SensorRecording> SensorRecordings { get; set; }
-        public DbSet<SensoringStation> SensoringStations { get; set; }
+        public DbSet<MeterRecordingEntity> MeterRecordings { get; set; }
+        public DbSet<TimeDateEntity> Dates { get; set; }
+        public DbSet<MeterEntity> Meters { get; set; }
+        public DbSet<SensorRecordingEntity> SensorRecordings { get; set; }
+        public DbSet<SensoringStationEntity> SensoringStations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

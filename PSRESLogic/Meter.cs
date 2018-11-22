@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
+using PSRES.Data.Entities;
+using System.Linq;
 
 namespace PSRESLogic
 {
-    public delegate void MeterDataReadyHandler(bool recived);
+    public delegate void MeterDataReadyHandler(int meterId);
 
     public class Meter
     {
@@ -20,19 +22,23 @@ namespace PSRESLogic
         private StringBuilder sb = new StringBuilder();
 
 
-        private decimal Voltage;
-        private decimal Current;
-        private int ActivePower;
-        private decimal PowerFactor;
-        private decimal Frequency;
-        private int ReactivePower;
-        private bool reciveCompeleted;
-        private decimal totalActiveEnergy;
-        private decimal totalReactiveEnergy;
+        private List<decimal> Voltage;
+        private List<decimal> Current;
+        private List<decimal> PowerFactor;
+        private List<decimal> Frequency;
+
+        private int peakActivePower;
+        private int peakReactivePower;
+
+        private decimal[] totalActiveEnergy= new decimal[2];
+        private decimal[] totalReactiveEnergy= new decimal[2];
+
         private string voltageCuttBegining;
         private string voltageReturn;
+
         public event MeterDataReadyHandler MeterDataReady;
-                                                  
+        private bool reciveCompeleted;
+
 
         private Stopwatch watch = new Stopwatch();
         private Timer timer = new Timer(1100);
@@ -58,13 +64,13 @@ namespace PSRESLogic
                 extractData();
             }
 
-            onDataReady(reciveCompeleted);
+            onDataReady(Id);
             ;
         }
 
-        protected virtual void onDataReady(bool reciveCompeleted)
+        protected virtual void onDataReady(int meterid)
         {
-            (MeterDataReady as MeterDataReadyHandler)?.Invoke(reciveCompeleted);
+            (MeterDataReady as MeterDataReadyHandler)?.Invoke(meterid);
         }
 
         private void extractData()
@@ -78,31 +84,31 @@ namespace PSRESLogic
                 switch (i)
                 {
                     case 0:
-                        totalActiveEnergy = 1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        totalActiveEnergy[1] = decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 1:
-                        totalReactiveEnergy = 1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        totalReactiveEnergy[1] = decimal.Parse(matches[i].Value.Trim(charstoTrim));
                         break;
                     case 2:
                         //serial number
                         break;
                     case 3:
-                        Voltage = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        Voltage.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 4:
-                        Current = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        Current.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 5:
-                        ActivePower = (int)(1000*decimal.Parse(matches[i].Value.Trim(charstoTrim)));
+                        peakActivePower = MAX((int)(1000*decimal.Parse(matches[i].Value.Trim(charstoTrim))),peakActivePower);
                         break;
                     case 6:
-                        PowerFactor = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        PowerFactor.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 7:
-                        Frequency = decimal.Parse(matches[i].Value.Trim(charstoTrim));
+                        Frequency.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 8:
-                        ReactivePower = (int)(1000 *decimal.Parse(matches[i].Value.Trim(charstoTrim)));
+                        peakReactivePower = MAX((int)(1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim))), peakReactivePower);
                         break;
                     case 9:
                         voltageCuttBegining = matches[i].Value.Trim(charstoTrim);
@@ -117,6 +123,45 @@ namespace PSRESLogic
             
         }
 
+        private int MAX(int v1, int v2)
+        {
+            int result=v2;
+            if (v1 >= v2)
+            {
+                result = v1;
+            }
+            return result;
+        }
+
+        public MeterRecordingEntity GetDataForDataBase()
+        {
+            MeterRecordingEntity mr = new MeterRecordingEntity();
+
+            mr.activeEnergy = (int)(1000*(totalActiveEnergy[1] - totalActiveEnergy[0]));
+            mr.reactiveEnergy = (int)(1000 * (totalReactiveEnergy[1] - totalReactiveEnergy[0]));
+            mr.current = Current.Average();
+            mr.frequency = Frequency.Average();
+            mr.voltage = Voltage.Average();
+            mr.powerFactor = PowerFactor.Average();
+            mr.peakActivePower = peakActivePower;
+            mr.peakReactivePower = peakReactivePower;
+            mr.MeterId = Id;
+
+            return mr;
+        }
+
+        public void Reset()
+        {
+            totalActiveEnergy[0]=totalActiveEnergy[1];
+            totalReactiveEnergy[0] = totalReactiveEnergy[1];
+            Current.Clear();
+            Voltage.Clear();
+            PowerFactor.Clear();
+            Frequency.Clear();
+            peakActivePower = 0;
+            peakReactivePower = 0;
+
+        }
 
         public void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
@@ -152,6 +197,22 @@ namespace PSRESLogic
             timer.Elapsed += timerelapsed;
             timer.AutoReset = false;
         }
+        public override string ToString()
+        {
+            StringBuilder newsb = new StringBuilder();
+            newsb.AppendLine("Serial Code: " + SerialCode.ToString());
+            newsb.AppendLine("Peak Active Power: "+peakActivePower.ToString());
+            newsb.AppendLine("Peak Reactive Power: " + peakReactivePower.ToString());
+            newsb.AppendLine("Active Energy: " + totalActiveEnergy[1].ToString());
+            newsb.AppendLine("Reactive Energy: " + totalReactiveEnergy[1].ToString());
+            newsb.AppendLine("Voltage: " + Voltage.Last().ToString());
+            newsb.AppendLine("Current: " + Current.Last().ToString());
+            newsb.AppendLine("Power Factor: " + PowerFactor.Last().ToString());
+            newsb.AppendLine("Frequency: " + Frequency.Last().ToString());
+
+            return newsb.ToString();
+        }
+
 
     }
 }

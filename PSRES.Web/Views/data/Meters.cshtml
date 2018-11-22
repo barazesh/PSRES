@@ -8,9 +8,9 @@
             <div class="form-group">
                 <label>Select Meter:</label>
                 <select class="form-control" asp-for="@Model.Value">
-                    @foreach (var meter in Model.Meters)
+                    @foreach (var meter in Model.MeterNames)
                     {
-                        <option value="@meter.Id"> @meter.Name </option>
+                        <option value="@meter"> @meter </option>
 
                     }
 

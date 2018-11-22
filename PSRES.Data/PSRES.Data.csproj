@@ -134,26 +134,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseSeeder.cs" />
-    <Compile Include="Entities\Meter.cs" />
-    <Compile Include="Entities\MeterRecording.cs" />
-    <Compile Include="Entities\SensoringStation.cs" />
-    <Compile Include="Entities\SensorRecording.cs" />
-    <Compile Include="Entities\TimeDate.cs" />
-    <Compile Include="Migrations\20181031092607_initial.cs" />
-    <Compile Include="Migrations\20181031092607_initial.designer.cs">
-      <DependentUpon>20181031092607_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20181106112924_addsesnors.cs" />
-    <Compile Include="Migrations\20181106112924_addsesnors.designer.cs">
-      <DependentUpon>20181106112924_addsesnors.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20181106113701_addsensor1.cs" />
-    <Compile Include="Migrations\20181106113701_addsensor1.designer.cs">
-      <DependentUpon>20181106113701_addsensor1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20181106115045_addsensor2.cs" />
-    <Compile Include="Migrations\20181106115045_addsensor2.designer.cs">
-      <DependentUpon>20181106115045_addsensor2.cs</DependentUpon>
+    <Compile Include="Entities\MeterEntity.cs" />
+    <Compile Include="Entities\MeterRecordingEntity.cs" />
+    <Compile Include="Entities\SensoringStationEntity.cs" />
+    <Compile Include="Entities\SensorRecordingEntity.cs" />
+    <Compile Include="Entities\TimeDateEntity.cs" />
+    <Compile Include="Migrations\20181122084158_initial.cs" />
+    <Compile Include="Migrations\20181122084158_initial.designer.cs">
+      <DependentUpon>20181122084158_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\PSRESContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

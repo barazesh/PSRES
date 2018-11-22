@@ -42,8 +42,6 @@ namespace PSRESLogic
             sp.Open();
 
             sp.Write(readRequestMessage, 0, 2);
-            timer.Elapsed += timerelapsed;
-            timer.AutoReset = false;
             timer.Start();
         }
 
@@ -135,6 +133,9 @@ namespace PSRESLogic
             parentNumber = parentnumber;
             readRequestMessage[0] = (byte)((parentNumber << 6) + 56);
             readRequestMessage[1] = (byte)~readRequestMessage[0];
+
+            timer.Elapsed += timerelapsed;
+            timer.AutoReset = false;
 
         }
     }

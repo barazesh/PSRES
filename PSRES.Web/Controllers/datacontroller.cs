@@ -26,9 +26,9 @@ namespace PSRES.Web.Controllers
 
         public IActionResult Meters()
         {
-            var meters = from m in _context.Meters orderby m.Serialcode select m;
+            var meternames = from m in _context.Meters orderby m.Serialcode select m.Name;
             ViewMeter meter = new ViewMeter();
-            meter.Meters = meters.ToList();
+            meter.MeterNames = meternames.ToList();
                          
             return View(meter);
         }
@@ -37,11 +37,11 @@ namespace PSRES.Web.Controllers
         public IActionResult Meters(ViewMeter model)
         {
 
-            var recording = from r in _context.MeterRecordings where r.MeterId == model.Value select r;
+            var latestrecording = (from r in _context.MeterRecordings where r.MeterId == model.Value select r).LastOrDefault();
 
 
 
-            return View("MeterData", recording.Last());
+            return View("MeterData", latestrecording);
         }
 
 

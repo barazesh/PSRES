@@ -1,5 +1,4 @@
-﻿using PSRESLogic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,9 @@ namespace PSRES.Web.ViewModels
         public int Value { get; set; }
         public string Name { get; set; }
 
-        public List<Meter> Meters { get; set; }
+        public List<string> MeterNames { get; set; }
+        public List<int> MeterIds { get; set; }
+
+
     }
 }
