@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.cmboxPorts = new System.Windows.Forms.ComboBox();
             this.btnOpenPort = new System.Windows.Forms.Button();
             this.btnReadMeter = new System.Windows.Forms.Button();
-            this.cmboxMeters = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.txtSerial = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -56,6 +55,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -90,7 +90,7 @@
             // 
             // btnReadMeter
             // 
-            this.btnReadMeter.Location = new System.Drawing.Point(361, 75);
+            this.btnReadMeter.Location = new System.Drawing.Point(361, 85);
             this.btnReadMeter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnReadMeter.Name = "btnReadMeter";
             this.btnReadMeter.Size = new System.Drawing.Size(112, 35);
@@ -99,39 +99,17 @@
             this.btnReadMeter.UseVisualStyleBackColor = true;
             this.btnReadMeter.Click += new System.EventHandler(this.btnReadMeter_Click);
             // 
-            // cmboxMeters
-            // 
-            this.cmboxMeters.FormattingEnabled = true;
-            this.cmboxMeters.Items.AddRange(new object[] {
-            "Big Room HVAC",
-            "Big Room PCs"});
-            this.cmboxMeters.Location = new System.Drawing.Point(138, 79);
-            this.cmboxMeters.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmboxMeters.Name = "cmboxMeters";
-            this.cmboxMeters.Size = new System.Drawing.Size(180, 28);
-            this.cmboxMeters.TabIndex = 4;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(77, 86);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 20);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Meter";
-            // 
             // txtSerial
             // 
-            this.txtSerial.Location = new System.Drawing.Point(146, 165);
+            this.txtSerial.Location = new System.Drawing.Point(146, 162);
             this.txtSerial.Name = "txtSerial";
-            this.txtSerial.Size = new System.Drawing.Size(100, 26);
+            this.txtSerial.Size = new System.Drawing.Size(394, 26);
             this.txtSerial.TabIndex = 6;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 168);
+            this.label3.Location = new System.Drawing.Point(154, 129);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(109, 20);
             this.label3.TabIndex = 7;
@@ -203,14 +181,14 @@
             // 
             // txtFreq
             // 
-            this.txtFreq.Location = new System.Drawing.Point(440, 301);
+            this.txtFreq.Location = new System.Drawing.Point(440, 338);
             this.txtFreq.Name = "txtFreq";
             this.txtFreq.Size = new System.Drawing.Size(100, 26);
             this.txtFreq.TabIndex = 16;
             // 
             // txtInstantActive
             // 
-            this.txtInstantActive.Location = new System.Drawing.Point(440, 199);
+            this.txtInstantActive.Location = new System.Drawing.Point(440, 236);
             this.txtInstantActive.Name = "txtInstantActive";
             this.txtInstantActive.Size = new System.Drawing.Size(100, 26);
             this.txtInstantActive.TabIndex = 21;
@@ -224,21 +202,21 @@
             // 
             // txtAmpre
             // 
-            this.txtAmpre.Location = new System.Drawing.Point(440, 267);
+            this.txtAmpre.Location = new System.Drawing.Point(440, 304);
             this.txtAmpre.Name = "txtAmpre";
             this.txtAmpre.Size = new System.Drawing.Size(100, 26);
             this.txtAmpre.TabIndex = 19;
             // 
             // txtInstantReact
             // 
-            this.txtInstantReact.Location = new System.Drawing.Point(440, 233);
+            this.txtInstantReact.Location = new System.Drawing.Point(440, 270);
             this.txtInstantReact.Name = "txtInstantReact";
             this.txtInstantReact.Size = new System.Drawing.Size(100, 26);
             this.txtInstantReact.TabIndex = 18;
             // 
             // txtPF
             // 
-            this.txtPF.Location = new System.Drawing.Point(440, 165);
+            this.txtPF.Location = new System.Drawing.Point(440, 202);
             this.txtPF.Name = "txtPF";
             this.txtPF.Size = new System.Drawing.Size(100, 26);
             this.txtPF.TabIndex = 17;
@@ -246,7 +224,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(278, 202);
+            this.label8.Location = new System.Drawing.Point(278, 239);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(154, 20);
             this.label8.TabIndex = 26;
@@ -264,7 +242,7 @@
             // txtAmpre1
             // 
             this.txtAmpre1.AutoSize = true;
-            this.txtAmpre1.Location = new System.Drawing.Point(370, 270);
+            this.txtAmpre1.Location = new System.Drawing.Point(370, 307);
             this.txtAmpre1.Name = "txtAmpre1";
             this.txtAmpre1.Size = new System.Drawing.Size(62, 20);
             this.txtAmpre1.TabIndex = 24;
@@ -273,7 +251,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(259, 236);
+            this.label11.Location = new System.Drawing.Point(259, 273);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(173, 20);
             this.label11.TabIndex = 23;
@@ -282,7 +260,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(329, 168);
+            this.label12.Location = new System.Drawing.Point(329, 205);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(103, 20);
             this.label12.TabIndex = 22;
@@ -291,7 +269,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(347, 303);
+            this.label13.Location = new System.Drawing.Point(347, 340);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(84, 20);
             this.label13.TabIndex = 27;
@@ -325,8 +303,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtSerial);
             this.Controls.Add(this.btnReadMeter);
-            this.Controls.Add(this.cmboxMeters);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnOpenPort);
             this.Controls.Add(this.cmboxPorts);
             this.Controls.Add(this.label1);
@@ -346,8 +322,6 @@
         private System.Windows.Forms.ComboBox cmboxPorts;
         private System.Windows.Forms.Button btnOpenPort;
         private System.Windows.Forms.Button btnReadMeter;
-        private System.Windows.Forms.ComboBox cmboxMeters;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtSerial;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -370,6 +344,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }
 

@@ -10,93 +10,121 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using PSRESLogic;
 using PSRES.Data;
+using System.Timers;
+using PSRES.Data.Entities;
 
 namespace ReadMeter
 {
     public partial class Form1 : Form
     {
-        SerialPort sp = new SerialPort("COM10", 9600, Parity.Even, 7, StopBits.One);
-        Meter meter = new Meter();
-        MeterRecording mr = new MeterRecording();
-        private bool dataok;
-        private int id;
+        private Meter[] Meters = new Meter[2];
+        private System.Timers.Timer timer = new System.Timers.Timer(60000);
+
+        private decimal[] meterdata = new decimal[8];
+        private int ID;
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void MeterDataReadyEventHandler(bool recived, MeterRecording data)
-        {
-            dataok = recived;
-            mr = data;
-            Invoke(new EventHandler(populate));
-            
-        }
-
-        private void populate(object sender, EventArgs e)
-        {
-
-            if (dataok)
-            {
-                using (var context = new PSRESContext())
-                {
-                    var meters = context.Meters.ToList();
-                    var lasttimedate = context.Dates.Last().Id;
-                    mr.MeterId = id;
-                    mr.TimeDateId = lasttimedate;
-                    context.MeterRecordings.Add(mr);
-                    context.SaveChanges();
-                }
-
-
-                txtSerial.Text = meter.Serialcode.ToString();
-                txtActive.Text = mr.activeEnergy.ToString();
-                txtReact.Text = mr.reactiveEnergy.ToString();
-                txtVolt.Text = mr.voltage.ToString();
-                txtAmpre.Text = mr.current.ToString();
-                txtFreq.Text = mr.frequency.ToString();
-                txtInstantActive.Text = mr.activePower.ToString();
-                txtInstantReact.Text = mr.reactivePower.ToString();
-                txtPF.Text = mr.powerFactor.ToString(); 
-            }
-            else
-            {
-                MessageBox.Show("No Data Received");
-            }
-
-
-        }
+ 
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            serialPort1.BaudRate = 9600;
+            serialPort1.Parity = Parity.Even;
+            serialPort1.DataBits = 7;
+            serialPort1.StopBits = StopBits.One;
             cmboxPorts.Items.AddRange(SerialPort.GetPortNames());
-            meter.MeterDataReady += MeterDataReadyEventHandler;
-            sp.DataReceived += meter.DataReceivedHandler;
+
+            timer.Elapsed += oneMinuteMark;
+
+            //instantiate the meters
+
+            using (var context = new PSRESContext())
+            {
+                DatabaseSeeder seeder = new DatabaseSeeder(context);
+                seeder.Seed();
+                var meters = context.Meters.ToArray();
+                for (int i = 0; i < Meters.Length; i++)
+                {
+                    Meters[i] = new Meter();
+                    Meters[i].Id = meters[i].Id;
+                    Meters[i].SerialCode = meters[i].Serialcode;
+                    Meters[i].MeterDataReady += MeterDataHandler;
+                    serialPort1.DataReceived += Meters[i].DataReceivedHandler;
+                }
+
+            }
         }
+
+        private void MeterDataHandler(int meterId)
+        {
+            meterdata=Meters[meterId - 1].GetRealTimeData();
+            //this handler calls the next meter to read data
+            int i=0;
+            if (meterId != Meters.Length)
+            {
+                i = meterId;
+            }
+            ID = meterId;
+            Meters[i].Read(serialPort1);
+            Invoke(new EventHandler(populate));
+
+        }
+
+        private void oneMinuteMark(object sender, ElapsedEventArgs e)
+        {
+            //add data to database
+
+            using (var context = new PSRESContext())
+            {
+
+                // add a new entry to timedate table 
+                var newtime = new TimeDateEntity()
+                {
+                    year = DateTime.Now.Year,
+                    month = (byte)DateTime.Now.Month,
+                    day = (byte)DateTime.Now.Day,
+                    hour = (byte)DateTime.Now.Hour,
+                    minute = (byte)DateTime.Now.Minute
+                };
+                context.Dates.Add(newtime);
+
+
+                // add sensor recordings
+
+
+                //add meter recordings
+                foreach (var m in Meters)
+                {
+                    MeterRecordingEntity meterdata = m.GetDataForDataBase();
+                    meterdata.TimeDateId = newtime.Id;
+                    context.MeterRecordings.Add(meterdata);
+
+                    m.Reset();
+                }
+
+                //save changes
+                context.SaveChanges();
+            }
+
+        }
+
 
         private void btnOpenPort_Click(object sender, EventArgs e)
         {
-            sp.PortName = cmboxPorts.Text;
-            sp.Open();
+            serialPort1.PortName = cmboxPorts.Text;
+            serialPort1.Open();
         }
 
         private void btnReadMeter_Click(object sender, EventArgs e)
         {
 
-            if (sp.IsOpen)
+            if (serialPort1.IsOpen)
             {
 
-                if (cmboxMeters.Text.Equals("Big Room HVAC"))
-                {
-                    meter.Serialcode = 18119713646205;
-                    id  = 2;
-                }
-                else
-                {
-                    meter.Serialcode = 18119713646206;
-                    id = 3;
-                }
-                meter.Read(sp);
+                Meters[0].Read(serialPort1);
             }
             else
             {
@@ -104,6 +132,28 @@ namespace ReadMeter
             }
 
         }
+
+        private void MeterDataReadyEventHandler(int meterId)
+        {
+
+
+        }
+
+        private void populate(object sender, EventArgs e)
+        {
+                txtSerial.Text = Meters[ID].SerialCode.ToString();
+                txtActive.Text = meterdata[0].ToString();
+                txtReact.Text = meterdata[1].ToString();
+                txtVolt.Text = meterdata[4].ToString();
+                txtAmpre.Text = meterdata[2].ToString();
+                txtFreq.Text = meterdata[3].ToString();
+                txtInstantActive.Text = meterdata[6].ToString();
+                txtInstantReact.Text = meterdata[7].ToString();
+                txtPF.Text = meterdata[5].ToString();
+        }
+
+
+
 
     }
 }

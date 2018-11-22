@@ -23,7 +23,7 @@ namespace consoletest
         static byte[] buffer = new byte[18];
         static Parent parent = new Parent(2);
 
-
+        static int counter;
 
 
         static Timer timer = new Timer(60000);
@@ -33,9 +33,9 @@ namespace consoletest
                           
         static void Main(string[] args)
         {
-            Console.WriteLine(SerialPort.GetPortNames().ToString());
-            Console.WriteLine("select port for meter reading:");
-            MetersPort.PortName = Console.ReadLine();
+            Console.WriteLine(MetersPort.PortName);
+            Console.WriteLine("Press any key to begin");
+            Console.ReadKey();
             
             timer.Elapsed += oneMinuteMark;
 
@@ -54,16 +54,27 @@ namespace consoletest
                     Meters[i].MeterDataReady += MeterDataHandler;
                 }
 
+
+
             }
 
             parent.SensorDataReady += SensorDataHandler;
             MetersPort.Open();
+            MetersPort.DataReceived += Meters[0].DataReceivedHandler;
             Meters[0].Read(MetersPort);
             timer.Start();
-            Console.ReadKey();
+            string input = "";
+            while (!input.Equals("q"))
+            {
+                input = Console.ReadLine();
+
+            }
+
 
 
         }
+
+
 
         private static void SensorDataHandler(bool recived)
         {
@@ -72,18 +83,19 @@ namespace consoletest
 
         private static void MeterDataHandler(int meterId)
         {
-            Console.WriteLine(Meters[meterId - 1].ToString()); 
+            //Console.WriteLine(Meters[meterId - 1].ToString());
+
+            MetersPort.DataReceived -= Meters[meterId - 1].DataReceivedHandler;
             //this handler calls the next meter to read data
-            int i;
-            switch (meterId==Meters.Length)
+            int i=meterId;//not the last meter in the list. (meterId is 1 based while the index is zero based)
+            if (meterId == Meters.Length)//the last meter in the array has been reached so the first one should be read next
             {
-                case true://the last meter in the array has been reached so the first one should be read next
-                    i = 0;
-                    break;
-                case false:
-                    i = meterId;//not the last meter in the list. (meterId is 1 based while the index is zero based)
-                    break;
+                i = 0;
+                Console.WriteLine(counter);
+                counter++;
             }
+            MetersPort.DataReceived += Meters[i].DataReceivedHandler;
+            Meters[i].Read(MetersPort);
         }
 
         private static void oneMinuteMark(object sender, ElapsedEventArgs e)
@@ -102,6 +114,7 @@ namespace consoletest
                     minute=(byte)DateTime.Now.Minute                
                 };
                 context.Dates.Add(newtime);
+                context.SaveChanges();
 
 
                 // add sensor recordings
@@ -119,6 +132,7 @@ namespace consoletest
 
                 //save changes
                 context.SaveChanges();
+                Console.WriteLine("Saved To DataBase");
 
 
             }

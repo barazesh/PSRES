@@ -18,17 +18,19 @@ namespace PSRESLogic
         public int Id { get; set; }
         public long SerialCode { get; set; }
 
-
         private StringBuilder sb = new StringBuilder();
 
 
-        private List<decimal> Voltage;
-        private List<decimal> Current;
-        private List<decimal> PowerFactor;
-        private List<decimal> Frequency;
+        private List<decimal> Voltage = new List<decimal>();
+        private List<decimal> Current = new List<decimal>();
+        private List<decimal> PowerFactor = new List<decimal>();
+        private List<decimal> Frequency = new List<decimal>();
 
         private int peakActivePower;
         private int peakReactivePower;
+
+        private int ActivePower;
+        private int ReactivePower;
 
         private decimal[] totalActiveEnergy= new decimal[2];
         private decimal[] totalReactiveEnergy= new decimal[2];
@@ -65,7 +67,7 @@ namespace PSRESLogic
             }
 
             onDataReady(Id);
-            ;
+            
         }
 
         protected virtual void onDataReady(int meterid)
@@ -93,13 +95,15 @@ namespace PSRESLogic
                         //serial number
                         break;
                     case 3:
+                        
                         Voltage.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 4:
                         Current.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 5:
-                        peakActivePower = MAX((int)(1000*decimal.Parse(matches[i].Value.Trim(charstoTrim))),peakActivePower);
+                        ActivePower = (int)(1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim)));
+                        peakActivePower = MAX(ActivePower,peakActivePower);
                         break;
                     case 6:
                         PowerFactor.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
@@ -108,7 +112,8 @@ namespace PSRESLogic
                         Frequency.Add(decimal.Parse(matches[i].Value.Trim(charstoTrim)));
                         break;
                     case 8:
-                        peakReactivePower = MAX((int)(1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim))), peakReactivePower);
+                        ReactivePower = (int)(1000 * decimal.Parse(matches[i].Value.Trim(charstoTrim)));
+                        peakReactivePower = MAX(ReactivePower, peakReactivePower);
                         break;
                     case 9:
                         voltageCuttBegining = matches[i].Value.Trim(charstoTrim);
@@ -143,11 +148,27 @@ namespace PSRESLogic
             mr.frequency = Frequency.Average();
             mr.voltage = Voltage.Average();
             mr.powerFactor = PowerFactor.Average();
-            mr.peakActivePower = peakActivePower;
-            mr.peakReactivePower = peakReactivePower;
+            mr.peakActivePower = ActivePower;
+            mr.peakReactivePower = ReactivePower;
             mr.MeterId = Id;
 
             return mr;
+        }
+
+        public decimal[] GetRealTimeData()
+        {
+            decimal[] realTimeData = new decimal[8];
+
+            realTimeData[0] = totalActiveEnergy[1];
+            realTimeData[1] = totalReactiveEnergy[1];
+            realTimeData[2] = Current.Last();
+            realTimeData[3] = Frequency.Last();
+            realTimeData[4] = Voltage.Last();
+            realTimeData[5] = PowerFactor.Last();
+            realTimeData[6] = peakActivePower;
+            realTimeData[7] = peakReactivePower;
+
+            return realTimeData;
         }
 
         public void Reset()
@@ -189,14 +210,10 @@ namespace PSRESLogic
             {
                 sb.Append(indata);
             }
+            //Console.WriteLine(indata);
             
         }
 
-        public Meter()
-        {
-            timer.Elapsed += timerelapsed;
-            timer.AutoReset = false;
-        }
         public override string ToString()
         {
             StringBuilder newsb = new StringBuilder();
@@ -213,7 +230,11 @@ namespace PSRESLogic
             return newsb.ToString();
         }
 
-
+        public Meter()
+        {
+            timer.Elapsed += timerelapsed;
+            timer.AutoReset = false;
+        }
     }
 }
 
