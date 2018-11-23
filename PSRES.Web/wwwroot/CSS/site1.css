@@ -1,16 +1,22 @@
 ﻿
-
+.footeritem {
+    /*border:2px solid white;*/
+}
 
 .footeritem > img {
-    /*border:2px solid white;*/
-    height: 150px;
-}
-    
-        .footeritem >a> img {
-            height:150px;
-            /*border: 2px solid black;*/
 
-        }
+    width: auto;
+    max-height: 150px;
+    margin: 2px;
+    vertical-align:middle;
+}
+
+.footeritem > a > img {
+    width: auto;
+    max-height:150px;
+    margin: 2px;
+    vertical-align:middle;
+}
 
         
 

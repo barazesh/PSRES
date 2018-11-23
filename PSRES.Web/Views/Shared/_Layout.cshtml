@@ -7,24 +7,28 @@
 </head>
 <body>
 
-    <div class="navbar bg-dark">
-        <header class=" container-fluid">
-            <div class="navbar-brand text-light">PSRES Lab. MicroGrid</div>
-            <ul class="nav navbar-nav">
-                <li><a asp-controller="main" asp-action="Index">HomePage</a></li>
-                <li><a asp-controller="main" asp-action="Login">Login</a></li>
-                <li><a asp-controller="main" asp-action="About">About</a></li>
-                <li><a asp-controller="data" asp-action="Meters">Meters</a></li>
-                <li><a asp-controller="data" asp-action="Sensors">Sensors</a></li>
-            </ul>
-        </header>
-    </div>
+    <header>
+        <nav class="navbar navbar-dark navbar-expand-sm" style="background-color:darkred;">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="main" asp-action="Index">PSRES Lab. MicroGrid</a>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" asp-controller="main" asp-action="Index">HomePage</a>
+                    <a class="nav-item nav-link" asp-controller="main" asp-action="Login">Login</a>
+                    <a class="nav-item nav-link" asp-controller="main" asp-action="About">About</a>
+                    <a class="nav-item nav-link" asp-controller="data" asp-action="Meters">Meters</a>
+                    <a class="nav-item nav-link" asp-controller="data" asp-action="Sensors">Sensors</a>
+                </div>
+            </div>
+        </nav>
+        
+
+    </header>
     <section class="container">
         <h1 class="text-center">@ViewBag.Title</h1>
         @RenderBody()
     </section>
 
-    <footer class="container-fluid bg-info text-center">
+    <footer class="container-fluid text-center" style="background-color:aliceblue">
 
         <div class="row">
 
