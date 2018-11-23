@@ -17,10 +17,10 @@ gulp.task("minify", function () {
             .pipe(uglify())
             .pipe(concat("wilderblog.min.js"))
             .pipe(gulp.dest("wwwroot/lib/site")),
-        gulp.src(["wwwroot/js/contact.js"])
-            .pipe(uglify())
-            .pipe(concat("contact.min.js"))
-            .pipe(gulp.dest("wwwroot/lib/site"))
+        //gulp.src(["wwwroot/js/contact.js"])
+        //    .pipe(uglify())
+        //    .pipe(concat("contact.min.js"))
+        //    .pipe(gulp.dest("wwwroot/lib/site"))
     ];
 
     return merge(streams);
@@ -59,7 +59,7 @@ var deps = {
     "vue-resource": {
         "dist/*": ""
     },
-    "@fontawesome/fontawesome-free-webfonts": {
+    "fontawesome": {
         "**/*": ""
     }
 };
