@@ -6,17 +6,15 @@
 <div class="col-6 offset-3">
         <form method="post">
             <div class="form-group">
-                <label>Select Meter:</label>
-                <select class="form-control" asp-for="@Model.Value">
-                    @foreach (var meter in Model.MeterNames)
+                <label class="form-control-label" for="MetersList">Select Meter:</label>
+                <select class="form-control" asp-for="@Model.Value" id="MetersList">
+                    @for (int i = 0; i < 5; i++)
                     {
-                        <option value="@meter"> @meter </option>
-
+                        <option value="@(i+1)"> @Model.MeterNames[i] </option>
                     }
-
 
                 </select>
             </div>
-            <input class="form-group" type="submit" name="getData" value="get Data" />
+            <input class="form-group btn btn-primary" type="submit" name="getData" value="get Data" />
         </form>
 </div>

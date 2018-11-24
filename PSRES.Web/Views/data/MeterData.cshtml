@@ -1,4 +1,4 @@
-﻿@*@model MeterRecording*@
+﻿@model MeterRecordingEntity
 @{
     ViewBag.Title = "Meter Data";
 }
@@ -18,11 +18,11 @@
         </li>
 
         <li>
-            Active Power(KW):     @Model.activePower
+            Active Power(KW):     @Model.peakActivePower
         </li>
 
         <li>
-            Reactive Power(KVAr):     @Model.reactivePower
+            Reactive Power(KVAr):     @Model.peakReactivePower
         </li>
 
         <li>
