@@ -1,0 +1,41 @@
+﻿@model LampViewModel
+
+<div class="col-3 bg-light">
+    <form method="post">
+        <fieldset class="form-group">
+            <label>Select Lamp:</label>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="controlalllamps" asp-for="@Model.All" />
+                <label class="form-check-label">Select All Lamps at Once</label>
+            </div>
+            <input type="number" min="1" max="26" class="form-control" asp-for="@Model.Index" />
+        </fieldset>
+
+        <fieldset>
+            <a href="#" class="btn btn-primary btn-sm" data-target="#dutycyclecontrolfield" data-toggle="collapse">Dim</a>
+            <a href="#" class="btn btn-danger btn-sm" data-target="#frequencycontrolfield" data-toggle="collapse">Frequency</a>
+        </fieldset>
+
+        <fieldset class="collapse" id="dutycyclecontrolfield">
+            <div class="form-group">
+                <label>Dim Value:</label>
+                <input type="number" min="1" max="100" class="form-control mx-1" asp-for="@Model.DutyCycle" />
+            </div>
+            <input class="btn btn-primary btn-block" type="submit" name="SetDutyCycle" value="Dim" />
+
+
+        </fieldset>
+
+        <fieldset class="collapse" id="frequencycontrolfield">
+            <div class="form-group">
+                <label>Switching Frequency:</label>
+                <input type="number" min="1" max="255" class="form-control mx-1" asp-for="@Model.Frequency" />
+            </div>
+            <input class="btn btn-primary btn-block" type="submit" name="SetFrequency" value="Set" />
+
+
+        </fieldset>
+
+    </form>
+</div>

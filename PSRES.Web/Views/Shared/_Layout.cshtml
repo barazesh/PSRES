@@ -15,14 +15,25 @@
                     <a class="nav-item nav-link" asp-controller="main" asp-action="Index">HomePage</a>
                     <a class="nav-item nav-link" asp-controller="main" asp-action="Login">Login</a>
                     <a class="nav-item nav-link" asp-controller="main" asp-action="About">About</a>
-                    <a class="nav-item nav-link" asp-controller="data" asp-action="Meters">Meters</a>
-                    <a class="nav-item nav-link" asp-controller="data" asp-action="Sensors">Sensors</a>
+                    <div class="dropdown">
+                        <a class="nav-item nav-link dropdown-toggle" data-toggle="dropdown" id="Microgrid Dropdown" 
+                           aria-haspopup="true"
+                           href="#">MicroGrid</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-controller="data" asp-action="Meters">Meters</a>
+                            <a class="dropdown-item" asp-controller="data" asp-action="Sensors">Sensors</a>
+                            <a class="dropdown-item" asp-controller="data" asp-action="lampControl">Lamp Control</a>
+
+                        </div>
+                    </div>
+                    
+
                 </div>
             </div>
         </nav>
-        
-
     </header>
+
+
     <section class="container">
         <h1 class="text-center">@ViewBag.Title</h1>
         @RenderBody()

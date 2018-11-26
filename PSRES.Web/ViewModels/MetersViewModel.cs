@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PSRES.Web.ViewModels
 {
-    public class ViewMeter
+    public class MetersViewModel
     {
-        public int Value { get; set; }
+        public int Index { get; set; }
         public string Name { get; set; }
 
         public List<string> MeterNames { get; set; }
