@@ -4,7 +4,6 @@
     button.on("click", function () {
         form.slideToggle(500);
     });
-
     form.on("click", function () {
         console.log("hi you clicked on" + $(this).text());
     })

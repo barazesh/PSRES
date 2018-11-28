@@ -16,7 +16,7 @@
                     <a class="nav-item nav-link" asp-controller="main" asp-action="Login">Login</a>
                     <a class="nav-item nav-link" asp-controller="main" asp-action="About">About</a>
                     <div class="dropdown">
-                        <a class="nav-item nav-link dropdown-toggle" data-toggle="dropdown" id="Microgrid Dropdown" 
+                        <a class="nav-item nav-link dropdown-toggle" data-toggle="dropdown" id="Microgrid Dropdown"
                            aria-haspopup="true"
                            href="#">MicroGrid</a>
                         <div class="dropdown-menu">
@@ -26,7 +26,7 @@
 
                         </div>
                     </div>
-                    
+
 
                 </div>
             </div>
@@ -62,12 +62,10 @@
         </div>
     </footer>
 
-
-
-
-    <script src="~/lib/jquery/jquery.slim.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="~/js/sensorform.js"></script>
+    @RenderSection("scripts", required: false)
+
 
 </body>
 </html>
