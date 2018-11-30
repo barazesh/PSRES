@@ -25,6 +25,7 @@ namespace PSRESLogic
         private List<decimal> Current = new List<decimal>();
         private List<decimal> PowerFactor = new List<decimal>();
         private List<decimal> Frequency = new List<decimal>();
+        private List<decimal> Calcpower= new List<decimal>();
 
         private int peakActivePower;
         private int peakReactivePower;
@@ -125,6 +126,7 @@ namespace PSRESLogic
                         break;
                 }
             }
+            Calcpower.Add(Voltage.Last()*Current.Last());
             
         }
 
