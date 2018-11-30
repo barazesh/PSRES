@@ -1,4 +1,4 @@
-﻿namespace PSRES.Data.Entities
+namespace PSRESData.Entities
 {
     public class SensorRecordingEntity
     {
@@ -9,5 +9,6 @@
         public double Illumination { get; set; }
         public double Distance { get; set; }
         public bool Presence { get; set; }
+
     }
 }

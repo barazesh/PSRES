@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PSRES.Data\PSRES.Data.csproj" />
+    <ProjectReference Include="..\PSRESData\PSRESData.csproj" />
     <ProjectReference Include="..\PSRESLogic\PSRESLogic.csproj" />
   </ItemGroup>
 

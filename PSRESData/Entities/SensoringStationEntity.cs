@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-namespace PSRES.Data.Entities
+using System.Collections.Generic;
+namespace PSRESData.Entities
 {
     public class SensoringStationEntity
     {

@@ -1,7 +1,6 @@
-﻿namespace PSRES.Data.Entities
+namespace PSRESData.Entities
 {
-    public class MeterRecordingEntity
-    {
+    public class MeterRecordingEntity{
         public int Id { get; set; }
         public MeterEntity meter { get; set; }
         public int MeterId { get; set; }

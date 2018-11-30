@@ -1,19 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using PSRES.Data.Entities;
+﻿using System;
 
-namespace PSRES.Data
+namespace PSRESData
 {
-    public class PSRESContext:DbContext
+    public class PSRESContext:context
     {
-        public static readonly LoggerFactory myConsoleLoggerFactory = new LoggerFactory(new[]
-        {
-            new ConsoleLoggerProvider((category, level)=> category ==DbLoggerCategory.Database.Command.Name
-            && level== LogLevel.Information,true)
-        });
-
-
         public DbSet<MeterRecordingEntity> MeterRecordings { get; set; }
         public DbSet<TimeDateEntity> Dates { get; set; }
         public DbSet<MeterEntity> Meters { get; set; }
@@ -23,12 +13,8 @@ namespace PSRES.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseLoggerFactory(myConsoleLoggerFactory)
                 .UseSqlServer(@"Server= ENG-PC\SQLEXPRESS; DataBase = PSRESDataTest1; Integrated Security = True; 
                 ");
         }
-
-
     }
 }
- 

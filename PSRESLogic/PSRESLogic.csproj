@@ -48,10 +48,7 @@
     <Compile Include="SensorData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PSRES.Data\PSRES.Data.csproj">
-      <Project>{d48a2e2e-c2b5-417a-b83e-efdefd21ab90}</Project>
-      <Name>PSRES.Data</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\PSRESData\PSRESData.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

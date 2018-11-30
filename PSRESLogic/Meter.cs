@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
-using PSRES.Data.Entities;
+using PSRESData;
+using PSRESData.Entities;
 using System.Linq;
 
 namespace PSRESLogic

@@ -1,18 +1,14 @@
-﻿using PSRES.Data.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PSRESData.Entities;
 
-
-namespace PSRES.Data
+namespace PSRESData
 {
-    public class DatabaseSeeder
+    public class DataBaseSeeder
     {
+
         private readonly PSRESContext _ctx;
 
-        public DatabaseSeeder(PSRESContext ctx)
+        public DataBaseSeeder(PSRESContext ctx)
         {
             _ctx = ctx;
         }
