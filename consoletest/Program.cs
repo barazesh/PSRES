@@ -5,11 +5,11 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PSRES.Data;
+using PSRESData;
 using PSRESLogic;
 using System.IO;
 using System.Timers;
-using PSRES.Data.Entities;
+using PSRESData.Entities;
 
 namespace consoletest
 {
@@ -43,7 +43,7 @@ namespace consoletest
 
             using (var context = new PSRESContext())
             {
-                DatabaseSeeder seeder = new DatabaseSeeder(context);
+                DataBaseSeeder seeder = new DataBaseSeeder(context);
                 seeder.Seed();
                 var meters= context.Meters.ToArray();
                 for (int i = 0; i < Meters.Length; i++)

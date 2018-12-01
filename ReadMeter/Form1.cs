@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using PSRESLogic;
-using PSRES.Data;
+using PSRESData;
 using System.Timers;
-using PSRES.Data.Entities;
+using PSRESData.Entities;
 
 namespace ReadMeter
 {
@@ -43,7 +43,7 @@ namespace ReadMeter
 
             using (var context = new PSRESContext())
             {
-                DatabaseSeeder seeder = new DatabaseSeeder(context);
+                DataBaseSeeder seeder = new DataBaseSeeder(context);
                 seeder.Seed();
                 var meters = context.Meters.ToArray();
                 for (int i = 0; i < Meters.Length; i++)
