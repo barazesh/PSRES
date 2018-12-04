@@ -56,6 +56,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.cmboxMeters = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -74,12 +76,12 @@
             this.cmboxPorts.Location = new System.Drawing.Point(138, 20);
             this.cmboxPorts.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cmboxPorts.Name = "cmboxPorts";
-            this.cmboxPorts.Size = new System.Drawing.Size(180, 28);
+            this.cmboxPorts.Size = new System.Drawing.Size(273, 28);
             this.cmboxPorts.TabIndex = 1;
             // 
             // btnOpenPort
             // 
-            this.btnOpenPort.Location = new System.Drawing.Point(361, 16);
+            this.btnOpenPort.Location = new System.Drawing.Point(428, 16);
             this.btnOpenPort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnOpenPort.Name = "btnOpenPort";
             this.btnOpenPort.Size = new System.Drawing.Size(112, 35);
@@ -90,7 +92,7 @@
             // 
             // btnReadMeter
             // 
-            this.btnReadMeter.Location = new System.Drawing.Point(361, 85);
+            this.btnReadMeter.Location = new System.Drawing.Point(428, 85);
             this.btnReadMeter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnReadMeter.Name = "btnReadMeter";
             this.btnReadMeter.Size = new System.Drawing.Size(112, 35);
@@ -109,7 +111,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(154, 129);
+            this.label3.Location = new System.Drawing.Point(29, 162);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(109, 20);
             this.label3.TabIndex = 7;
@@ -275,11 +277,32 @@
             this.label13.TabIndex = 27;
             this.label13.Text = "Frequency";
             // 
+            // cmboxMeters
+            // 
+            this.cmboxMeters.FormattingEnabled = true;
+            this.cmboxMeters.Location = new System.Drawing.Point(138, 89);
+            this.cmboxMeters.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmboxMeters.Name = "cmboxMeters";
+            this.cmboxMeters.Size = new System.Drawing.Size(273, 28);
+            this.cmboxMeters.TabIndex = 29;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(28, 92);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(99, 20);
+            this.label2.TabIndex = 28;
+            this.label2.Text = "Select Meter";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(593, 425);
+            this.ClientSize = new System.Drawing.Size(557, 425);
+            this.Controls.Add(this.cmboxMeters);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
@@ -345,6 +368,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.IO.Ports.SerialPort serialPort1;
+        private System.Windows.Forms.ComboBox cmboxMeters;
+        private System.Windows.Forms.Label label2;
     }
 }
 
