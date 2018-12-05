@@ -45,7 +45,8 @@
     <Compile Include="Meter.cs" />
     <Compile Include="Parent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SensorData.cs" />
+    <Compile Include="InstantSensorData.cs" />
+    <Compile Include="SensorPackData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PSRESData\PSRESData.csproj" />

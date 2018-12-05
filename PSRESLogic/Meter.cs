@@ -45,7 +45,7 @@ namespace PSRESLogic
 
 
         private Stopwatch watch = new Stopwatch();
-        private Timer timer = new Timer(2000);
+        private Timer timer = new Timer(1000);
 
 
         public void Read(SerialPort mySerialPort1)

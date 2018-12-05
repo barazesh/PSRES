@@ -20,7 +20,7 @@ namespace LampControl
         private Lamp[] lamps = new Lamp[5];
         private Parent parent = new Parent(2);
         private bool datarecived;
-        private SensorData[] sd = new SensorData[3];
+        private InstantSensorData[] sd = new InstantSensorData[3];
 
         public Form1()
         {
@@ -47,7 +47,11 @@ namespace LampControl
             datarecived = recived;
             if (recived)
             {
-                sd = parent.GetrealTimeData();
+                for (int i = 0; i < 3; i++)
+                {
+                    sd[i] = parent.sensorsdata[i].GetLatestData();
+                }
+
                 Invoke(new EventHandler(populate));
             }
             
