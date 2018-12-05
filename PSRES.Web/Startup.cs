@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PSRES.Web.Services;
 using PSRESData;
 
 namespace PSRES.Web
@@ -17,6 +18,7 @@ namespace PSRES.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IController, SystemControl>();
             services.AddMvc();
             services.AddDbContext<PSRESContext>();
         }
