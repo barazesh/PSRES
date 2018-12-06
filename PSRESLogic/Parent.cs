@@ -20,7 +20,7 @@ namespace PSRESLogic
         private bool datarecieved;
         private byte[] readRequestMessage = new byte[2];
         private Stopwatch watch = new Stopwatch();
-        private Timer timer = new Timer(100);
+        private Timer timer = new Timer(50);
         public event SensorDataReadyHandler SensorDataReady;
         
 

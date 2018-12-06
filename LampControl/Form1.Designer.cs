@@ -33,11 +33,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtdutycycle = new System.Windows.Forms.TextBox();
             this.btndutycycle = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkalllamps = new System.Windows.Forms.CheckBox();
             this.btnfrequency = new System.Windows.Forms.Button();
             this.txtfrequency = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmboxParent = new System.Windows.Forms.ComboBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.chkallParents = new System.Windows.Forms.CheckBox();
+            this.cmboxLamps = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtPresence1 = new System.Windows.Forms.TextBox();
             this.txtDistbin1 = new System.Windows.Forms.TextBox();
@@ -86,10 +90,9 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.btnReadSensor = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.cmboxPorts = new System.Windows.Forms.ComboBox();
-            this.btnPort = new System.Windows.Forms.Button();
-            this.cmboxLamps = new System.Windows.Forms.ComboBox();
             this.btnRefreshPortNames = new System.Windows.Forms.Button();
+            this.btnPort = new System.Windows.Forms.Button();
+            this.cmboxPorts = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -100,7 +103,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 32);
+            this.label1.Location = new System.Drawing.Point(173, 30);
             this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(112, 20);
@@ -110,7 +113,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(255, 32);
+            this.label2.Location = new System.Drawing.Point(321, 30);
             this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 20);
@@ -120,43 +123,43 @@
             // txtdutycycle
             // 
             this.txtdutycycle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtdutycycle.Location = new System.Drawing.Point(259, 76);
+            this.txtdutycycle.Location = new System.Drawing.Point(407, 25);
             this.txtdutycycle.Margin = new System.Windows.Forms.Padding(5);
             this.txtdutycycle.Name = "txtdutycycle";
-            this.txtdutycycle.Size = new System.Drawing.Size(187, 29);
+            this.txtdutycycle.Size = new System.Drawing.Size(72, 29);
             this.txtdutycycle.TabIndex = 3;
             // 
             // btndutycycle
             // 
             this.btndutycycle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btndutycycle.Location = new System.Drawing.Point(349, 22);
+            this.btndutycycle.Location = new System.Drawing.Point(325, 58);
             this.btndutycycle.Margin = new System.Windows.Forms.Padding(5);
             this.btndutycycle.Name = "btndutycycle";
-            this.btndutycycle.Size = new System.Drawing.Size(97, 43);
+            this.btndutycycle.Size = new System.Drawing.Size(154, 30);
             this.btndutycycle.TabIndex = 4;
             this.btndutycycle.Text = "SET Duty Cycle";
             this.btndutycycle.UseVisualStyleBackColor = true;
             this.btndutycycle.Click += new System.EventHandler(this.btndutycycle_Click);
             // 
-            // checkBox1
+            // chkalllamps
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(143, 33);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(97, 24);
-            this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "All Lamps";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.chkalllamps.AutoSize = true;
+            this.chkalllamps.Location = new System.Drawing.Point(177, 58);
+            this.chkalllamps.Margin = new System.Windows.Forms.Padding(2);
+            this.chkalllamps.Name = "chkalllamps";
+            this.chkalllamps.Size = new System.Drawing.Size(45, 24);
+            this.chkalllamps.TabIndex = 6;
+            this.chkalllamps.Text = "All";
+            this.chkalllamps.UseVisualStyleBackColor = true;
+            this.chkalllamps.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // btnfrequency
             // 
             this.btnfrequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnfrequency.Location = new System.Drawing.Point(556, 22);
+            this.btnfrequency.Location = new System.Drawing.Point(498, 58);
             this.btnfrequency.Margin = new System.Windows.Forms.Padding(5);
             this.btnfrequency.Name = "btnfrequency";
-            this.btnfrequency.Size = new System.Drawing.Size(94, 44);
+            this.btnfrequency.Size = new System.Drawing.Size(154, 31);
             this.btnfrequency.TabIndex = 9;
             this.btnfrequency.Text = "SET Frequency";
             this.btnfrequency.UseVisualStyleBackColor = true;
@@ -165,16 +168,16 @@
             // txtfrequency
             // 
             this.txtfrequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtfrequency.Location = new System.Drawing.Point(461, 76);
+            this.txtfrequency.Location = new System.Drawing.Point(591, 24);
             this.txtfrequency.Margin = new System.Windows.Forms.Padding(5);
             this.txtfrequency.Name = "txtfrequency";
-            this.txtfrequency.Size = new System.Drawing.Size(189, 29);
+            this.txtfrequency.Size = new System.Drawing.Size(61, 29);
             this.txtfrequency.TabIndex = 8;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(462, 33);
+            this.label3.Location = new System.Drawing.Point(497, 30);
             this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 20);
@@ -183,6 +186,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmboxParent);
+            this.groupBox1.Controls.Add(this.label25);
+            this.groupBox1.Controls.Add(this.chkallParents);
             this.groupBox1.Controls.Add(this.cmboxLamps);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.btnfrequency);
@@ -190,16 +196,67 @@
             this.groupBox1.Controls.Add(this.txtfrequency);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.txtdutycycle);
-            this.groupBox1.Controls.Add(this.checkBox1);
+            this.groupBox1.Controls.Add(this.chkalllamps);
             this.groupBox1.Controls.Add(this.btndutycycle);
             this.groupBox1.Location = new System.Drawing.Point(20, 10);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(670, 138);
+            this.groupBox1.Size = new System.Drawing.Size(670, 103);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Lamp Control";
+            // 
+            // cmboxParent
+            // 
+            this.cmboxParent.FormattingEnabled = true;
+            this.cmboxParent.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"});
+            this.cmboxParent.Location = new System.Drawing.Point(81, 58);
+            this.cmboxParent.Name = "cmboxParent";
+            this.cmboxParent.Size = new System.Drawing.Size(58, 28);
+            this.cmboxParent.TabIndex = 11;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(27, 30);
+            this.label25.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(119, 20);
+            this.label25.TabIndex = 10;
+            this.label25.Text = "Parent Selector";
+            // 
+            // chkallParents
+            // 
+            this.chkallParents.AutoSize = true;
+            this.chkallParents.Location = new System.Drawing.Point(31, 61);
+            this.chkallParents.Margin = new System.Windows.Forms.Padding(2);
+            this.chkallParents.Name = "chkallParents";
+            this.chkallParents.Size = new System.Drawing.Size(45, 24);
+            this.chkallParents.TabIndex = 12;
+            this.chkallParents.Text = "All";
+            this.chkallParents.UseVisualStyleBackColor = true;
+            // 
+            // cmboxLamps
+            // 
+            this.cmboxLamps.FormattingEnabled = true;
+            this.cmboxLamps.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"});
+            this.cmboxLamps.Location = new System.Drawing.Point(220, 56);
+            this.cmboxLamps.Name = "cmboxLamps";
+            this.cmboxLamps.Size = new System.Drawing.Size(72, 28);
+            this.cmboxLamps.TabIndex = 2;
             // 
             // groupBox2
             // 
@@ -217,7 +274,7 @@
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Location = new System.Drawing.Point(20, 162);
+            this.groupBox2.Location = new System.Drawing.Point(20, 188);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
@@ -368,7 +425,7 @@
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.label17);
-            this.groupBox3.Location = new System.Drawing.Point(318, 162);
+            this.groupBox3.Location = new System.Drawing.Point(318, 188);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
@@ -519,7 +576,7 @@
             this.groupBox4.Controls.Add(this.label22);
             this.groupBox4.Controls.Add(this.label23);
             this.groupBox4.Controls.Add(this.label24);
-            this.groupBox4.Location = new System.Drawing.Point(626, 162);
+            this.groupBox4.Location = new System.Drawing.Point(626, 188);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
@@ -660,7 +717,7 @@
             // 
             // btnReadSensor
             // 
-            this.btnReadSensor.Location = new System.Drawing.Point(20, 475);
+            this.btnReadSensor.Location = new System.Drawing.Point(20, 501);
             this.btnReadSensor.Name = "btnReadSensor";
             this.btnReadSensor.Size = new System.Drawing.Size(875, 34);
             this.btnReadSensor.TabIndex = 16;
@@ -675,48 +732,15 @@
             this.groupBox5.Controls.Add(this.cmboxPorts);
             this.groupBox5.Location = new System.Drawing.Point(697, 10);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(198, 138);
+            this.groupBox5.Size = new System.Drawing.Size(198, 114);
             this.groupBox5.TabIndex = 17;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Port";
             // 
-            // cmboxPorts
-            // 
-            this.cmboxPorts.FormattingEnabled = true;
-            this.cmboxPorts.Location = new System.Drawing.Point(6, 75);
-            this.cmboxPorts.Name = "cmboxPorts";
-            this.cmboxPorts.Size = new System.Drawing.Size(172, 28);
-            this.cmboxPorts.TabIndex = 0;
-            // 
-            // btnPort
-            // 
-            this.btnPort.Location = new System.Drawing.Point(6, 32);
-            this.btnPort.Name = "btnPort";
-            this.btnPort.Size = new System.Drawing.Size(81, 37);
-            this.btnPort.TabIndex = 1;
-            this.btnPort.Text = "Set Port";
-            this.btnPort.UseVisualStyleBackColor = true;
-            this.btnPort.Click += new System.EventHandler(this.btnPort_Click);
-            // 
-            // cmboxLamps
-            // 
-            this.cmboxLamps.FormattingEnabled = true;
-            this.cmboxLamps.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6"});
-            this.cmboxLamps.Location = new System.Drawing.Point(8, 75);
-            this.cmboxLamps.Name = "cmboxLamps";
-            this.cmboxLamps.Size = new System.Drawing.Size(232, 28);
-            this.cmboxLamps.TabIndex = 2;
-            // 
             // btnRefreshPortNames
             // 
             this.btnRefreshPortNames.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.btnRefreshPortNames.Location = new System.Drawing.Point(93, 32);
+            this.btnRefreshPortNames.Location = new System.Drawing.Point(101, 24);
             this.btnRefreshPortNames.Name = "btnRefreshPortNames";
             this.btnRefreshPortNames.Size = new System.Drawing.Size(85, 37);
             this.btnRefreshPortNames.TabIndex = 2;
@@ -724,11 +748,29 @@
             this.btnRefreshPortNames.UseVisualStyleBackColor = false;
             this.btnRefreshPortNames.Click += new System.EventHandler(this.btnRefreshPortNames_Click);
             // 
+            // btnPort
+            // 
+            this.btnPort.Location = new System.Drawing.Point(14, 24);
+            this.btnPort.Name = "btnPort";
+            this.btnPort.Size = new System.Drawing.Size(81, 37);
+            this.btnPort.TabIndex = 1;
+            this.btnPort.Text = "Set Port";
+            this.btnPort.UseVisualStyleBackColor = true;
+            this.btnPort.Click += new System.EventHandler(this.btnPort_Click);
+            // 
+            // cmboxPorts
+            // 
+            this.cmboxPorts.FormattingEnabled = true;
+            this.cmboxPorts.Location = new System.Drawing.Point(14, 67);
+            this.cmboxPorts.Name = "cmboxPorts";
+            this.cmboxPorts.Size = new System.Drawing.Size(172, 28);
+            this.cmboxPorts.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(919, 521);
+            this.ClientSize = new System.Drawing.Size(919, 552);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.btnReadSensor);
             this.Controls.Add(this.groupBox4);
@@ -758,7 +800,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtdutycycle;
         private System.Windows.Forms.Button btndutycycle;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkalllamps;
         private System.Windows.Forms.Button btnfrequency;
         private System.Windows.Forms.TextBox txtfrequency;
         private System.Windows.Forms.Label label3;
@@ -815,6 +857,9 @@
         private System.Windows.Forms.ComboBox cmboxPorts;
         private System.Windows.Forms.ComboBox cmboxLamps;
         private System.Windows.Forms.Button btnRefreshPortNames;
+        private System.Windows.Forms.ComboBox cmboxParent;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.CheckBox chkallParents;
     }
 }
 

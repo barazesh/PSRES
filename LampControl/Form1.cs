@@ -18,9 +18,15 @@ namespace LampControl
         private byte[] data;
         private byte[] buffer = new byte[18];
         private Lamp[] lamps = new Lamp[5];
-        private Parent parent = new Parent(2);
+        private Parent[] parents =
+        {
+            new Parent(1),
+            new Parent(2),
+            new Parent(3)
+        };
         private bool datarecived;
         private InstantSensorData[] sd = new InstantSensorData[3];
+        private int parentindex;
 
         public Form1()
         {
@@ -28,18 +34,22 @@ namespace LampControl
             InitializeComponent();
             cmboxPorts.Items.AddRange(SerialPort.GetPortNames());
             serialPort1.BaudRate = 115200;
-            serialPort1.DataReceived += parent.sensorDataReceivedEventHandler;
-            parent.SensorDataReady += populatesensorform;
+            for (int i = 0; i < parents.Length; i++)
+            {
+                parents[i].SensorDataReady += populatesensorform;
 
+            }
+            
             for (int i = 0; i < 5; i++)
             {
-                lamps[i] = new Lamp(2);
+                lamps[i] = new Lamp();
                 lamps[i].PWMpin = i + 1;
             }
         }
 
         private void populatesensorform(bool recived)
         {
+            MessageBox.Show("hello");
             if (serialPort1.IsOpen)
             {
                 serialPort1.Close();
@@ -49,7 +59,7 @@ namespace LampControl
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    sd[i] = parent.sensorsdata[i].GetLatestData();
+                    sd[i] = parents[parentindex].sensorsdata[i].GetLatestData();
                 }
 
                 Invoke(new EventHandler(populate));
@@ -63,28 +73,28 @@ namespace LampControl
             if (datarecived)
             {
                 txtTemp1.Text = sd[0].Temperature.ToString();
-                txtTempbin1.Text = Convert.ToString(((parent.buffer[0] << 8) + parent.buffer[1]), 2);
+                txtTempbin1.Text = Convert.ToString(((parents[parentindex].buffer[0] << 8) + parents[parentindex].buffer[1]), 2);
                 txtLight1.Text = sd[0].Illumination.ToString();
-                txtLightbin1.Text = Convert.ToString(((parent.buffer[2] << 8) + parent.buffer[3]), 2);
+                txtLightbin1.Text = Convert.ToString(((parents[parentindex].buffer[2] << 8) + parents[parentindex].buffer[3]), 2);
                 txtDist1.Text = sd[0].Distance.ToString();
-                txtDistbin1.Text = Convert.ToString(((parent.buffer[4] & 0x7F) << 8) + parent.buffer[5], 2);
-                txtPresence1.Text = (parent.buffer[4] > 0x80).ToString();
+                txtDistbin1.Text = Convert.ToString(((parents[parentindex].buffer[4] & 0x7F) << 8) + parents[parentindex].buffer[5], 2);
+                txtPresence1.Text = (parents[parentindex].buffer[4] > 0x80).ToString();
 
                 txtTemp2.Text = sd[1].Temperature.ToString();
-                txtTempbin2.Text = Convert.ToString(((parent.buffer[6] << 8) + parent.buffer[7]), 2);
+                txtTempbin2.Text = Convert.ToString(((parents[parentindex].buffer[6] << 8) + parents[parentindex].buffer[7]), 2);
                 txtLight2.Text = sd[1].Illumination.ToString();
-                txtLightbin2.Text = Convert.ToString(((parent.buffer[8] << 8) + parent.buffer[9]), 2);
+                txtLightbin2.Text = Convert.ToString(((parents[parentindex].buffer[8] << 8) + parents[parentindex].buffer[9]), 2);
                 txtDist2.Text = sd[1].Distance.ToString();
-                txtDistbin2.Text = Convert.ToString(((parent.buffer[10] & 0x7F) << 8) + parent.buffer[11], 2);
-                txtPresence2.Text = (parent.buffer[10] > 0x80).ToString();
+                txtDistbin2.Text = Convert.ToString(((parents[parentindex].buffer[10] & 0x7F) << 8) + parents[parentindex].buffer[11], 2);
+                txtPresence2.Text = (parents[parentindex].buffer[10] > 0x80).ToString();
 
                 txtTemp3.Text = sd[2].Temperature.ToString();
-                txtTempbin3.Text = Convert.ToString(((parent.buffer[12] << 8) + parent.buffer[13]), 2);
+                txtTempbin3.Text = Convert.ToString(((parents[parentindex].buffer[12] << 8) + parents[parentindex].buffer[13]), 2);
                 txtLight3.Text = sd[2].Illumination.ToString();
-                txtLightbin3.Text = Convert.ToString(((parent.buffer[14] << 8) + parent.buffer[15]), 2);
+                txtLightbin3.Text = Convert.ToString(((parents[parentindex].buffer[14] << 8) + parents[parentindex].buffer[15]), 2);
                 txtDist3.Text = sd[2].Distance.ToString();
-                txtDistbin3.Text = Convert.ToString(((parent.buffer[16] & 0x7F) << 8) + parent.buffer[17], 2);
-                txtPresence3.Text = (parent.buffer[16] > 0x80).ToString();
+                txtDistbin3.Text = Convert.ToString(((parents[parentindex].buffer[16] & 0x7F) << 8) + parents[parentindex].buffer[17], 2);
+                txtPresence3.Text = (parents[parentindex].buffer[16] > 0x80).ToString();
             }
             else
             {
@@ -95,10 +105,10 @@ namespace LampControl
         private void btndutycycle_Click(object sender, EventArgs e)
         {
 
-
-            if (checkBox1.Checked)
+            parentindex = cmboxParent.SelectedIndex;
+            if (chkalllamps.Checked)
             {
-                data = Lamp.DimAll(byte.Parse(txtdutycycle.Text), 2);
+                data = Lamp.DimAll(byte.Parse(txtdutycycle.Text), parentindex+1);
             }
             else
             {
@@ -109,16 +119,22 @@ namespace LampControl
             {
                 serialPort1.Open();
             }
+
+            if (chkallParents.Checked)
+            {
+                data[0] &= 0x3F;
+            }
             serialPort1.Write(data, 0, 2);
             serialPort1.Close();
         }
 
         private void btnfrequency_Click(object sender, EventArgs e)
         {
+            parentindex = cmboxParent.SelectedIndex;
 
-            if (checkBox1.Checked)
+            if (chkalllamps.Checked)
             {
-                data = Lamp.changeFrequencyAll(byte.Parse(txtfrequency.Text), 2);
+                data = Lamp.changeFrequencyAll(byte.Parse(txtfrequency.Text), parentindex + 1);
 
             }
             else
@@ -131,6 +147,11 @@ namespace LampControl
             {
                 serialPort1.Open();
             }
+
+            if (chkallParents.Checked)
+            {
+                data[0] &= 0x3F;
+            }
             serialPort1.Write(data, 0, 2);
             serialPort1.Close();
         }
@@ -139,7 +160,11 @@ namespace LampControl
 
         private void btnReadSensor_Click(object sender, EventArgs e)
         {
-            parent.readSensorData(serialPort1);
+            serialPort1.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
+            parentindex = cmboxParent.SelectedIndex;
+            serialPort1.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
+
+            parents[parentindex].readSensorData(serialPort1);
         }
 
         private void btnPort_Click(object sender, EventArgs e)
@@ -157,7 +182,7 @@ namespace LampControl
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (chkalllamps.Checked)
             {
                 cmboxLamps.Enabled = false;
             }
@@ -167,6 +192,7 @@ namespace LampControl
 
             }
         }
+
     }
 }
 
