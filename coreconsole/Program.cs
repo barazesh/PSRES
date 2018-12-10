@@ -7,34 +7,41 @@ namespace coreconsole
 {
     class Program
     {
-        static SerialPort SensorsPort = new SerialPort(SerialPort.GetPortNames()[2], 115200, Parity.None, 8, StopBits.One);
+        static SerialPort SensorsPort = new SerialPort("COM10", 115200, Parity.None, 8, StopBits.One);
         static byte[] buffer = new byte[18];
 
-        static Parent[] parents =
-        {
-            new Parent(1),
-            new Parent(2),
-            new Parent(3)
-        };
+
         static bool datarecived;
         static int parentindex;
+        static Parent[] parents = {
+                new Parent(1),
+                new Parent(2),
+                new Parent(3)
 
+            };
 
         static void Main(string[] args)
         {
-
-            for (int i = 0; i < parents.Length; i++)
+            datarecived = false;
+            for (int i = 0; i < 3; i++)
             {
                 parents[i].SensorDataReady += ShowSensrosData;
 
             }
-            Console.WriteLine(SensorsPort.PortName);
+            Console.WriteLine("Available Ports");
+            foreach (var item in SerialPort.GetPortNames())
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("Enter Port Name");
+            SensorsPort.PortName = Console.ReadLine().ToUpper();
+            Console.WriteLine("You Selected "+ SensorsPort.PortName);
             Console.WriteLine("Press any key to begin");
             Console.ReadKey();
 
             while (true)
             {
-                Console.WriteLine("Eneter the Parent Number to read Sensor data:");
+                Console.WriteLine("Enter the Parent Number to read Sensor data:");
 
 
                 SensorsPort.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;

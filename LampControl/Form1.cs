@@ -49,7 +49,6 @@ namespace LampControl
 
         private void populatesensorform(bool recived)
         {
-            MessageBox.Show("hello");
             if (serialPort1.IsOpen)
             {
                 serialPort1.Close();

@@ -78,6 +78,13 @@ namespace PSRESLogic
             timer.Elapsed += timerelapsed;
             timer.AutoReset = false;
 
+            for (int i = 0; i < sensorsdata.Length; i++)
+            {
+                sensorsdata[i] = new SensorPackData();
+
+            }
+
+
         }
     }
 }
