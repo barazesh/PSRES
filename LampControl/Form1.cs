@@ -34,6 +34,7 @@ namespace LampControl
             InitializeComponent();
             cmboxPorts.Items.AddRange(SerialPort.GetPortNames());
             serialPort1.BaudRate = 115200;
+            //serialPort1.DataReceived += bitcounter;
             for (int i = 0; i < parents.Length; i++)
             {
                 parents[i].SensorDataReady += populatesensorform;
@@ -45,6 +46,12 @@ namespace LampControl
                 lamps[i] = new Lamp();
                 lamps[i].PWMpin = i + 1;
             }
+        }
+
+        private void bitcounter(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort sp = (SerialPort)sender;
+            MessageBox.Show(sp.BytesToRead.ToString());
         }
 
         private void populatesensorform(bool recived)

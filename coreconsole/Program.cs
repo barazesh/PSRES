@@ -22,6 +22,7 @@ namespace coreconsole
 
         static void Main(string[] args)
         {
+            SensorsPort.DataReceived += SensorsPort_DataReceived;
             datarecived = false;
             for (int i = 0; i < 3; i++)
             {
@@ -34,7 +35,7 @@ namespace coreconsole
                 Console.WriteLine(item);
             }
             Console.WriteLine("Enter Port Name");
-            SensorsPort.PortName = Console.ReadLine().ToUpper();
+            SensorsPort.PortName = "COM"+Console.ReadLine();
             Console.WriteLine("You Selected "+ SensorsPort.PortName);
             Console.WriteLine("Press any key to begin");
             Console.ReadKey();
@@ -45,15 +46,28 @@ namespace coreconsole
 
 
                 SensorsPort.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
-                parentindex = int.Parse(Console.ReadLine());
-                SensorsPort.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
-
-                parents[parentindex].readSensorData(SensorsPort);
-
+                bool isright = int.TryParse(Console.ReadLine(), out parentindex);
+                if (isright)
+                {
+                    parentindex -= 1;
+                    SensorsPort.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
+                    parents[parentindex].readSensorData(SensorsPort);
+                }
+                else
+                {
+                    Console.WriteLine("Please enter an integer!");
+                }
+                
                 Console.ReadKey();
 
             }
 
+        }
+
+        private static void SensorsPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort sp = (SerialPort)sender;
+            Console.WriteLine(sp.BytesToRead); 
         }
 
         private static void ShowSensrosData(bool recived)
@@ -66,10 +80,23 @@ namespace coreconsole
             datarecived = recived;
             if (recived)
             {
+                buffer = parents[parentindex].buffer;
+                byte[] subbuffer = new byte[6];
+
                 for (int i = 0; i < 3; i++)
                 {
-                    Console.WriteLine("Sensor Pack {i+1}");
+                    Console.WriteLine("Sensor Pack "+(i+1));
                     Console.WriteLine(parents[parentindex].sensorsdata[i].GetLatestData().ToString());
+                    Console.WriteLine("Binary:");
+                    Array.Copy(buffer, i * 6, subbuffer, 0, 6);
+                    Console.WriteLine("");
+                    Console.WriteLine(BitConverter.ToString(subbuffer));
+                    foreach (var item in subbuffer)
+                    {
+                        Console.WriteLine(Convert.ToString(item,2).PadLeft(8,'0'));
+
+                    }
+                    Console.WriteLine("");
                 }
 
             }

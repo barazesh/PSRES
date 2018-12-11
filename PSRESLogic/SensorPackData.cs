@@ -29,12 +29,12 @@ namespace PSRESLogic
             Array.Copy(recieveddata, 0, subdata, 0, 2);
             Temperature.Add(TranslateTemperature(subdata));
 
-            Array.Copy(recieveddata, 2, subdata, 0, 2);
+            Array.Copy(recieveddata, 4, subdata, 0, 2);
             Distance.Add(TranslateDistance(subdata));
 
-            Array.Copy(recieveddata, 4, subdata, 0, 2);
+            Array.Copy(recieveddata, 2, subdata, 0, 2);
             Illumination.Add(TranslateIllumination(subdata));
-            Presence = recieveddata[4] > 128;
+            Presence = recieveddata[4] >= 128;
         }
 
         private double TranslateIllumination(byte[] illumstring)
@@ -44,7 +44,7 @@ namespace PSRESLogic
 
         private double TranslateDistance(byte[] diststring)
         {
-            return (((diststring[0]& 0x70) << 8) + diststring[1]) * 0.017;
+            return (((diststring[0] & 0x78) << 8) + diststring[1]) * 0.017;
         }
 
         private double TranslateTemperature(byte[] tempstring)
