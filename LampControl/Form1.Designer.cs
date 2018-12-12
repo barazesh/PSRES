@@ -278,7 +278,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Size = new System.Drawing.Size(281, 308);
+            this.groupBox2.Size = new System.Drawing.Size(352, 308);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sensor Pack 1";
@@ -288,7 +288,7 @@
             this.txtPresence1.Location = new System.Drawing.Point(118, 263);
             this.txtPresence1.Margin = new System.Windows.Forms.Padding(2);
             this.txtPresence1.Name = "txtPresence1";
-            this.txtPresence1.Size = new System.Drawing.Size(148, 26);
+            this.txtPresence1.Size = new System.Drawing.Size(200, 26);
             this.txtPresence1.TabIndex = 13;
             // 
             // txtDistbin1
@@ -296,7 +296,7 @@
             this.txtDistbin1.Location = new System.Drawing.Point(118, 225);
             this.txtDistbin1.Margin = new System.Windows.Forms.Padding(2);
             this.txtDistbin1.Name = "txtDistbin1";
-            this.txtDistbin1.Size = new System.Drawing.Size(148, 26);
+            this.txtDistbin1.Size = new System.Drawing.Size(200, 26);
             this.txtDistbin1.TabIndex = 12;
             // 
             // txtDist1
@@ -304,7 +304,7 @@
             this.txtDist1.Location = new System.Drawing.Point(118, 187);
             this.txtDist1.Margin = new System.Windows.Forms.Padding(2);
             this.txtDist1.Name = "txtDist1";
-            this.txtDist1.Size = new System.Drawing.Size(148, 26);
+            this.txtDist1.Size = new System.Drawing.Size(200, 26);
             this.txtDist1.TabIndex = 11;
             // 
             // label9
@@ -342,7 +342,7 @@
             this.txtLightbin1.Location = new System.Drawing.Point(118, 149);
             this.txtLightbin1.Margin = new System.Windows.Forms.Padding(2);
             this.txtLightbin1.Name = "txtLightbin1";
-            this.txtLightbin1.Size = new System.Drawing.Size(148, 26);
+            this.txtLightbin1.Size = new System.Drawing.Size(200, 26);
             this.txtLightbin1.TabIndex = 7;
             // 
             // label7
@@ -360,7 +360,7 @@
             this.txtLight1.Location = new System.Drawing.Point(118, 111);
             this.txtLight1.Margin = new System.Windows.Forms.Padding(2);
             this.txtLight1.Name = "txtLight1";
-            this.txtLight1.Size = new System.Drawing.Size(148, 26);
+            this.txtLight1.Size = new System.Drawing.Size(200, 26);
             this.txtLight1.TabIndex = 5;
             // 
             // txtTempbin1
@@ -368,7 +368,7 @@
             this.txtTempbin1.Location = new System.Drawing.Point(118, 73);
             this.txtTempbin1.Margin = new System.Windows.Forms.Padding(2);
             this.txtTempbin1.Name = "txtTempbin1";
-            this.txtTempbin1.Size = new System.Drawing.Size(148, 26);
+            this.txtTempbin1.Size = new System.Drawing.Size(200, 26);
             this.txtTempbin1.TabIndex = 4;
             // 
             // txtTemp1
@@ -376,7 +376,7 @@
             this.txtTemp1.Location = new System.Drawing.Point(118, 35);
             this.txtTemp1.Margin = new System.Windows.Forms.Padding(2);
             this.txtTemp1.Name = "txtTemp1";
-            this.txtTemp1.Size = new System.Drawing.Size(148, 26);
+            this.txtTemp1.Size = new System.Drawing.Size(200, 26);
             this.txtTemp1.TabIndex = 3;
             // 
             // label6
@@ -425,11 +425,11 @@
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.label17);
-            this.groupBox3.Location = new System.Drawing.Point(318, 188);
+            this.groupBox3.Location = new System.Drawing.Point(386, 188);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(288, 308);
+            this.groupBox3.Size = new System.Drawing.Size(359, 308);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Sensor Pack 2";
@@ -439,7 +439,7 @@
             this.txtPresence2.Location = new System.Drawing.Point(118, 263);
             this.txtPresence2.Margin = new System.Windows.Forms.Padding(2);
             this.txtPresence2.Name = "txtPresence2";
-            this.txtPresence2.Size = new System.Drawing.Size(154, 26);
+            this.txtPresence2.Size = new System.Drawing.Size(200, 26);
             this.txtPresence2.TabIndex = 13;
             // 
             // txtDistbin2
@@ -447,7 +447,7 @@
             this.txtDistbin2.Location = new System.Drawing.Point(118, 225);
             this.txtDistbin2.Margin = new System.Windows.Forms.Padding(2);
             this.txtDistbin2.Name = "txtDistbin2";
-            this.txtDistbin2.Size = new System.Drawing.Size(154, 26);
+            this.txtDistbin2.Size = new System.Drawing.Size(200, 26);
             this.txtDistbin2.TabIndex = 12;
             // 
             // txtDist2
@@ -455,7 +455,7 @@
             this.txtDist2.Location = new System.Drawing.Point(118, 187);
             this.txtDist2.Margin = new System.Windows.Forms.Padding(2);
             this.txtDist2.Name = "txtDist2";
-            this.txtDist2.Size = new System.Drawing.Size(154, 26);
+            this.txtDist2.Size = new System.Drawing.Size(200, 26);
             this.txtDist2.TabIndex = 11;
             // 
             // label8
@@ -493,7 +493,7 @@
             this.txtLightbin2.Location = new System.Drawing.Point(118, 149);
             this.txtLightbin2.Margin = new System.Windows.Forms.Padding(2);
             this.txtLightbin2.Name = "txtLightbin2";
-            this.txtLightbin2.Size = new System.Drawing.Size(154, 26);
+            this.txtLightbin2.Size = new System.Drawing.Size(200, 26);
             this.txtLightbin2.TabIndex = 7;
             // 
             // label14
@@ -511,7 +511,7 @@
             this.txtLight2.Location = new System.Drawing.Point(118, 111);
             this.txtLight2.Margin = new System.Windows.Forms.Padding(2);
             this.txtLight2.Name = "txtLight2";
-            this.txtLight2.Size = new System.Drawing.Size(154, 26);
+            this.txtLight2.Size = new System.Drawing.Size(200, 26);
             this.txtLight2.TabIndex = 5;
             // 
             // txtTempbin2
@@ -519,7 +519,7 @@
             this.txtTempbin2.Location = new System.Drawing.Point(118, 73);
             this.txtTempbin2.Margin = new System.Windows.Forms.Padding(2);
             this.txtTempbin2.Name = "txtTempbin2";
-            this.txtTempbin2.Size = new System.Drawing.Size(154, 26);
+            this.txtTempbin2.Size = new System.Drawing.Size(200, 26);
             this.txtTempbin2.TabIndex = 4;
             // 
             // txtTemp2
@@ -527,7 +527,7 @@
             this.txtTemp2.Location = new System.Drawing.Point(118, 35);
             this.txtTemp2.Margin = new System.Windows.Forms.Padding(2);
             this.txtTemp2.Name = "txtTemp2";
-            this.txtTemp2.Size = new System.Drawing.Size(154, 26);
+            this.txtTemp2.Size = new System.Drawing.Size(200, 26);
             this.txtTemp2.TabIndex = 3;
             // 
             // label15
@@ -576,11 +576,11 @@
             this.groupBox4.Controls.Add(this.label22);
             this.groupBox4.Controls.Add(this.label23);
             this.groupBox4.Controls.Add(this.label24);
-            this.groupBox4.Location = new System.Drawing.Point(626, 188);
+            this.groupBox4.Location = new System.Drawing.Point(760, 188);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox4.Size = new System.Drawing.Size(269, 308);
+            this.groupBox4.Size = new System.Drawing.Size(340, 308);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Sensor Pack 3";
@@ -590,7 +590,7 @@
             this.txtPresence3.Location = new System.Drawing.Point(118, 263);
             this.txtPresence3.Margin = new System.Windows.Forms.Padding(2);
             this.txtPresence3.Name = "txtPresence3";
-            this.txtPresence3.Size = new System.Drawing.Size(147, 26);
+            this.txtPresence3.Size = new System.Drawing.Size(200, 26);
             this.txtPresence3.TabIndex = 13;
             // 
             // txtDistbin3
@@ -598,7 +598,7 @@
             this.txtDistbin3.Location = new System.Drawing.Point(118, 225);
             this.txtDistbin3.Margin = new System.Windows.Forms.Padding(2);
             this.txtDistbin3.Name = "txtDistbin3";
-            this.txtDistbin3.Size = new System.Drawing.Size(147, 26);
+            this.txtDistbin3.Size = new System.Drawing.Size(200, 26);
             this.txtDistbin3.TabIndex = 12;
             // 
             // txtDist3
@@ -606,7 +606,7 @@
             this.txtDist3.Location = new System.Drawing.Point(118, 187);
             this.txtDist3.Margin = new System.Windows.Forms.Padding(2);
             this.txtDist3.Name = "txtDist3";
-            this.txtDist3.Size = new System.Drawing.Size(147, 26);
+            this.txtDist3.Size = new System.Drawing.Size(200, 26);
             this.txtDist3.TabIndex = 11;
             // 
             // label18
@@ -644,7 +644,7 @@
             this.txtLightbin3.Location = new System.Drawing.Point(118, 149);
             this.txtLightbin3.Margin = new System.Windows.Forms.Padding(2);
             this.txtLightbin3.Name = "txtLightbin3";
-            this.txtLightbin3.Size = new System.Drawing.Size(147, 26);
+            this.txtLightbin3.Size = new System.Drawing.Size(200, 26);
             this.txtLightbin3.TabIndex = 7;
             // 
             // label21
@@ -662,7 +662,7 @@
             this.txtLight3.Location = new System.Drawing.Point(118, 111);
             this.txtLight3.Margin = new System.Windows.Forms.Padding(2);
             this.txtLight3.Name = "txtLight3";
-            this.txtLight3.Size = new System.Drawing.Size(147, 26);
+            this.txtLight3.Size = new System.Drawing.Size(200, 26);
             this.txtLight3.TabIndex = 5;
             // 
             // txtTempbin3
@@ -670,7 +670,7 @@
             this.txtTempbin3.Location = new System.Drawing.Point(118, 73);
             this.txtTempbin3.Margin = new System.Windows.Forms.Padding(2);
             this.txtTempbin3.Name = "txtTempbin3";
-            this.txtTempbin3.Size = new System.Drawing.Size(147, 26);
+            this.txtTempbin3.Size = new System.Drawing.Size(200, 26);
             this.txtTempbin3.TabIndex = 4;
             // 
             // txtTemp3
@@ -678,7 +678,7 @@
             this.txtTemp3.Location = new System.Drawing.Point(118, 35);
             this.txtTemp3.Margin = new System.Windows.Forms.Padding(2);
             this.txtTemp3.Name = "txtTemp3";
-            this.txtTemp3.Size = new System.Drawing.Size(147, 26);
+            this.txtTemp3.Size = new System.Drawing.Size(200, 26);
             this.txtTemp3.TabIndex = 3;
             // 
             // label22
@@ -719,7 +719,7 @@
             // 
             this.btnReadSensor.Location = new System.Drawing.Point(20, 501);
             this.btnReadSensor.Name = "btnReadSensor";
-            this.btnReadSensor.Size = new System.Drawing.Size(875, 34);
+            this.btnReadSensor.Size = new System.Drawing.Size(946, 34);
             this.btnReadSensor.TabIndex = 16;
             this.btnReadSensor.Text = "Read Sensors";
             this.btnReadSensor.UseVisualStyleBackColor = true;
@@ -770,7 +770,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(919, 552);
+            this.ClientSize = new System.Drawing.Size(1112, 552);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.btnReadSensor);
             this.Controls.Add(this.groupBox4);

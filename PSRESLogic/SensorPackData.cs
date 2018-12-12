@@ -4,20 +4,25 @@ using System.Linq;
 
 namespace PSRESLogic
 {
+    public delegate void PresenceChangedHandler(bool presence);
     public class SensorPackData
     {
 
         private List<double> Temperature = new List<double>();
         private List<double> Illumination = new List<double>();
         private List<double> Distance = new List<double>();
-        private bool Presence;
+        private List<bool> Presence = new List<bool>();
+
+        public event PresenceChangedHandler PresenceChanged;
+
+
 
         public InstantSensorData GetLatestData()
         {
             InstantSensorData data = new InstantSensorData();
             data.Temperature = Temperature.LastOrDefault();
             data.Distance = Distance.LastOrDefault();
-            data.Presence = Presence;
+            data.Presence = Presence.LastOrDefault(); ;
             data.Illumination = Illumination.LastOrDefault();
 
             return data;
@@ -27,27 +32,47 @@ namespace PSRESLogic
         {
             byte[] subdata = new byte[2];
             Array.Copy(recieveddata, 0, subdata, 0, 2);
-            Temperature.Add(TranslateTemperature(subdata));
+            TranslateTemperature(subdata);
 
             Array.Copy(recieveddata, 4, subdata, 0, 2);
-            Distance.Add(TranslateDistance(subdata));
+            TranslateDistance(subdata);
 
             Array.Copy(recieveddata, 2, subdata, 0, 2);
-            Illumination.Add(TranslateIllumination(subdata));
-            Presence = recieveddata[4] >= 128;
+            TranslateIllumination(subdata);
+
+            TranslatePresence(recieveddata[4]);
         }
 
-        private double TranslateIllumination(byte[] illumstring)
+        private void TranslatePresence(byte v)
         {
-            return ((illumstring[0] << 8) | (illumstring[1])) / 1.2;
+            bool newpresence = v >= 128;
+
+            if (newpresence!=Presence.LastOrDefault() )
+            {
+                onPreseneChanged(newpresence);
+            }
+            Presence.Add(newpresence);
+
         }
 
-        private double TranslateDistance(byte[] diststring)
+        protected virtual void onPreseneChanged(bool newpresence)
         {
-            return (((diststring[0] & 0x78) << 8) + diststring[1]) * 0.017;
+            (PresenceChanged as PresenceChangedHandler)?.Invoke(newpresence);
         }
 
-        private double TranslateTemperature(byte[] tempstring)
+        private void TranslateIllumination(byte[] illumstring)
+        {
+            double newIllumination= ((illumstring[0] << 8) | (illumstring[1])) / 1.2;
+            Illumination.Add(newIllumination);
+        }
+
+        private void TranslateDistance(byte[] diststring)
+        {
+            double newDistance=(((diststring[0] & 0x78) << 8) + diststring[1]) * 0.017;
+            Distance.Add(newDistance);
+        }
+
+        private void TranslateTemperature(byte[] tempstring)
         {
             int temp = (tempstring[0] << 8) | tempstring[1];
             bool minus = false;
@@ -69,7 +94,8 @@ namespace PSRESLogic
             {
                 temperature = 0 - temperature;
             }
-            return temperature;
+
+            Temperature.Add(temperature);
         }
     }
 

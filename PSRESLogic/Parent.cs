@@ -28,8 +28,11 @@ namespace PSRESLogic
         {
             
             datarecieved = false;
-
-            sp.Open();
+            if (!sp.IsOpen)
+            {
+                sp.Open();
+            }
+            
 
             sp.Write(readRequestMessage, 0, 2);
             timer.Start();

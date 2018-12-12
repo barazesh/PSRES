@@ -17,7 +17,7 @@ namespace LampControl
         private int lampnumber;
         private byte[] data;
         private byte[] buffer = new byte[18];
-        private Lamp[] lamps = new Lamp[5];
+        private Lamp[] lamps = new Lamp[6];
         private Parent[] parents =
         {
             new Parent(1),
@@ -41,7 +41,7 @@ namespace LampControl
 
             }
             
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < lamps.Length; i++)
             {
                 lamps[i] = new Lamp();
                 lamps[i].PWMpin = i + 1;
@@ -79,28 +79,28 @@ namespace LampControl
             if (datarecived)
             {
                 txtTemp1.Text = sd[0].Temperature.ToString();
-                txtTempbin1.Text = Convert.ToString(((parents[parentindex].buffer[0] << 8) + parents[parentindex].buffer[1]), 2);
+                txtTempbin1.Text = Convert.ToString(((parents[parentindex].buffer[0] << 8) + parents[parentindex].buffer[1]), 2).PadLeft(16, '0');
                 txtLight1.Text = sd[0].Illumination.ToString();
-                txtLightbin1.Text = Convert.ToString(((parents[parentindex].buffer[2] << 8) + parents[parentindex].buffer[3]), 2);
+                txtLightbin1.Text = Convert.ToString(((parents[parentindex].buffer[2] << 8) + parents[parentindex].buffer[3]), 2).PadLeft(16, '0');
                 txtDist1.Text = sd[0].Distance.ToString();
-                txtDistbin1.Text = Convert.ToString(((parents[parentindex].buffer[4] & 0x7F) << 8) + parents[parentindex].buffer[5], 2);
-                txtPresence1.Text = (parents[parentindex].buffer[4] > 0x80).ToString();
+                txtDistbin1.Text = Convert.ToString(((parents[parentindex].buffer[4]) << 8) + parents[parentindex].buffer[5], 2).PadLeft(16, '0');
+                txtPresence1.Text = sd[0].Presence.ToString();
 
                 txtTemp2.Text = sd[1].Temperature.ToString();
-                txtTempbin2.Text = Convert.ToString(((parents[parentindex].buffer[6] << 8) + parents[parentindex].buffer[7]), 2);
+                txtTempbin2.Text = Convert.ToString(((parents[parentindex].buffer[6] << 8) + parents[parentindex].buffer[7]), 2).PadLeft(16, '0');
                 txtLight2.Text = sd[1].Illumination.ToString();
-                txtLightbin2.Text = Convert.ToString(((parents[parentindex].buffer[8] << 8) + parents[parentindex].buffer[9]), 2);
+                txtLightbin2.Text = Convert.ToString(((parents[parentindex].buffer[8] << 8) + parents[parentindex].buffer[9]), 2).PadLeft(16, '0');
                 txtDist2.Text = sd[1].Distance.ToString();
-                txtDistbin2.Text = Convert.ToString(((parents[parentindex].buffer[10] & 0x7F) << 8) + parents[parentindex].buffer[11], 2);
-                txtPresence2.Text = (parents[parentindex].buffer[10] > 0x80).ToString();
+                txtDistbin2.Text = Convert.ToString(((parents[parentindex].buffer[10]) << 8) + parents[parentindex].buffer[11], 2).PadLeft(16, '0');
+                txtPresence2.Text = sd[1].Presence.ToString();
 
                 txtTemp3.Text = sd[2].Temperature.ToString();
-                txtTempbin3.Text = Convert.ToString(((parents[parentindex].buffer[12] << 8) + parents[parentindex].buffer[13]), 2);
+                txtTempbin3.Text = Convert.ToString(((parents[parentindex].buffer[12] << 8) + parents[parentindex].buffer[13]), 2).PadLeft(16, '0');
                 txtLight3.Text = sd[2].Illumination.ToString();
-                txtLightbin3.Text = Convert.ToString(((parents[parentindex].buffer[14] << 8) + parents[parentindex].buffer[15]), 2);
+                txtLightbin3.Text = Convert.ToString(((parents[parentindex].buffer[14] << 8) + parents[parentindex].buffer[15]), 2).PadLeft(16, '0');
                 txtDist3.Text = sd[2].Distance.ToString();
-                txtDistbin3.Text = Convert.ToString(((parents[parentindex].buffer[16] & 0x7F) << 8) + parents[parentindex].buffer[17], 2);
-                txtPresence3.Text = (parents[parentindex].buffer[16] > 0x80).ToString();
+                txtDistbin3.Text = Convert.ToString(((parents[parentindex].buffer[16]) << 8) + parents[parentindex].buffer[17], 2).PadLeft(16,'0');
+                txtPresence3.Text = sd[2].Presence.ToString();
             }
             else
             {
