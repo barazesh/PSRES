@@ -5,13 +5,16 @@ using System.Linq;
 namespace PSRESLogic
 {
     public delegate void PresenceChangedHandler(bool presence);
-    public class SensorPackData
+    public class SensorPack
     {
 
         private List<double> Temperature = new List<double>();
         private List<double> Illumination = new List<double>();
         private List<double> Distance = new List<double>();
         private List<bool> Presence = new List<bool>();
+        private byte Position;
+        private byte IDC;
+        private byte ParentId;
 
         public event PresenceChangedHandler PresenceChanged;
 
