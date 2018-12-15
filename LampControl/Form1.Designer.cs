@@ -87,17 +87,13 @@
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.TTLport = new System.IO.Ports.SerialPort(this.components);
             this.btnReadSensor = new System.Windows.Forms.Button();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.btnRefreshPortNames = new System.Windows.Forms.Button();
-            this.btnPort = new System.Windows.Forms.Button();
-            this.cmboxPorts = new System.Windows.Forms.ComboBox();
+            this.ZigBeeport = new System.IO.Ports.SerialPort(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -151,7 +147,7 @@
             this.chkalllamps.TabIndex = 6;
             this.chkalllamps.Text = "All";
             this.chkalllamps.UseVisualStyleBackColor = true;
-            this.chkalllamps.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.chkalllamps.CheckedChanged += new System.EventHandler(this.chkalllamps_CheckedChanged);
             // 
             // btnfrequency
             // 
@@ -216,7 +212,8 @@
             "3",
             "4",
             "5",
-            "6"});
+            "6",
+            "7"});
             this.cmboxParent.Location = new System.Drawing.Point(81, 58);
             this.cmboxParent.Name = "cmboxParent";
             this.cmboxParent.Size = new System.Drawing.Size(58, 28);
@@ -242,6 +239,7 @@
             this.chkallParents.TabIndex = 12;
             this.chkallParents.Text = "All";
             this.chkallParents.UseVisualStyleBackColor = true;
+            this.chkallParents.CheckedChanged += new System.EventHandler(this.chkallParents_CheckedChanged);
             // 
             // cmboxLamps
             // 
@@ -711,9 +709,9 @@
             this.label24.TabIndex = 0;
             this.label24.Text = "Temp";
             // 
-            // serialPort1
+            // TTLport
             // 
-            this.serialPort1.BaudRate = 115200;
+            this.TTLport.BaudRate = 115200;
             // 
             // btnReadSensor
             // 
@@ -725,53 +723,11 @@
             this.btnReadSensor.UseVisualStyleBackColor = true;
             this.btnReadSensor.Click += new System.EventHandler(this.btnReadSensor_Click);
             // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.btnRefreshPortNames);
-            this.groupBox5.Controls.Add(this.btnPort);
-            this.groupBox5.Controls.Add(this.cmboxPorts);
-            this.groupBox5.Location = new System.Drawing.Point(697, 10);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(198, 114);
-            this.groupBox5.TabIndex = 17;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Port";
-            // 
-            // btnRefreshPortNames
-            // 
-            this.btnRefreshPortNames.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.btnRefreshPortNames.Location = new System.Drawing.Point(101, 24);
-            this.btnRefreshPortNames.Name = "btnRefreshPortNames";
-            this.btnRefreshPortNames.Size = new System.Drawing.Size(85, 37);
-            this.btnRefreshPortNames.TabIndex = 2;
-            this.btnRefreshPortNames.Text = "Refresh";
-            this.btnRefreshPortNames.UseVisualStyleBackColor = false;
-            this.btnRefreshPortNames.Click += new System.EventHandler(this.btnRefreshPortNames_Click);
-            // 
-            // btnPort
-            // 
-            this.btnPort.Location = new System.Drawing.Point(14, 24);
-            this.btnPort.Name = "btnPort";
-            this.btnPort.Size = new System.Drawing.Size(81, 37);
-            this.btnPort.TabIndex = 1;
-            this.btnPort.Text = "Set Port";
-            this.btnPort.UseVisualStyleBackColor = true;
-            this.btnPort.Click += new System.EventHandler(this.btnPort_Click);
-            // 
-            // cmboxPorts
-            // 
-            this.cmboxPorts.FormattingEnabled = true;
-            this.cmboxPorts.Location = new System.Drawing.Point(14, 67);
-            this.cmboxPorts.Name = "cmboxPorts";
-            this.cmboxPorts.Size = new System.Drawing.Size(172, 28);
-            this.cmboxPorts.TabIndex = 0;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1112, 552);
-            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.btnReadSensor);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -789,7 +745,6 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -850,16 +805,13 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label24;
-        private System.IO.Ports.SerialPort serialPort1;
+        private System.IO.Ports.SerialPort TTLport;
         private System.Windows.Forms.Button btnReadSensor;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Button btnPort;
-        private System.Windows.Forms.ComboBox cmboxPorts;
         private System.Windows.Forms.ComboBox cmboxLamps;
-        private System.Windows.Forms.Button btnRefreshPortNames;
         private System.Windows.Forms.ComboBox cmboxParent;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.CheckBox chkallParents;
+        private System.IO.Ports.SerialPort ZigBeeport;
     }
 }
 

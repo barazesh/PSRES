@@ -17,13 +17,9 @@ namespace LampControl
         private int lampnumber;
         private byte[] data;
         private byte[] buffer = new byte[18];
-        private Lamp[] lamps = new Lamp[6];
-        private Parent[] parents =
-        {
-            new Parent(1),
-            new Parent(2),
-            new Parent(3)
-        };
+        private Lamp[] lamps = new Lamp[26];
+        private Parent[] parents = new Parent[7];
+
         private bool datarecived;
         private InstantSensorData[] sd = new InstantSensorData[3];
         private int parentindex;
@@ -32,11 +28,34 @@ namespace LampControl
         {
 
             InitializeComponent();
-            cmboxPorts.Items.AddRange(SerialPort.GetPortNames());
-            serialPort1.BaudRate = 115200;
+            TTLport.BaudRate = 115200;
+            TTLport.PortName = "COM4";
+            
+            ZigBeeport.BaudRate = 115200;
+            ZigBeeport.PortName = "COM5";
+
             //serialPort1.DataReceived += bitcounter;
             for (int i = 0; i < parents.Length; i++)
             {
+                if (i < 3)
+                {
+                    parents[i] = new Parent(i+1);
+                    parents[i].Zone = 1;
+                }
+                else
+                {
+                    if (i < 5)
+                    {
+                        parents[i] = new Parent(i - 2);
+                        parents[i].Zone = 2;
+                    }
+                    else
+                    {
+                        parents[i] = new Parent(i - 3);
+                        parents[i].Zone = 3;
+                    }
+                }
+                
                 parents[i].SensorDataReady += populatesensorform;
 
             }
@@ -44,7 +63,7 @@ namespace LampControl
             for (int i = 0; i < lamps.Length; i++)
             {
                 lamps[i] = new Lamp();
-                lamps[i].PWMpin = i + 1;
+                
             }
         }
 
@@ -56,10 +75,7 @@ namespace LampControl
 
         private void populatesensorform(bool recived)
         {
-            if (serialPort1.IsOpen)
-            {
-                serialPort1.Close();
-            }
+
             datarecived = recived;
             if (recived)
             {
@@ -121,17 +137,17 @@ namespace LampControl
                 lampnumber = int.Parse(cmboxLamps.Text)-1;
                 data = lamps[lampnumber].Dim(byte.Parse(txtdutycycle.Text));
             }
-            if (!serialPort1.IsOpen)
+            if (!TTLport.IsOpen)
             {
-                serialPort1.Open();
+                TTLport.Open();
             }
 
             if (chkallParents.Checked)
             {
                 data[0] &= 0x3F;
             }
-            serialPort1.Write(data, 0, 2);
-            serialPort1.Close();
+            TTLport.Write(data, 0, 2);
+            TTLport.Close();
         }
 
         private void btnfrequency_Click(object sender, EventArgs e)
@@ -149,44 +165,61 @@ namespace LampControl
                 data = lamps[lampnumber].changeFreqency(byte.Parse(txtfrequency.Text));
             }
 
-            if (!serialPort1.IsOpen)
+            if (!TTLport.IsOpen)
             {
-                serialPort1.Open();
+                TTLport.Open();
             }
 
             if (chkallParents.Checked)
             {
                 data[0] &= 0x3F;
             }
-            serialPort1.Write(data, 0, 2);
-            serialPort1.Close();
+            TTLport.Write(data, 0, 2);
+            TTLport.Close();
         }
 
 
 
         private void btnReadSensor_Click(object sender, EventArgs e)
         {
-            serialPort1.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
+            if (parentindex < 4 )
+            {
+                TTLport.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
+            }
+            else
+            {
+                ZigBeeport.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
+            }
+
             parentindex = cmboxParent.SelectedIndex;
-            serialPort1.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
 
-            parents[parentindex].readSensorData(serialPort1);
+            if (parentindex < 3)
+            {
+                TTLport.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
+                parents[parentindex].readSensorData(TTLport);
+            }
+            else
+            {
+                ZigBeeport.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
+                parents[parentindex].readSensorData(ZigBeeport);
+            }
+
         }
 
-        private void btnPort_Click(object sender, EventArgs e)
+            
+        private void chkallParents_CheckedChanged(object sender, EventArgs e)
         {
-            serialPort1.PortName = cmboxPorts.Text;
+            if (chkallParents.Checked)
+            {
+                cmboxParent.Enabled = false;
+            }
+            else
+            {
+                cmboxParent.Enabled = true;
+            }
         }
 
-        private void btnRefreshPortNames_Click(object sender, EventArgs e)
-        {
-            cmboxPorts.Items.Clear();
-            cmboxPorts.Items.AddRange(SerialPort.GetPortNames());
-
-
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void chkalllamps_CheckedChanged(object sender, EventArgs e)
         {
             if (chkalllamps.Checked)
             {
@@ -195,10 +228,8 @@ namespace LampControl
             else
             {
                 cmboxLamps.Enabled = true;
-
             }
         }
-
     }
 }
 

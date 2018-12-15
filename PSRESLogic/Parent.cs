@@ -32,9 +32,31 @@ namespace PSRESLogic
             {
                 sp.Open();
             }
-            
+            if (Zone == 1)
+            {
+                sp.Write(readRequestMessage, 0, 2);
+            }
+            else
+            {
+                byte[] zigbeereadRequextMessage = {
+                    0xFD, 0x02,
+                    0x57, 0x3b,
+                    readRequestMessage[0],readRequestMessage[1]
+                    };
+                switch (Zone)
+                {
+                    case 2:
+                        sp.Write(zigbeereadRequextMessage, 0, 6);
+                        break;
+                    case 3:
+                        zigbeereadRequextMessage[2] = 0xB5;
+                        zigbeereadRequextMessage[3] = 0xCE;
 
-            sp.Write(readRequestMessage, 0, 2);
+                        sp.Write(zigbeereadRequextMessage, 0, 6);
+                        break;
+                }
+            }
+
             timer.Start();
         }
 
@@ -56,13 +78,19 @@ namespace PSRESLogic
 
         public void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            
+            byte[] readbuffer = new byte[22];
             long a = watch.ElapsedMilliseconds;
             SerialPort sp = (SerialPort)sender;
-            
-            sp.Read(buffer, 0,buffer.Length);
-            sp.Close();
 
+            if (Zone ==1)
+            {
+                sp.Read(buffer, 0, 18);
+            }
+            else
+            {
+                sp.Read(readbuffer, 0, 22);
+                Array.Copy(readbuffer, 4, buffer, 0, 18);
+            }
             datarecieved = true;
 
         }
