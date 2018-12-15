@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +11,11 @@ namespace PSRESLogic
     public class Lamp
     {
         public byte CurrentIllumination { get; set; }
-        public int Parent { get; set; }
+        public byte Parent { get; set; }
         public byte Zone { get; set; }
-        public int Position { get; set; }
-        public int PWMpin { get; set; }
+        public byte[] Position { get; set; }
+        public byte PWMpin { get; set; }
+        public byte LampId { get; set; }
 
 
         public byte[] Dim(byte dimValue)
@@ -37,6 +40,27 @@ namespace PSRESLogic
             return data;
         }
 
+        public void StateChangedHandler(bool presence)
+        {
+            byte Dim;
+
+            if (presence)
+            {
+                Dim = 100;
+
+            }
+            else
+            {
+                Dim = 0;
+            }
+            if (!TTLPort.IsOpen)
+            {
+                TTLPort.Open();
+            }
+            TTLPort.Write(Lamps[5].Dim(Dim), 0, 2);
+            TTLPort.Close();
+        }
+
         public byte[] changeFreqency(byte frequency)
         {
             byte[] data = { 0, frequency };
@@ -57,14 +81,52 @@ namespace PSRESLogic
         }
 
 
-        public Lamp(int parent)
+
+
+        public override string ToString()
         {
-            Parent = parent;
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("ID: ");
+            sb.AppendLine(LampId.ToString());
+
+            sb.Append("Position: ");
+            foreach (var p in Position)
+            {
+                sb.Append(p.ToString()+",");
+            }
+            sb.AppendLine();
+
+            sb.Append("Zone: ");
+            sb.AppendLine(Zone.ToString());
+
+            sb.Append("Parent: ");
+            sb.AppendLine(Parent.ToString());
+
+            sb.Append("PWM No.: ");
+            sb.AppendLine(PWMpin.ToString());
+
+            sb.Append("Current Illumination: ");
+            sb.AppendLine(CurrentIllumination.ToString());
+            return sb.ToString();
+
         }
 
+        public Lamp(int parent)
+        {
+            Parent = (byte)parent;
+        }
+
+        public Lamp(byte parent)
+        {
+            Parent = parent;
+
+        }
         public Lamp()
         {
 
         }
+
+
     }
 }

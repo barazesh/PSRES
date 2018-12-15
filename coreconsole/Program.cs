@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
+using Newtonsoft.Json;
 using PSRESLogic;
 
 
@@ -7,61 +9,51 @@ namespace coreconsole
 {
     class Program
     {
-        static SerialPort SensorsPort = new SerialPort("COM10", 115200, Parity.None, 8, StopBits.One);
+        static SerialPort TTLPort = new SerialPort("COM10", 115200, Parity.None, 8, StopBits.One);
+        static SerialPort ZigbeePort = new SerialPort("COM11", 115200, Parity.None, 8, StopBits.One);
+
         static byte[] buffer = new byte[18];
 
 
         static bool datarecived;
         static int parentindex=0;
-        static Parent[] parents = {
-                new Parent(1),
-                new Parent(2),
-                new Parent(3)
-
-            };
-        static Lamp[] Lamps = new Lamp[13];
+        static Parent[] parents = new Parent[7];
+        static Lamp[] Lamps = new Lamp[26];
 
         static void Main(string[] args)
         {
-            //SensorsPort.DataReceived += SensorsPort_DataReceived;
-            datarecived = false;
-            for (int i = 0; i < 3; i++)
+
+            //initiate the parents
+            parents = JsonConvert.DeserializeObject<Parent[]>(File.ReadAllText(@"~\PSRESLogic\parents.json"));
+
+            for (int i = 0; i < parents.Length; i++)
             {
                 parents[i].SensorDataReady += ShowSensrosData;
                 parents[i].SensorDataReady += ParentDataready;
 
             }
 
+            //initiate the sensors
 
-            for (int i = 0; i < Lamps.Length; i++)
+
+
+            //initiate the lamps
+            Lamps = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(@"~\PSRESLogic\Lamps.json"));
+            foreach (Lamp lamp in Lamps)
             {
-                Lamps[i] = new Lamp();
+                foreach (var p in lamp.Position)
+                {
+                    //select the parent related to this position
+
+                    //subscribe this lamps event handler to the corresponding sensorpack event
+
+                    //parents[i].sensorsdata[j].PresenceChanged += lamp.StateChangedHandler;
+
+                }
             }
-            parents[0].sensorsdata[0].PresenceChanged += Drroom;
 
-            Lamps[0].Parent = 1;
-            Lamps[0].PWMpin = 1;
-
-            Lamps[1].Parent = 3;
-            Lamps[1].PWMpin = 1;
-
-            Lamps[2].Parent = 3;
-            Lamps[2].PWMpin = 2;
-
-
-            parents[0].sensorsdata[2].PresenceChanged += KarAmooz;
-
-            Lamps[4].Parent = 2;
-            Lamps[4].PWMpin = 4;
-
-
-            parents[0].sensorsdata[1].PresenceChanged += Torbatia;
-
-            Lamps[5].Parent = 1;
-            Lamps[5].PWMpin = 2;
-
-
-
+            //SensorsPort.DataReceived += SensorsPort_DataReceived;
+            datarecived = false;
 
 
 
@@ -72,14 +64,14 @@ namespace coreconsole
                 Console.WriteLine(item);
             }
             Console.WriteLine("Enter Port Name");
-            SensorsPort.PortName = "COM"+Console.ReadLine();
-            Console.WriteLine("You Selected "+ SensorsPort.PortName);
+            TTLPort.PortName = "COM"+Console.ReadLine();
+            Console.WriteLine("You Selected "+ TTLPort.PortName);
             Console.WriteLine("Press any key to begin");
             Console.ReadKey();
 
 
-            SensorsPort.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
-            parents[parentindex].readSensorData(SensorsPort);
+            TTLPort.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
+            parents[parentindex].readSensorData(TTLPort);
             while (true)
             {
 
@@ -100,12 +92,12 @@ namespace coreconsole
             {
                 Dim = 0;
             }
-            if (!SensorsPort.IsOpen)
+            if (!TTLPort.IsOpen)
             {
-                SensorsPort.Open();
+                TTLPort.Open();
             }
-            SensorsPort.Write(Lamps[5].Dim(Dim), 0, 2);
-            SensorsPort.Close();
+            TTLPort.Write(Lamps[5].Dim(Dim), 0, 2);
+            TTLPort.Close();
         }
 
         private static void KarAmooz(bool presence)
@@ -121,12 +113,12 @@ namespace coreconsole
             {
                 Dim = 0;
             }
-            if (!SensorsPort.IsOpen)
+            if (!TTLPort.IsOpen)
             {
-                SensorsPort.Open();
+                TTLPort.Open();
             }
-            SensorsPort.Write(Lamps[4].Dim(Dim), 0, 2);
-            SensorsPort.Close();
+            TTLPort.Write(Lamps[4].Dim(Dim), 0, 2);
+            TTLPort.Close();
         }
 
         private static void Drroom(bool presence)
@@ -142,19 +134,19 @@ namespace coreconsole
             {
                 Dim = 0;
             }
-            if (!SensorsPort.IsOpen)
+            if (!TTLPort.IsOpen)
             {
-                SensorsPort.Open();
+                TTLPort.Open();
             }
-            SensorsPort.Write(Lamps[0].Dim(Dim), 0, 2);
-            SensorsPort.Write(Lamps[1].Dim(Dim), 0, 2);
-            SensorsPort.Write(Lamps[2].Dim(Dim), 0, 2);
-            SensorsPort.Close();
+            TTLPort.Write(Lamps[0].Dim(Dim), 0, 2);
+            TTLPort.Write(Lamps[1].Dim(Dim), 0, 2);
+            TTLPort.Write(Lamps[2].Dim(Dim), 0, 2);
+            TTLPort.Close();
         }
 
         private static void ParentDataready(bool recived)
         {
-            SensorsPort.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
+            TTLPort.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
             if (parentindex==parents.Length-1)
             {
                 parentindex = 0;
@@ -163,8 +155,8 @@ namespace coreconsole
             {
                 parentindex++;
             }
-            SensorsPort.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
-            parents[parentindex].readSensorData(SensorsPort);
+            TTLPort.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
+            parents[parentindex].readSensorData(TTLPort);
         }
 
         private static void SensorsPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -176,9 +168,9 @@ namespace coreconsole
         private static void ShowSensrosData(bool recived)
         {
             Console.WriteLine();
-            if (SensorsPort.IsOpen)
+            if (TTLPort.IsOpen)
             {
-                SensorsPort.Close();
+                TTLPort.Close();
             }
             datarecived = recived;
             if (recived)

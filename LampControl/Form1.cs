@@ -81,7 +81,7 @@ namespace LampControl
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    sd[i] = parents[parentindex].sensorsdata[i].GetLatestData();
+                    sd[i] = parents[parentindex].Sensor[i].GetLatestData();
                 }
 
                 Invoke(new EventHandler(populate));

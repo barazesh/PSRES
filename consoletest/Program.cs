@@ -1,94 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PSRESData;
+﻿using Newtonsoft.Json;
 using PSRESLogic;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Timers;
-using PSRESData.Entities;
+using System.Diagnostics;
 
 namespace consoletest
 {
     class Program
     {
-        static SerialPort SensorsPort = new SerialPort("COM10", 115200, Parity.None, 8, StopBits.One);
-        static byte[] buffer = new byte[18];
-
-        //static Parent[] parents = new Parent[3];
-
-        static Parent[] parents = {
-                new Parent(1),
-                new Parent(2),
-                new Parent(3)
-
-            };
-
-        static bool datarecived;
-        static int parentindex;
-
-          
         static void Main(string[] args)
         {
-
-
-            for (int i = 0; i < parents.Length; i++)
+            Lamp[] lamp = new Lamp[26];
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            lamp = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(@"C:\Users\SM\Source\Repos\PSRES\PSRESLogic\Lamps.json"));
+            Console.WriteLine(watch.ElapsedMilliseconds);
+            foreach (var l in lamp)
             {
-                //parents[i] = new Parent(2);
-                parents[i].SensorDataReady += ShowSensrosData;
-
+                Console.WriteLine(l.ToString()); 
+                Console.WriteLine();
             }
-            Console.WriteLine("Available Ports");
-            foreach (var item in SerialPort.GetPortNames())
-            {
-                Console.WriteLine(item);
-            }
-            Console.WriteLine("Enter Port Name");
-            SensorsPort.PortName = Console.ReadLine().ToUpper();
-            Console.WriteLine("Press any key to begin");
+            Console.WriteLine(watch.ElapsedMilliseconds);
             Console.ReadKey();
-
-            while (true)
-            {
-                Console.WriteLine("Eneter the Parent Number to read Sensor data:");
-
-
-                SensorsPort.DataReceived -= parents[parentindex].sensorDataReceivedEventHandler;
-                parentindex = int.Parse(Console.ReadLine());
-                SensorsPort.DataReceived += parents[parentindex].sensorDataReceivedEventHandler;
-
-                parents[parentindex].readSensorData(SensorsPort);
-
-                Console.ReadKey();
-
-            }
-
-        }
-
-        private static void ShowSensrosData(bool recived)
-        {
-            Console.WriteLine();
-            if (SensorsPort.IsOpen)
-            {
-                SensorsPort.Close();
-            }
-            datarecived = recived;
-            if (recived)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Console.WriteLine("Sensor Pack {i+1}");
-                    Console.WriteLine(parents[parentindex].sensorsdata[i].GetLatestData().ToString());
-                }
-
-            }
-            else
-            {
-                Console.WriteLine("No Data Recieved");
-            }
+            
         }
     }
 }

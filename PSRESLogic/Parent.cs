@@ -13,7 +13,7 @@ namespace PSRESLogic
         public int Zone { get; set; }
         public int parentNumber { get; set; }
 
-        public SensorPackData[] sensorsdata = new SensorPackData[3];
+        public SensorPack[] Sensor = new SensorPack[3];
 
 
         public byte[] buffer = new byte[18];
@@ -68,7 +68,7 @@ namespace PSRESLogic
                 for (int i = 0; i < 3; i++)
                 {
                     Array.Copy(buffer, i * 6, subbuffer, 0, 6);
-                    sensorsdata[i].Update(subbuffer);
+                    Sensor[i].Update(subbuffer);
                 }
             }
             onDataReady(datarecieved);
@@ -109,9 +109,9 @@ namespace PSRESLogic
             timer.Elapsed += timerelapsed;
             timer.AutoReset = false;
 
-            for (int i = 0; i < sensorsdata.Length; i++)
+            for (int i = 0; i < Sensor.Length; i++)
             {
-                sensorsdata[i] = new SensorPackData();
+                Sensor[i] = new SensorPack();
 
             }
 
