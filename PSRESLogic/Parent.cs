@@ -12,6 +12,7 @@ namespace PSRESLogic
         public int Id { get; set; }
         public int Zone { get; set; }
         public int parentNumber { get; set; }
+        public int messageDelay { get; set; }
 
         public SensorPack[] Sensor = new SensorPack[3];
 
@@ -20,7 +21,7 @@ namespace PSRESLogic
         private bool datarecieved;
         private byte[] readRequestMessage = new byte[2];
         private Stopwatch watch = new Stopwatch();
-        private Timer timer = new Timer(50);
+        private Timer timer = new Timer();
         public event SensorDataReadyHandler SensorDataReady;
         
 
@@ -56,7 +57,7 @@ namespace PSRESLogic
                         break;
                 }
             }
-
+            timer.Interval = messageDelay;
             timer.Start();
         }
 
@@ -78,7 +79,7 @@ namespace PSRESLogic
 
         public void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            byte[] readbuffer = new byte[22];
+            byte[] readbuffer = new byte[24];
             long a = watch.ElapsedMilliseconds;
             SerialPort sp = (SerialPort)sender;
 
@@ -88,7 +89,7 @@ namespace PSRESLogic
             }
             else
             {
-                sp.Read(readbuffer, 0, 22);
+                sp.Read(readbuffer, 0, 24);
                 Array.Copy(readbuffer, 4, buffer, 0, 18);
             }
             datarecieved = true;

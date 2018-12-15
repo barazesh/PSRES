@@ -42,23 +42,19 @@ namespace PSRESLogic
 
         public void StateChangedHandler(bool presence)
         {
-            byte Dim;
+            byte dim;
 
             if (presence)
             {
-                Dim = 100;
+                dim = 100;
 
             }
             else
             {
-                Dim = 0;
+                dim = 0;
             }
-            if (!TTLPort.IsOpen)
-            {
-                TTLPort.Open();
-            }
-            TTLPort.Write(Lamps[5].Dim(Dim), 0, 2);
-            TTLPort.Close();
+
+            //TTLPort.Write(Dim(dim), 0, 2);
         }
 
         public byte[] changeFreqency(byte frequency)
