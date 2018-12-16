@@ -1,12 +1,64 @@
+using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 using PSRESLogic;
+using System;
+using System.IO;
+using System.IO.Ports;
+
 
 namespace PSRES.Web.Services
 {
     public class SystemControl:IController
     {
+        public SystemControl(IHostingEnvironment _hosting)
+        {
+            var lampfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\Lamps.json");
+
+            Lamps = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(lampfilepath));
+            _Hosting = _hosting;
+        }
+
+        //initiate the lamps
+        Lamp[] Lamps = new Lamp[26];
+
+        static SerialPort TTLPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
+        static SerialPort ZigbeePort = new SerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
+
+        public IHostingEnvironment _Hosting { get; }
+
         public void ChangeFrequency(int index, byte frequency)
         {
             //change one lamp's switching frequency
+            int zone = 1;
+            zone = Lamps[index - 1].Zone;
+
+            var message = Lamps[index - 1].changeFreqency(frequency);
+            byte[] Zmessage =
+                    {
+                            0xFD, 0x02,
+                            0x57, 0x3B,
+                            message[0],message[1]
+                        };
+            switch (zone)
+            {
+                case 1:
+                    TTLPort.Open();
+                    TTLPort.Write(message, 0, 2);
+                    TTLPort.Close();
+                    break;
+                case 2:
+                    ZigbeePort.Open();
+                    ZigbeePort.Write(Zmessage, 0, 6);
+                    ZigbeePort.Close();
+                    break;
+                case 3:
+                    Zmessage[2] = 0xB5;
+                    Zmessage[3] = 0xCE;
+                    ZigbeePort.Open();
+                    ZigbeePort.Write(Zmessage, 0, 6);
+                    ZigbeePort.Close();
+                    break;
+            }
 
         }
 
@@ -16,10 +68,64 @@ namespace PSRES.Web.Services
 
         public void Dim(int index, byte dutycycle){
             //change one lamp's duty cycle
+            int zone = 1;
+            zone = Lamps[index - 1].Zone;
+
+            var message = Lamps[index - 1].Dim(dutycycle);
+            byte[] Zmessage =
+                    {
+                            0xFD, 0x02,
+                            0x57, 0x3B,
+                            message[0],message[1]
+                        };
+            switch (zone)
+            {
+                case 1:
+                    TTLPort.Open();
+                    TTLPort.Write(message, 0, 2);
+                    TTLPort.Close();
+                    break;
+                case 2:
+                    ZigbeePort.Open();
+                    ZigbeePort.Write(Zmessage, 0, 6);
+                    ZigbeePort.Close();
+                    break;
+                case 3:
+                    Zmessage[2] = 0xB5;
+                    Zmessage[3] = 0xCE;
+                    ZigbeePort.Open();
+                    ZigbeePort.Write(Zmessage, 0, 6);
+                    ZigbeePort.Close();
+                    break;
+            }
         }
 
         public void Dim(byte dutycycle){
             //change all lamps duty cycle at once
+
+
+            byte[] message = { 0, dutycycle };
+            byte[] Zmessage =
+                    {
+                            0xFD, 0x02,
+                            0x57, 0x3B,
+                            message[0],message[1]
+                        };
+                //zone 1:
+                    TTLPort.Open();
+                    TTLPort.Write(message, 0, 2);
+                    TTLPort.Close();
+                //zone 2:
+                    ZigbeePort.Open();
+                    ZigbeePort.Write(Zmessage, 0, 6);
+                    ZigbeePort.Close();
+                //zone 3:
+                    Zmessage[2] = 0xB5;
+                    Zmessage[3] = 0xCE;
+                    ZigbeePort.Open();
+                    ZigbeePort.Write(Zmessage, 0, 6);
+                    ZigbeePort.Close();
+            
         }
 
 
