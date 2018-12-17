@@ -109,7 +109,7 @@
   "Position": [ 2, 3 ],
    "zone": 1,
    "parent": 1,
-   "PWMpin": 2
+   "PWMpin": 3
  },
  {
    "LampId": 17,

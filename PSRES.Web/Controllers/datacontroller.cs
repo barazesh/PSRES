@@ -56,31 +56,32 @@ namespace PSRES.Web.Controllers
         [HttpPost("data/LampControl")]
         public IActionResult LampControl(LampViewModel model)
         {
-
-            if (model.All)
+            switch (model.All)
             {
-                if (model.isDim)
-                {
-                    systemControl.Dim(model.DutyCycle);
-
-                }
-                else
-                {
-                    systemControl.ChangeFrequency(model.Frequency);
-                }
+                case true:
+                    switch (model.controltype)
+                    {
+                        case "Frequency":
+                            systemControl.ChangeFrequency(model.Frequency);
+                            break;
+                        case "Dim":
+                            systemControl.Dim(model.DutyCycle);
+                            break;
+                    }
+                    break;
+                case false:
+                    switch (model.controltype)
+                    {
+                        case "Frequency":
+                            systemControl.ChangeFrequency(model.Index, model.Frequency);
+                            break;
+                        case "Dim":
+                            systemControl.Dim(model.Index, model.DutyCycle);
+                            break;
+                    }
+                    break;
             }
-            else
-            {
-                if (model.isDim)
-                {
-                    systemControl.Dim(model.Index, model.DutyCycle);
 
-                }
-                else
-                {
-                    systemControl.ChangeFrequency(model.Index,model.Frequency);
-                }
-            }
             return View();
         }
 

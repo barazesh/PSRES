@@ -1,9 +1,9 @@
 ﻿$(document).ready(function () {
 
-    var dutycyclecheck = $("#dutycyclecontrolradio");
+    var dutycycleradio = $("#dutycyclecontrolradio");
     var dutycyclenumber = $("#dutycyclecontrolnumber");
     var dutycyclerange = $("#dutycyclecontrolrange");
-    var frequencycheck = $("#frequencycontrolradio");
+    var frequencyradio = $("#frequencycontrolradio");
     var frequencynumber = $("#frequencycontrolnumber");
     var frequencyrange = $("#frequencycontrolrange");
     var setbutton = $("#setbutton");
@@ -11,52 +11,73 @@
     var lampselector = $("#lampselector");
     var lampnumber = $(".lamplabel");
 
-    dutycyclecheck.click(function () {
-        if (dutycyclecheck.prop("checked")) {
+
+    dutycycleradio.on("input", function () {
             dutycyclenumber.prop("disabled", false);
             dutycyclerange.prop("disabled", false);
 
-
-
             frequencynumber.prop("disabled", true);
             frequencyrange.prop("disabled", true);
-
-            frequencycheck.prop("checked", false);
-            setbutton.prop("disabled", false);
-        } else {
-            if (!(frequencycheck.prop("checked"))) {
-                setbutton.prop("disabled", true);
-
-            }
-        }
-
     })
-    
-    frequencycheck.on("click", function () {
-        if (frequencycheck.prop("checked")) {
+
+
+
+
+    frequencyradio.on("input", function () {
+
             dutycyclenumber.prop("disabled", true);
             dutycyclerange.prop("disabled", true);
 
-
             frequencynumber.prop("disabled", false);
             frequencyrange.prop("disabled", false);
-
-
-            dutycyclecheck.prop("checked", false);
-            setbutton.prop("disabled", false);
-        } else {
-            if (!(dutycyclecheck.prop("checked"))) {
-                setbutton.prop("disabled", true);
-            }
-        }
     })
+
+
+
+
+    //dutycycleradio.on("input", function () {
+    //    if (dutycycleradio.prop("checked")) {
+
+    //        dutycyclenumber.prop("disabled", false);
+    //        dutycyclerange.prop("disabled", false);
+
+    //        frequencynumber.prop("disabled", true);
+    //        frequencyrange.prop("disabled", true);
+
+    //        setbutton.prop("disabled", false);
+    //    } else {
+    //        if (!(frequencyradio.prop("checked"))) {
+    //            setbutton.prop("disabled", true);
+    //        }
+    //    }
+
+    //})
+
+
+
+    
+    //frequencyradio.on("input", function () {
+    //    if (frequencyradio.prop("checked")) {
+
+    //        dutycyclenumber.prop("disabled", true);
+    //        dutycyclerange.prop("disabled", true);
+
+    //        frequencynumber.prop("disabled", false);
+    //        frequencyrange.prop("disabled", false);
+
+    //        setbutton.prop("disabled", false);
+    //    } else {
+    //        if (!(dutycycleradio.prop("checked"))) {
+    //            setbutton.prop("disabled", true);
+    //        }
+    //    }
+    //})
 
     selectallcheck.click(function () {
         if (selectallcheck.prop("checked")) {
             lampselector.prop("disabled", true);
         } else {
             lampselector.prop("disabled", false);
-
         }
     })
 

@@ -19,7 +19,7 @@
 
             <div class="col-4 mx-1">
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="dutycyclecontrolradio" asp-for="@Model.isDim" value="Dim" />
+                    <input type="radio" class="form-check-input" id="dutycyclecontrolradio" asp-for="@Model.controltype" name="controltype" value="Dim" checked/>
                     <label class="form-check-label">Duty Cycle</label>
 
                 </div>
@@ -36,8 +36,8 @@
 
             <div class="col-4 mx-1">
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="frequencycontrolradio" asp-for="@Model.isFrequency" value="Frequency" />
-                    <label class="form-check-label">Frequency</label>
+                    <input type="radio" class="form-check-input" id="frequencycontrolradio" asp-for="@Model.controltype" name="controltype" value="Frequency" />
+                    <label for="Frequency" class="form-check-label">Frequency</label>
 
                 </div>
                 <div class="form-group">
@@ -51,7 +51,7 @@
 
 
             <div class="col-1 mx-1">
-                <input class="btn btn-primary btn-block" type="submit" id="setbutton" value="Set" disabled />
+                <input class="btn btn-primary btn-block" type="submit" id="setbutton" value="Set" />
             </div>
         </div>
 
@@ -68,23 +68,23 @@
     <label class="lamplabel" style="left:180px; top:123px">7</label>
     <label class="lamplabel" style="left:90px; top:123px">8</label>
     <label class="lamplabel" style="left:650px; top:265px">9</label>
-    <label class="lamplabel" style="left:470px; top:265px">10</label>
-    <label class="lamplabel" style="left:370px; top:265px">11</label>
+    <label class="lamplabel" style="left:450px; top:265px">10</label>
+    <label class="lamplabel" style="left:350px; top:265px">11</label>
     <label class="lamplabel" style="left:130px; top:265px">12</label>
     <label class="lamplabel" style="left:650px; top:394px">13</label>
     <label class="lamplabel" style="left:470px; top:394px">14</label>
     <label class="lamplabel" style="left:370px; top:394px">15</label>
     <label class="lamplabel" style="left:130px; top:394px">16</label>
-    <label class="lamplabel" style="left:650px; top:520px">17</label>
-    <label class="lamplabel" style="left:470px; top:520px">18</label>
-    <label class="lamplabel" style="left:370px; top:520px">19</label>
-    <label class="lamplabel" style="left:130px; top:520px">20</label>
+    <label class="lamplabel" style="left:650px; top:515px">17</label>
+    <label class="lamplabel" style="left:470px; top:515px">18</label>
+    <label class="lamplabel" style="left:370px; top:515px">19</label>
+    <label class="lamplabel" style="left:130px; top:515px">20</label>
     <label class="lamplabel" style="left:970px; top:205px">21</label>
     <label class="lamplabel" style="left:938px; top:380px">22</label>
     <label class="lamplabel" style="left:938px; top:480px">23</label>
-    <label class="lamplabel" style="left:740px; top:265px">24</label>
-    <label class="lamplabel" style="left:740px; top:400px">25</label>
-    <label class="lamplabel" style="left:740px; top:500px">26</label>
+    <label class="lamplabel" style="left:755px; top:255px">24</label>
+    <label class="lamplabel" style="left:755px; top:360px">25</label>
+    <label class="lamplabel" style="left:755px; top:450px">26</label>
 </div>
 
 @section scripts{

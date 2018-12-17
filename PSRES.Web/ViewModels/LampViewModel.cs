@@ -12,7 +12,6 @@ namespace PSRES.Web.ViewModels
         public byte DutyCycle { get; set; }
         public byte Frequency { get; set; }
         public bool All { get; set; }
-        public bool isDim { get; set; }
-        public bool isFrequency { get; set; }
+        public string controltype { get; set; }
     }
 }
