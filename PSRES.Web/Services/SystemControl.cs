@@ -13,19 +13,31 @@ namespace PSRES.Web.Services
         public SystemControl(IHostingEnvironment _hosting)
         {
             var lampfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\Lamps.json");
+            var metersfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\meters.json");
+            var parentsfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\parents.json");
+
+
 
             Lamps = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(lampfilepath));
+            Parents = JsonConvert.DeserializeObject<Parent[]>(File.ReadAllText(parentsfilepath));
+            Meters = JsonConvert.DeserializeObject<Meter[]>(File.ReadAllText(metersfilepath));
+
             _Hosting = _hosting;
         }
 
         //initiate the lamps
         Lamp[] Lamps = new Lamp[26];
+        Parent[] Parents = new Parent[7];
+        Meter[] Meters = new Meter[5];
 
         static SerialPort TTLPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
         static SerialPort ZigbeePort = new SerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
+        static SerialPort MetersPort = new SerialPort("COM3", 9600, Parity.Even, 7, StopBits.One);
+
 
         public IHostingEnvironment _Hosting { get; }
 
+        #region LampControl
         public void ChangeFrequency(int index, byte frequency)
         {
             //change one lamp's switching frequency
@@ -35,10 +47,10 @@ namespace PSRES.Web.Services
             var message = Lamps[index - 1].changeFreqency(frequency);
             byte[] Zmessage =
                     {
-                            0xFD, 0x02,
-                            0x57, 0x3B,
-                            message[0],message[1]
-                        };
+                        0xFD, 0x02,
+                        0x57, 0x3B,
+                        message[0],message[1]
+                    };
             switch (zone)
             {
                 case 1:
@@ -62,11 +74,13 @@ namespace PSRES.Web.Services
 
         }
 
-        public void ChangeFrequency(byte frequency){
+        public void ChangeFrequency(byte frequency)
+        {
             //change all lamps switching frequency at once
         }
 
-        public void Dim(int index, byte dutycycle){
+        public void Dim(int index, byte dutycycle)
+        {
             //change one lamp's duty cycle
             int zone = 1;
             zone = Lamps[index - 1].Zone;
@@ -100,7 +114,8 @@ namespace PSRES.Web.Services
             }
         }
 
-        public void Dim(byte dutycycle){
+        public void Dim(byte dutycycle)
+        {
             //change all lamps duty cycle at once
 
 
@@ -111,24 +126,31 @@ namespace PSRES.Web.Services
                             0x57, 0x3B,
                             message[0],message[1]
                         };
-                //zone 1:
-                    TTLPort.Open();
-                    TTLPort.Write(message, 0, 2);
-                    TTLPort.Close();
-                //zone 2:
-                    ZigbeePort.Open();
-                    ZigbeePort.Write(Zmessage, 0, 6);
-                    ZigbeePort.Close();
-                //zone 3:
-                    Zmessage[2] = 0xB5;
-                    Zmessage[3] = 0xCE;
-                    ZigbeePort.Open();
-                    ZigbeePort.Write(Zmessage, 0, 6);
-                    ZigbeePort.Close();
-            
+            //zone 1:
+            TTLPort.Open();
+            TTLPort.Write(message, 0, 2);
+            TTLPort.Close();
+            //zone 2:
+            ZigbeePort.Open();
+            ZigbeePort.Write(Zmessage, 0, 6);
+            ZigbeePort.Close();
+            //zone 3:
+            Zmessage[2] = 0xB5;
+            Zmessage[3] = 0xCE;
+            ZigbeePort.Open();
+            ZigbeePort.Write(Zmessage, 0, 6);
+            ZigbeePort.Close();
+
         }
+        #endregion
+
+        #region Meter
 
 
+
+
+
+        #endregion
         #region MyRegion
         //static SerialPort MetersPort = new SerialPort(SerialPort.GetPortNames()[1], 9600, Parity.Even, 7, StopBits.One);
         ////static SerialPort SensorsPort = new SerialPort(SerialPort.GetPortNames()[2], 115200, Parity.None, 8, StopBits.One);

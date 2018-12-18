@@ -1,0 +1,24 @@
+[
+  {
+    "Name": "mainroom HVAC",
+    "Serialcode": 18119713646205
+  },
+  {
+    "Name": "mainroom other",
+    "Serialcode": 18119713646206
+  },
+  {
+    "Name": "smallroom HVAC",
+    "Serialcode": 18119713646207
+  },
+  {
+    "Name": "smallroom other",
+    "Serialcode": 18119713646209
+  },
+  {
+    "Name": "lighting",
+    "Serialcode": 18119713646208
+  }
+
+
+]
