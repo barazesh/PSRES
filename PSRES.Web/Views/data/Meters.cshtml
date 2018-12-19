@@ -4,35 +4,37 @@
 }
 
 
-@foreach (var meter in Model)
-{
-    <div class="col-4">
-        <h1>@meter.Name</h1>
-        <h2>@meter.SerialCode</h2>
-        <ul>
-            <li>
-                Active Power (KW):     @meter.ActivePower
-            </li>
+<div class="row justify-content-center">
+    @foreach (var meter in Model)
+    {
+        <div class="col-4 bg-light">
+            <h2>@meter.Name</h2>
+            <h3>@meter.SerialCode</h3>
+            <ul>
+                <li>
+                    Active Power (KW):     @meter.ActivePower
+                </li>
 
-            <li>
-                Reactive Power (KW):     @meter.ReactivePower
-            </li>
+                <li>
+                    Reactive Power (KW):     @meter.ReactivePower
+                </li>
 
-            <li>
-                Current (A):     @meter.Current
-            </li>
+                <li>
+                    Current (A):     @meter.Current
+                </li>
 
-            <li>
-                Voltage (V):     @meter.Voltage
-            </li>
+                <li>
+                    Voltage (V):     @meter.Voltage
+                </li>
 
-            <li>
-                Power Factor:     @meter.PowerFactor
-            </li>
+                <li>
+                    Power Factor:     @meter.PowerFactor
+                </li>
 
-            <li>
-                Frequency (Hz):     @meter.Frequency
-            </li>
-        </ul>
-    </div>
-}
+                <li>
+                    Frequency (Hz):     @meter.Frequency
+                </li>
+            </ul>
+        </div>
+    }
+</div>

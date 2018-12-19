@@ -15,12 +15,12 @@ namespace PSRES.Web.Services
         {
             var lampfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\Lamps.json");
             var metersfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\meters.json");
-            var parentsfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\parents.json");
+            //var parentsfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\parents.json");
 
 
 
             Lamps = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(lampfilepath));
-            Parents = JsonConvert.DeserializeObject<Parent[]>(File.ReadAllText(parentsfilepath));
+            //Parents = JsonConvert.DeserializeObject<Parent[]>(File.ReadAllText(parentsfilepath));
             Meters = JsonConvert.DeserializeObject<Meter[]>(File.ReadAllText(metersfilepath));
 
             foreach (var meter in Meters)
@@ -28,27 +28,15 @@ namespace PSRES.Web.Services
                 meter.MeterDataReady += MeterDataHandler;
             }
             MetersPort.DataReceived += Meters[0].DataReceivedHandler;
+            MetersPort.Open();
             Meters[0].Read(MetersPort);
 
             _Hosting = _hosting;
         }
 
-        private void MeterDataHandler(int meterId)
-        {
-            MetersPort.DataReceived -= Meters[meterId - 1].DataReceivedHandler;
-            int tempId = meterId;
-            if (tempId == Meters.Length)
-            {
-                tempId = 0;
-            }
-            MetersPort.DataReceived += Meters[tempId].DataReceivedHandler;
-            Meters[tempId].Read(MetersPort);
-        }
+       
 
-        //initiate the lamps
-        Lamp[] Lamps = new Lamp[26];
         Parent[] Parents = new Parent[7];
-        Meter[] Meters = new Meter[5];
 
         static SerialPort TTLPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
         static SerialPort ZigbeePort = new SerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
@@ -58,6 +46,9 @@ namespace PSRES.Web.Services
         public IHostingEnvironment _Hosting { get; }
 
         #region LampControl
+        Lamp[] Lamps = new Lamp[26];
+
+
         public void ChangeFrequency(int index, byte frequency)
         {
             //change one lamp's switching frequency
@@ -167,12 +158,30 @@ namespace PSRES.Web.Services
 
         #region Meter
 
+        Meter[] Meters = new Meter[5];
+        int selectedmeterid;
+
+
+        private void MeterDataHandler(int meterId)
+        {
+            MetersPort.DataReceived -= Meters[selectedmeterid].DataReceivedHandler;
+            selectedmeterid = meterId;
+            if (meterId == 5)
+            {
+                selectedmeterid = 0;
+            }
+            MetersPort.DataReceived += Meters[selectedmeterid].DataReceivedHandler;
+            Meters[selectedmeterid].Read(MetersPort);
+        }
+
+
         public MeterViewModel[] GetrealTimeMetersData()
         {
             MeterViewModel[] realtimemeterdata = new MeterViewModel[5];
             for (int i = 0; i < 5; i++)
             {
                 decimal[] output = Meters[i].GetRealTimeData();
+                realtimemeterdata[i] = new MeterViewModel();
                 realtimemeterdata[i].ActivePower = output[0];
                 realtimemeterdata[i].ReactivePower = output[1];
                 realtimemeterdata[i].Current = output[2];

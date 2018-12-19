@@ -19,6 +19,7 @@ namespace PSRESLogic
         public int Id { get; set; }
         public long SerialCode { get; set; }
         public string Name { get; set; }
+        public int delaytime { get; set; }
 
         private StringBuilder sb = new StringBuilder();
 
@@ -27,10 +28,12 @@ namespace PSRESLogic
         private List<decimal> Current = new List<decimal>();
         private List<decimal> PowerFactor = new List<decimal>();
         private List<decimal> Frequency = new List<decimal>();
-        private List<decimal> Calcpower= new List<decimal>();
+        private List<decimal> CalcActivePower= new List<decimal>();
+        private List<decimal> CalcReactivePower = new List<decimal>();
 
-        private int peakActivePower;
-        private int peakReactivePower;
+
+        private int peakActivePower=0;
+        private int peakReactivePower=0;
 
         private int ActivePower;
         private int ReactivePower;
@@ -46,11 +49,12 @@ namespace PSRESLogic
 
 
         private Stopwatch watch = new Stopwatch();
-        private Timer timer = new Timer(1000);
+        private Timer timer = new Timer();
 
 
         public void Read(SerialPort mySerialPort1)
         {
+            timer.Interval = delaytime;
             reciveCompeleted = false;
             sb.Clear();
             watch.Start();
@@ -124,12 +128,11 @@ namespace PSRESLogic
                     case 10:
                         voltageReturn = matches[i].Value.Trim(charstoTrim);
                         break;
-                    default:
-                        break;
                 }
             }
-            Calcpower.Add(Voltage.Last()*Current.Last());
-            
+            CalcActivePower.Add(Voltage.Last()*Current.Last()*PowerFactor.Last());
+            CalcReactivePower.Add(Voltage.Last() * Current.Last() * (1-(PowerFactor.Last()* PowerFactor.Last())));
+
         }
 
         private int MAX(int v1, int v2)
@@ -161,14 +164,14 @@ namespace PSRESLogic
 
         public decimal[] GetRealTimeData()
         {
-            decimal[] realTimeData = new decimal[6];
-
-            realTimeData[0] = peakActivePower;
-            realTimeData[1] = peakReactivePower;
-            realTimeData[2] = Current.Last();
-            realTimeData[3] = Frequency.Last();
-            realTimeData[4] = Voltage.Last();
-            realTimeData[5] = PowerFactor.Last();
+            decimal[] realTimeData = {
+                CalcActivePower.LastOrDefault(),
+                CalcReactivePower.LastOrDefault(),
+                Current.LastOrDefault(),
+                Frequency.LastOrDefault(),
+                Voltage.LastOrDefault(),
+                PowerFactor.LastOrDefault()
+            };
 
 
             return realTimeData;
@@ -184,6 +187,8 @@ namespace PSRESLogic
             Frequency.Clear();
             peakActivePower = 0;
             peakReactivePower = 0;
+            CalcReactivePower.Clear();
+            CalcActivePower.Clear();
 
         }
 
