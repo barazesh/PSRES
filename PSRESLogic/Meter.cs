@@ -18,6 +18,7 @@ namespace PSRESLogic
     {
         public int Id { get; set; }
         public long SerialCode { get; set; }
+        public string Name { get; set; }
 
         private StringBuilder sb = new StringBuilder();
 
@@ -160,16 +161,15 @@ namespace PSRESLogic
 
         public decimal[] GetRealTimeData()
         {
-            decimal[] realTimeData = new decimal[8];
+            decimal[] realTimeData = new decimal[6];
 
-            realTimeData[0] = totalActiveEnergy[1];
-            realTimeData[1] = totalReactiveEnergy[1];
+            realTimeData[0] = peakActivePower;
+            realTimeData[1] = peakReactivePower;
             realTimeData[2] = Current.Last();
             realTimeData[3] = Frequency.Last();
             realTimeData[4] = Voltage.Last();
             realTimeData[5] = PowerFactor.Last();
-            realTimeData[6] = peakActivePower;
-            realTimeData[7] = peakReactivePower;
+
 
             return realTimeData;
         }

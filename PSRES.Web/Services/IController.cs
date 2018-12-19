@@ -1,3 +1,5 @@
+using PSRES.Web.ViewModels;
+
 namespace PSRES.Web.Services
 {
     public interface IController
@@ -7,10 +9,6 @@ namespace PSRES.Web.Services
 
         void Dim(int index, byte dutycycle);
         void Dim(byte dutycycle);
-
-
-
-
-
+        MeterViewModel[] GetrealTimeMetersData();
     }
 }

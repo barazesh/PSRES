@@ -1,20 +1,38 @@
-﻿@model MetersViewModel
-@{ 
+﻿@model MeterViewModel[]
+@{
     ViewBag.Title = "Meters";
 }
 
-<div class="col-6 offset-3">
-        <form method="post">
-            <div class="form-group">
-                <label class="form-control-label" for="MetersList">Select Meter:</label>
-                <select class="form-control" asp-for="@Model.Index" id="MetersList">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <option value="@(i+1)"> @Model.MeterNames[i] </option>
-                    }
 
-                </select>
-            </div>
-            <input class="form-group btn btn-primary" type="submit" name="getData" value="get Data" />
-        </form>
-</div>
+@foreach (var meter in Model)
+{
+    <div class="col-4">
+        <h1>@meter.Name</h1>
+        <h2>@meter.SerialCode</h2>
+        <ul>
+            <li>
+                Active Power (KW):     @meter.ActivePower
+            </li>
+
+            <li>
+                Reactive Power (KW):     @meter.ReactivePower
+            </li>
+
+            <li>
+                Current (A):     @meter.Current
+            </li>
+
+            <li>
+                Voltage (V):     @meter.Voltage
+            </li>
+
+            <li>
+                Power Factor:     @meter.PowerFactor
+            </li>
+
+            <li>
+                Frequency (Hz):     @meter.Frequency
+            </li>
+        </ul>
+    </div>
+}

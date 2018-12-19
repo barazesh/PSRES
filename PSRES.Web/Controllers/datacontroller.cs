@@ -29,23 +29,10 @@ namespace PSRES.Web.Controllers
 
         public IActionResult Meters()
         {
-            var meternames = from m in _context.Meters orderby m.Serialcode select m.Name;
-            MetersViewModel meter = new MetersViewModel();
-            meter.MeterNames = meternames.ToList();
 
-            return View(meter);
+            return View(systemControl.GetrealTimeMetersData());
         }
 
-        [HttpPost("data/meters")]
-        public IActionResult Meters(MetersViewModel model)
-        {
-
-            var latestrecording = (from r in _context.MeterRecordings where r.MeterId == model.Index select r).LastOrDefault();
-
-
-
-            return View("MeterData", latestrecording);
-        }
 
         public IActionResult LampControl()
         {

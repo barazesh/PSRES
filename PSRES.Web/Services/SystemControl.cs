@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
+using PSRES.Web.ViewModels;
 using PSRESLogic;
 using System;
 using System.IO;
@@ -22,7 +23,26 @@ namespace PSRES.Web.Services
             Parents = JsonConvert.DeserializeObject<Parent[]>(File.ReadAllText(parentsfilepath));
             Meters = JsonConvert.DeserializeObject<Meter[]>(File.ReadAllText(metersfilepath));
 
+            foreach (var meter in Meters)
+            {
+                meter.MeterDataReady += MeterDataHandler;
+            }
+            MetersPort.DataReceived += Meters[0].DataReceivedHandler;
+            Meters[0].Read(MetersPort);
+
             _Hosting = _hosting;
+        }
+
+        private void MeterDataHandler(int meterId)
+        {
+            MetersPort.DataReceived -= Meters[meterId - 1].DataReceivedHandler;
+            int tempId = meterId;
+            if (tempId == Meters.Length)
+            {
+                tempId = 0;
+            }
+            MetersPort.DataReceived += Meters[tempId].DataReceivedHandler;
+            Meters[tempId].Read(MetersPort);
         }
 
         //initiate the lamps
@@ -142,11 +162,31 @@ namespace PSRES.Web.Services
             ZigbeePort.Close();
 
         }
+
         #endregion
 
         #region Meter
 
+        public MeterViewModel[] GetrealTimeMetersData()
+        {
+            MeterViewModel[] realtimemeterdata = new MeterViewModel[5];
+            for (int i = 0; i < 5; i++)
+            {
+                decimal[] output = Meters[i].GetRealTimeData();
+                realtimemeterdata[i].ActivePower = output[0];
+                realtimemeterdata[i].ReactivePower = output[1];
+                realtimemeterdata[i].Current = output[2];
+                realtimemeterdata[i].Frequency = output[3];
+                realtimemeterdata[i].Voltage = output[4];
+                realtimemeterdata[i].PowerFactor = output[5];
+                realtimemeterdata[i].SerialCode = Meters[i].SerialCode;
+                realtimemeterdata[i].Name = Meters[i].Name;
 
+
+            }
+
+            return realtimemeterdata;
+        }
 
 
 
