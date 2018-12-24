@@ -5,7 +5,9 @@ using PSRESLogic;
 using System;
 using System.IO;
 using System.IO.Ports;
-
+using System.Timers;
+using PSRESData.Entities;
+using PSRESData;
 
 namespace PSRES.Web.Services
 {
@@ -30,18 +32,55 @@ namespace PSRES.Web.Services
             MetersPort.DataReceived += Meters[0].DataReceivedHandler;
             MetersPort.Open();
             Meters[0].Read(MetersPort);
+            timer.Elapsed += OneMinuteMark;
+            timer.Start();
 
             _Hosting = _hosting;
         }
 
-       
+        private void OneMinuteMark(object sender, ElapsedEventArgs e)
+        {
+            using (var context = new PSRESContext())
+            {
 
-        Parent[] Parents = new Parent[7];
+                // add a new entry to timedate table 
+                var newtime = new TimeDateEntity()
+                {
+                    year = (byte)(DateTime.Now.Year-2000),
+                    month = (byte)DateTime.Now.Month,
+                    day = (byte)DateTime.Now.Day,
+                    hour = (byte)DateTime.Now.Hour,
+                    minute = (byte)DateTime.Now.Minute
+                };
+                context.Dates.Add(newtime);
+                context.SaveChanges();
+
+
+                // add sensor recordings
+
+
+                //add meter recordings
+                foreach (var m in Meters)
+                {
+                    MeterRecordingEntity meterdata = m.GetDataForDataBase();
+                    meterdata.datetime = newtime.Id;
+                    context.MeterRecordings.Add(meterdata);
+
+                    m.Reset();
+                }
+
+                //save changes
+                context.SaveChanges();
+                Console.WriteLine("Saved To DataBase");
+            }
+        }
+
+            Parent[] Parents = new Parent[7];
 
         static SerialPort TTLPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
         static SerialPort ZigbeePort = new SerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
         static SerialPort MetersPort = new SerialPort("COM3", 9600, Parity.Even, 7, StopBits.One);
-
+        private Timer timer = new Timer(60000);
 
         public IHostingEnvironment _Hosting { get; }
 
@@ -190,8 +229,6 @@ namespace PSRES.Web.Services
                 realtimemeterdata[i].PowerFactor = output[5];
                 realtimemeterdata[i].SerialCode = Meters[i].SerialCode;
                 realtimemeterdata[i].Name = Meters[i].Name;
-
-
             }
 
             return realtimemeterdata;
@@ -288,39 +325,7 @@ namespace PSRES.Web.Services
         //{
         //    //add data to database
 
-        //    using (var context = new PSRESContext())
-        //    {
-
-        //        // add a new entry to timedate table 
-        //        var newtime = new TimeDateEntity()
-        //        {
-        //            year = DateTime.Now.Year,
-        //            month = (byte)DateTime.Now.Month,
-        //            day = (byte)DateTime.Now.Day,
-        //            hour = (byte)DateTime.Now.Hour,
-        //            minute = (byte)DateTime.Now.Minute
-        //        };
-        //        context.Dates.Add(newtime);
-        //        context.SaveChanges();
-
-
-        //        // add sensor recordings
-
-
-        //        //add meter recordings
-        //        foreach (var m in Meters)
-        //        {
-        //            MeterRecordingEntity meterdata = m.GetDataForDataBase();
-        //            meterdata.TimeDateId = newtime.Id;
-        //            context.MeterRecordings.Add(meterdata);
-
-        //            m.Reset();
-        //        }
-
-        //        //save changes
-        //        context.SaveChanges();
-        //        Console.WriteLine("Saved To DataBase");
-
+            
 
         //    }
         //} 

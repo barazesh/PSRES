@@ -4,7 +4,7 @@ namespace PSRESData.Entities
     public class TimeDateEntity
     {
         public int Id { get; set; }
-        public int year { get; set; }
+        public byte year { get; set; }
         public byte month { get; set; }
         public byte day { get; set; }
         public byte hour { get; set; }

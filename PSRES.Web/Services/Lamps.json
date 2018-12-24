@@ -165,7 +165,7 @@
   "Position": [ 20 ],
    "zone": 3,
    "parent": 2,
-   "PWMpin": 5
+   "PWMpin": 6
  },
  {
    "LampId": 25,
@@ -179,6 +179,6 @@
   "Position": [ 16 ],
    "zone": 3,
    "parent": 2,
-   "PWMpin": 6
+   "PWMpin": 5
  }
 ]

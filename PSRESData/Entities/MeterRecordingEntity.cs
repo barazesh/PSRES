@@ -5,7 +5,7 @@ namespace PSRESData.Entities
         public MeterEntity meter { get; set; }
         public int MeterId { get; set; }
         public TimeDateEntity datetime { get; set; }
-        public int TimeDateId { get; set; }
+        //public int TimeDateId { get; set; }
         public int activeEnergy { get; set; }
         public int peakActivePower { get; set; }
         public int reactiveEnergy { get; set; }
