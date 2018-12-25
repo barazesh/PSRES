@@ -3,33 +3,49 @@
     ViewBag.Title = "Sensor Form";
 }
 
-<div>
-    <form>
+<div class="col-1 bg-secondary">
+    <form method="post">
         <div class="form-group">
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="selectallfield" asp-for="@Model.SelectAll" />
-                <label class="form-check-label">Select All Sensors at Once</label>
-            </div>
+            <label>Zone:</label>
+            <input type="number" min="1" max="3" class="form-control" id="sensorselectorfield" asp-for="@Model.Zone" />
+        </div>
 
-            <input type="number" min="1" max="20" class="form-control" id="sensorselectorfield" />
+        <div class="form-group">
+            <label>Parent:</label>
+            <input type="number" min="1" max="3" class="form-control" id="sensorselectorfield" asp-for="@Model.parentNumber" />
         </div>
 
         <input type="submit" value="Get Data" class="btn btn-primary">
     </form>
 </div>
-<div id="sensorData">
-    <ul>
-        <li>Temperature:</li>
-        <li> Light:</li>
-        <li>Distance:</li>
-        <li>Presence:</li>
-    </ul>
-</div>
-
-<button id="getButton" class="btn"> Get data</button>
-
-
-@section scripts{
-    <script src="~/js/sensorform.js"></script>
+@if (Model.Sensor.Any())
+{
+    for (int i = 0; i < 3; i++)
+    {
+        <div id="sensorData" class="col-3">
+            <h3>Sensor Pack @i</h3>
+            <ul>
+                <li>
+                    Temperature: @Model.Sensor[i].GetLatestData().Temperature;
+                </li>
+                <li>
+                    Light: @Model.Sensor[i].GetLatestData().Illumination;
+                </li>
+                <li>
+                    Distance: @Model.Sensor[i].GetLatestData().Distance;
+                </li>
+                <li>
+                    Presence: @Model.Sensor[i].GetLatestData().Presence;
+                </li>
+            </ul>
+        </div>
+    }
 
 }
+
+
+
+@*@section scripts{
+    <script src="~/js/sensorform.js"></script>
+
+}*@
