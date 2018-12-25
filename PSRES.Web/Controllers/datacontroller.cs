@@ -24,7 +24,15 @@ namespace PSRES.Web.Controllers
 
         public IActionResult Sensors()
         {
-            return View();
+            SensorViewModel sensor = new SensorViewModel();
+            return View(sensor);
+        }
+
+        [HttpPost("data/Sensors")]
+        public IActionResult Sensors(SensorViewModel model)
+        {
+            
+            return View(systemControl.GetrealTimeSensorsData(model.Zone,model.parentNumber));
         }
 
         public IActionResult Meters()

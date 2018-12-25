@@ -13,7 +13,7 @@ namespace PSRES.Web.ViewModels
         public int Zone { get; set; }
         public int parentNumber { get; set; }
 
-        public SensorPack[] Sensor = new SensorPack[3];
+        public InstantSensorData[] Sensor = new InstantSensorData[3];
 
     }
 }

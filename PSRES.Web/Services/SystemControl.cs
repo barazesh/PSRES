@@ -8,10 +8,11 @@ using System.IO.Ports;
 using System.Timers;
 using PSRESData.Entities;
 using PSRESData;
+using System.Linq;
 
 namespace PSRES.Web.Services
 {
-    public class SystemControl:IController
+    public class SystemControl : IController
     {
         public SystemControl(IHostingEnvironment _hosting)
         {
@@ -46,7 +47,7 @@ namespace PSRES.Web.Services
                 // add a new entry to timedate table 
                 var newtime = new TimeDateEntity()
                 {
-                    year = (byte)(DateTime.Now.Year-2000),
+                    year = (byte)(DateTime.Now.Year - 2000),
                     month = (byte)DateTime.Now.Month,
                     day = (byte)DateTime.Now.Day,
                     hour = (byte)DateTime.Now.Hour,
@@ -75,7 +76,7 @@ namespace PSRES.Web.Services
             }
         }
 
-            Parent[] Parents = new Parent[7];
+        Parent[] Parents = new Parent[7];
 
         static SerialPort TTLPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
         static SerialPort ZigbeePort = new SerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
@@ -235,100 +236,23 @@ namespace PSRES.Web.Services
         }
 
 
-
         #endregion
-        #region MyRegion
-        //static SerialPort MetersPort = new SerialPort(SerialPort.GetPortNames()[1], 9600, Parity.Even, 7, StopBits.One);
-        ////static SerialPort SensorsPort = new SerialPort(SerialPort.GetPortNames()[2], 115200, Parity.None, 8, StopBits.One);
 
+        #region Sensors
 
+        public SensorViewModel GetrealTimeSensorsData(int zone, int parentNumber)
+        {
+            SensorViewModel sensor = new SensorViewModel();
+            Parent parent = Parents.Where(p =>
+                            p.Zone == zone 
+                            && p.parentNumber == parentNumber).First();
+            for (int i = 0; i < 3; i++)
+            {
+                sensor.Sensor[i] = parent.Sensor[i].GetLatestData();
+            }
 
-        //static byte[] buffer = new byte[18];
-        //static Parent parent = new Parent(2);
-
-        //static int counter;
-
-
-        //static Timer timer = new Timer(60000);
-
-        //static Meter[] Meters = new Meter[2];
-
-
-        //static void Main(string[] args)
-        //{
-        //    Console.WriteLine(MetersPort.PortName);
-        //    Console.WriteLine("Press any key to begin");
-        //    Console.ReadKey();
-
-        //    timer.Elapsed += oneMinuteMark;
-
-        //    //instantiate the meters
-
-        //    using (var context = new PSRESContext())
-        //    {
-        //        DataBaseSeeder seeder = new DataBaseSeeder(context);
-        //        seeder.Seed();
-        //        var meters = context.Meters.ToArray();
-        //        for (int i = 0; i < Meters.Length; i++)
-        //        {
-        //            Meters[i] = new Meter();
-        //            Meters[i].Id = meters[i].Id;
-        //            Meters[i].SerialCode = meters[i].Serialcode;
-        //            Meters[i].MeterDataReady += MeterDataHandler;
-        //        }
-
-
-
-        //    }
-
-        //    parent.SensorDataReady += SensorDataHandler;
-        //    MetersPort.Open();
-        //    MetersPort.DataReceived += Meters[0].DataReceivedHandler;
-        //    Meters[0].Read(MetersPort);
-        //    timer.Start();
-        //    string input = "";
-        //    while (!input.Equals("q"))
-        //    {
-        //        input = Console.ReadLine();
-
-        //    }
-
-
-
-        //}
-
-
-
-        //private static void SensorDataHandler(bool recived)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private static void MeterDataHandler(int meterId)
-        //{
-        //    //Console.WriteLine(Meters[meterId - 1].ToString());
-
-        //    MetersPort.DataReceived -= Meters[meterId - 1].DataReceivedHandler;
-        //    //this handler calls the next meter to read data
-        //    int i = meterId;//not the last meter in the list. (meterId is 1 based while the index is zero based)
-        //    if (meterId == Meters.Length)//the last meter in the array has been reached so the first one should be read next
-        //    {
-        //        i = 0;
-        //        Console.WriteLine(counter);
-        //        counter++;
-        //    }
-        //    MetersPort.DataReceived += Meters[i].DataReceivedHandler;
-        //    Meters[i].Read(MetersPort);
-        //}
-
-        //private static void oneMinuteMark(object sender, ElapsedEventArgs e)
-        //{
-        //    //add data to database
-
-            
-
-        //    }
-        //} 
+            return sensor;
+        }
         #endregion
 
     }
