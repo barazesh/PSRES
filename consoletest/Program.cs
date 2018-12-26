@@ -12,95 +12,67 @@ namespace consoletest
     class Program
     {
         static int parentIndex;
-        static byte[] buffer = new byte[18];
-
         static Parent[] parents = new Parent[7];
 
+        static SerialPort TTLPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
+        static SerialPort ZigbeePort = new SerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
+
+        static int TTLDelay;
+        static int ZigbeeDelay;
         static void Main(string[] args)
         {
-            SerialPort TTLPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
-            SerialPort ZigbeePort = new SerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
-
             //initiate the parents
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             parents=JsonConvert.DeserializeObject<Parent[]>(File.ReadAllText(path+@"\parents.json"));
 
-            while (true)
+            foreach (var p in parents)
             {
-                Console.WriteLine("Enter Zone:");
-                int zone = 1;
-                try
-                {
-                    zone = int.Parse(Console.ReadLine());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                Console.WriteLine("Enter Parent:");
-                int parentnumber = 1;
-                try
-                {
-                    parentnumber = int.Parse(Console.ReadLine());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                var parentquery = from parent in parents
-                                  where parent.Zone == zone && parent.parentNumber == parentnumber
-                                  select parent;
-                Console.WriteLine("Press any key to read");
-                Console.ReadKey();
-                foreach (var p in parentquery)
-                {
-                    if (zone == 1)
-                    {
-                        TTLPort.DataReceived -= parents[parentIndex].sensorDataReceivedEventHandler;
-                    }
-                    else
-                    {
-                        ZigbeePort.DataReceived -= parents[parentIndex].sensorDataReceivedEventHandler;
-                    }
-                    parentIndex = Array.IndexOf(parents, p);
-                    p.messageDelay = 2000;
-                    p.SensorDataReady += ShowSensordata;
-                    if (zone==1)
-                    {
-                        TTLPort.DataReceived += p.sensorDataReceivedEventHandler;
-                        p.readSensorData(TTLPort);
-                    }
-                    else
-                    {
-                        ZigbeePort.DataReceived += p.sensorDataReceivedEventHandler;
-                        p.readSensorData(ZigbeePort);
-                    }
-                }
-                Console.ReadKey();
+                p.SensorDataReady += SensorDataReadyEventHandler;
             }
+
+            Console.WriteLine("enter the delay for TTL port messages in milliseconds");
+            TTLDelay = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("enter the delay for zigbee port messages in milliseconds");
+            ZigbeeDelay = int.Parse(Console.ReadLine());
+            TTLPort.DataReceived += parents[0].sensorDataReceivedEventHandler;
+            parents[0].messageDelay = 10;
+            parents[0].readSensorData(TTLPort);
+            Console.ReadKey();
 
         }
 
-        private static void ShowSensordata(bool recived)
+        private static void SensorDataReadyEventHandler(bool recived)
         {
-            buffer = parents[parentIndex].buffer;
-            byte[] subbuffer = new byte[6];
-            for (int i = 0; i < 3; i++)
+             
+            if (parents[parentIndex].Zone == 1)
             {
-                Console.WriteLine("Sensor Pack " + (i + 1));
-                Console.WriteLine(parents[parentIndex].Sensor[i].GetLatestData().ToString());
-                Console.WriteLine("Binary:");
-                Array.Copy(buffer, i * 6, subbuffer, 0, 6);
-                Console.WriteLine("");
-                Console.WriteLine(BitConverter.ToString(subbuffer));
-                foreach (var item in subbuffer)
-                {
-                    Console.WriteLine(Convert.ToString(item, 2).PadLeft(8, '0'));
+                TTLPort.DataReceived -= parents[parentIndex].sensorDataReceivedEventHandler;
+            }
+            else
+            {
+                ZigbeePort.DataReceived -= parents[parentIndex].sensorDataReceivedEventHandler;
+            }
 
-                }
-                Console.WriteLine("");
+            parentIndex++;
+            if (parentIndex==7)
+            {
+                parentIndex = 0;
+            }
+
+            if (parents[parentIndex].Zone == 1)
+            {
+                TTLPort.DataReceived += parents[parentIndex].sensorDataReceivedEventHandler;
+                parents[parentIndex].messageDelay = 10;
+                parents[parentIndex].readSensorData(TTLPort);
+            }
+            else
+            {
+                ZigbeePort.DataReceived += parents[parentIndex].sensorDataReceivedEventHandler;
+                parents[parentIndex].messageDelay = 1000;
+                parents[parentIndex].readSensorData(ZigbeePort);
             }
         }
+
     }
 }

@@ -58,7 +58,7 @@ namespace PSRESLogic
                 }
             }
             timer.Interval = messageDelay;
-            timer.Start();
+            //timer.Start();
         }
 
         private void timerelapsed(object sender, ElapsedEventArgs e)
@@ -79,8 +79,10 @@ namespace PSRESLogic
 
         public void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e)
         {
+            Console.WriteLine("sensor data received event fired");
             byte[] readbuffer = new byte[24];
             long a = watch.ElapsedMilliseconds;
+            Console.WriteLine("elapsed time: {0} milliseconds",a);
             SerialPort sp = (SerialPort)sender;
 
             if (Zone ==1)
@@ -93,6 +95,14 @@ namespace PSRESLogic
                 Array.Copy(readbuffer, 4, buffer, 0, 18);
             }
             datarecieved = true;
+            byte[] subbuffer = new byte[6];
+            for (int i = 0; i < 3; i++)
+            {
+                Array.Copy(buffer, i * 6, subbuffer, 0, 6);
+                Sensor[i].Update(subbuffer);
+            }
+            onDataReady(datarecieved);
+
 
         }
 
