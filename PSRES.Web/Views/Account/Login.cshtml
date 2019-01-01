@@ -1,0 +1,28 @@
+﻿@model LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+<div id="id01" class="row">
+    <div class="col-md-4 offset-4">
+        <form method="post">
+
+            <div class="form-group">
+                <label asp-for="UserName"><b>Username</b></label>
+                <input asp-for="UserName" type="text" placeholder="Enter Username" class="form-control">
+                <span asp-validation-for="UserName"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PassWord"><b>Username</b></label>
+                <input asp-for="PassWord" type="password" placeholder="Enter Password" class="form-control">
+                <span asp-validation-for="PassWord"></span>
+            </div>
+            <div>
+                <input asp-for="RememberMe" type="checkbox" checked="checked" class="form-check-inline">
+                <label asp-for="RememberMe">Remember Me?</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+
+        </form>
+    </div>
+</div>

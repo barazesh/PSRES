@@ -1,5 +1,8 @@
 using System.Linq;
 using PSRESData.Entities;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System;
 
 namespace PSRESData
 {
@@ -7,23 +10,43 @@ namespace PSRESData
     {
 
         private readonly PSRESContext _ctx;
+        private readonly UserManager<UserEntity> _userManager;
 
-        public DataBaseSeeder(PSRESContext ctx)
+        public DataBaseSeeder(PSRESContext ctx,
+            UserManager<UserEntity> userManager)
         {
             _ctx = ctx;
+            _userManager = userManager;
         }
 
-        public void Seed()
+        public async Task Seed()
         {
             _ctx.Database.EnsureCreated();
+
+            var user = await _userManager.FindByNameAsync("Admin");
+
+            if (user== null)
+            {
+                user = new UserEntity()
+                {
+                    UserName = "Admin"
+                };
+
+                var result = await _userManager.CreateAsync(user,"P@ssw0rd!");
+                if (result!=IdentityResult.Success)
+                {
+                    throw new InvalidOperationException("Failed to create the admin user");
+                }
+            }
 
             if (!_ctx.Meters.Any())
             {
                 MeterEntity[] meters = new MeterEntity[5];
-                meters[0] = new MeterEntity() {
+                meters[0] = new MeterEntity()
+                {
                     Name = "mainroom HVAC",
                     Serialcode = 18119713646205
-                 };
+                };
 
                 meters[1] = new MeterEntity()
                 {

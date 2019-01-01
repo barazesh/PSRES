@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PSRES.Web.Services;
 using PSRESData;
+using PSRESData.Entities;
 
 namespace PSRES.Web
 {
@@ -21,6 +23,11 @@ namespace PSRES.Web
             services.AddSingleton<IController, SystemControl>();
             services.AddMvc();
             services.AddDbContext<PSRESContext>();
+            services.AddIdentity<UserEntity, IdentityRole>(cfg =>
+            {
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<PSRESContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,6 +38,8 @@ namespace PSRES.Web
                 app.UseDeveloperExceptionPage();
             }
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(cfg =>
             {

@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PSRESData.Entities;
 using System;
 
 namespace PSRESData
 {
-    public class PSRESContext:DbContext
+    public class PSRESContext:IdentityDbContext<UserEntity>
     {
         public DbSet<MeterRecordingEntity> MeterRecordings { get; set; }
         public DbSet<TimeDateEntity> Dates { get; set; }

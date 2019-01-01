@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PSRES.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PSRES.Web.Controllers
 {
@@ -41,7 +42,7 @@ namespace PSRES.Web.Controllers
             return View(systemControl.GetrealTimeMetersData());
         }
 
-
+        [Authorize]
         public IActionResult LampControl()
         {
             return View();

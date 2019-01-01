@@ -15,11 +15,6 @@ namespace PSRES.Web.Controllers
             return View();
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         public IActionResult About()
         {
             ViewBag.title = "About Us";
