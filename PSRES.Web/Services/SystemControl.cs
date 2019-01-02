@@ -64,7 +64,7 @@ namespace PSRES.Web.Services
                 foreach (var m in Meters)
                 {
                     MeterRecordingEntity meterdata = m.GetDataForDataBase();
-                    meterdata.datetime = newtime.Id;
+                    meterdata.TimeDateId = newtime.Id;
                     context.MeterRecordings.Add(meterdata);
 
                     m.Reset();
