@@ -1,0 +1,24 @@
+﻿#lampplan {
+    background-image: url('../img/plans/psres.png');
+    height: 600px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+    #lampplan > label {
+        position: absolute;
+        background-color: yellow;
+        font-size: 14px;
+        line-height:1;
+        border-style:solid;
+        border-width:2px;
+        border-color:black;
+    }
+
+.horizontallamplabel {
+    padding: 0px 45px;
+}
+
+.verticallamplabel {
+    padding: 46px 0px;
+}

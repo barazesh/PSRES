@@ -29,4 +29,10 @@
     <ProjectReference Include="..\PSRESLogic\PSRESLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\data\lampControl.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

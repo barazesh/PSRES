@@ -18,16 +18,7 @@
     vertical-align:middle;
 }
 
-#lampplan {
-    background-image: url('../img/plans/plancheragh.png');
-    height:600px;
-    background-size:contain;
-    background-repeat:no-repeat;
-}
 
-#lampplan > label{
-    position:absolute;
-}
 
         
 

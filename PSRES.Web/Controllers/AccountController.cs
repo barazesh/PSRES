@@ -10,12 +10,12 @@ namespace PSRES.Web.Controllers
 {
     public class AccountController:Controller
     {
-        private readonly Logger<AccountController> logger;
+        //private readonly Logger<AccountController> logger;
 
-        public AccountController(Logger<AccountController> logger)
-        {
-            this.logger = logger;
-        }
+        //public AccountController(Logger<AccountController> logger)
+        //{
+        //    this.logger = logger;
+        //}
 
         public IActionResult Login()
         {
