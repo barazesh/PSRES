@@ -19,8 +19,16 @@ namespace PSRES.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration(SetupConfiguration)
             .UseKestrel()
             .UseIISIntegration()
                 .UseStartup<Startup>();
+
+        private static void SetupConfiguration(WebHostBuilderContext ctx, IConfigurationBuilder builder)
+        {
+            builder.Sources.Clear();
+            builder.AddJsonFile("config.json", false, true);
+            throw new NotImplementedException();
+        }
     }
 }

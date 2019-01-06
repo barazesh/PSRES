@@ -22,7 +22,7 @@ namespace PSRES.Web.Controllers
 
             return View();
         }
-        //[Authorize]
+        [Authorize]
         public IActionResult LampControl()
         {
             return View();

@@ -42,7 +42,7 @@ namespace PSRES.Web.Controllers
             return View(systemControl.GetrealTimeMetersData());
         }
 
-        //[Authorize]
+        [Authorize]
         public IActionResult LampControl()
         {
             return View();

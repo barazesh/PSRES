@@ -6,12 +6,14 @@
 
   <ItemGroup>
     <Content Remove="Services\meters.json" />
+    <Content Remove="Services\metersentity.json" />
     <Content Remove="Views\data\Lamps.json" />
     <Content Remove="Views\data\parents.json" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Services\Lamps.json" />
+    <None Include="Services\metersentity.json" />
     <None Include="Services\meters.json" />
     <None Include="Services\parents.json" />
   </ItemGroup>
