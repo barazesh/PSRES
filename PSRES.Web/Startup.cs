@@ -22,7 +22,7 @@ namespace PSRES.Web
         private readonly IHostingEnvironment env;
 
         public Startup(IConfiguration configuration,
-            IHostingEnvironment env)
+                       IHostingEnvironment env)
         {
             this.configuration = configuration;
             this.env = env;
@@ -47,7 +47,7 @@ namespace PSRES.Web
             });
             services.AddDbContext<PSRESContext>(cfg=>
             {
-                cfg.UseSqlServer(configuration.GetConnectionString("PSRESConnectionString"))
+                cfg.UseSqlServer(configuration.GetConnectionString("PSRESConnectionString"));
             });
 
             services.AddTransient<DataBaseSeeder>();
@@ -60,6 +60,7 @@ namespace PSRES.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
 
             app.UseAuthentication();

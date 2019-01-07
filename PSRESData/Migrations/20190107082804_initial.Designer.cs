@@ -10,8 +10,8 @@ using PSRESData;
 namespace PSRESData.Migrations
 {
     [DbContext(typeof(PSRESContext))]
-    [Migration("20190102072805_relationsfixed")]
-    partial class relationsfixed
+    [Migration("20190107082804_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

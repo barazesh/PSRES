@@ -19,7 +19,7 @@ namespace PSRESData.Entities
         public int peakReactivePower { get; set; }
         public decimal voltage { get; set; }
         public decimal current { get; set; }
-        public decimal powerFactor { get; set; }
+        public byte powerFactor { get; set; }
         public decimal frequency { get; set; }
     }
 }

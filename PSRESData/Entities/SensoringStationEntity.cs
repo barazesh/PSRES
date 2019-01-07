@@ -3,11 +3,11 @@ namespace PSRESData.Entities
 {
     public class SensoringStationEntity
     {
-        public int Id { get; set; }
-        public int Zone { get; set; }
-        public int ParentId { get; set; }
-        public int ParentPin { get; set; }
-        public int PositionId { get; set; }
+        public byte Id { get; set; }
+        public byte Zone { get; set; }
+        public byte ParentId { get; set; }
+        public byte ParentPin { get; set; }
+        public byte PositionId { get; set; }
         public List<SensorRecordingEntity> Recordings { get; set; }
     }
 }

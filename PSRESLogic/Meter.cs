@@ -154,7 +154,7 @@ namespace PSRESLogic
             mr.current = Current.Average();
             mr.frequency = Frequency.Average();
             mr.voltage = Voltage.Average();
-            mr.powerFactor = PowerFactor.Average();
+            mr.powerFactor = (byte)(100*PowerFactor.Average());
             mr.peakActivePower = ActivePower;
             mr.peakReactivePower = ReactivePower;
             mr.MeterId = Id;

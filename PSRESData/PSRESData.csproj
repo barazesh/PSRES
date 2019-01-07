@@ -4,6 +4,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20181224070536_initial.cs" />
+    <Compile Remove="Migrations\20181224071009_initial.cs" />
+    <Compile Remove="Migrations\20190102072805_relationsfixed.cs" />
+    <Compile Remove="Migrations\20190106122508_identity.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />

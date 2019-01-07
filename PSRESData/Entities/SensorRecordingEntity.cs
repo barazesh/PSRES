@@ -8,7 +8,7 @@ namespace PSRESData.Entities
 
         public SensoringStationEntity sensoringStation { get; set; }
         [ForeignKey("sensoringStation")]
-        public int SensoringStationId { get; set; }
+        public byte SensoringStationId { get; set; }
 
         public TimeDateEntity datetime { get; set; }
         [ForeignKey("datetime")]

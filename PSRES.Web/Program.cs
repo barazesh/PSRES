@@ -19,7 +19,7 @@ namespace PSRES.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration(SetupConfiguration)
+            //.ConfigureAppConfiguration(SetupConfiguration)
             .UseKestrel()
             .UseIISIntegration()
                 .UseStartup<Startup>();

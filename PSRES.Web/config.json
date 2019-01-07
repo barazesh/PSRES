@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "TestConnectionString": "@\"Server= ENG-PC\\SQLEXPRESS; DataBase = PSRESDataTest1; Integrated Security = True; MultipleActiveResultSets = True;",
-    "PSRESConnectionString": "@\"Server= WIN-NM20KIRDUPP\\SQLEXPRESS; DataBase = PSRES; Integrated Security = True; MultipleActiveResultSets = True;"
+    "TestConnectionString": "Server= ENG-PC\\SQLEXPRESS; DataBase = PSRESDataTest1; Integrated Security = True; MultipleActiveResultSets = True;",
+    "PSRESConnectionString": "Server= WIN-NM20KIRDUPP\\SQLEXPRESS; DataBase = PSRES; Integrated Security = True; MultipleActiveResultSets = True;"
   }
 }

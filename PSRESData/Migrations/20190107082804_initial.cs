@@ -4,58 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PSRESData.Migrations
 {
-    public partial class relationsfixed : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_MeterRecordings_Dates_datetimeId",
-                table: "MeterRecordings");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SensorRecordings_SensoringStations_SensoringStationEntityId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SensorRecordings_Dates_TimeDateEntityId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropIndex(
-                name: "IX_SensorRecordings_SensoringStationEntityId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropIndex(
-                name: "IX_SensorRecordings_TimeDateEntityId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropIndex(
-                name: "IX_MeterRecordings_datetimeId",
-                table: "MeterRecordings");
-
-            migrationBuilder.DropColumn(
-                name: "SensoringStationEntityId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropColumn(
-                name: "TimeDateEntityId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropColumn(
-                name: "datetimeId",
-                table: "MeterRecordings");
-
-            migrationBuilder.AddColumn<int>(
-                name: "TimeDateId",
-                table: "SensorRecordings",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<int>(
-                name: "TimeDateId",
-                table: "MeterRecordings",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -95,6 +47,53 @@ namespace PSRESData.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    year = table.Column<byte>(nullable: false),
+                    month = table.Column<byte>(nullable: false),
+                    day = table.Column<byte>(nullable: false),
+                    hour = table.Column<byte>(nullable: false),
+                    minute = table.Column<byte>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Meters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Serialcode = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meters", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SensoringStations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Zone = table.Column<int>(nullable: false),
+                    ParentId = table.Column<int>(nullable: false),
+                    ParentPin = table.Column<int>(nullable: false),
+                    PositionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SensoringStations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,20 +202,69 @@ namespace PSRESData.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SensorRecordings_SensoringStationId",
-                table: "SensorRecordings",
-                column: "SensoringStationId");
+            migrationBuilder.CreateTable(
+                name: "MeterRecordings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    MeterId = table.Column<int>(nullable: false),
+                    TimeDateId = table.Column<int>(nullable: false),
+                    activeEnergy = table.Column<int>(nullable: false),
+                    peakActivePower = table.Column<int>(nullable: false),
+                    reactiveEnergy = table.Column<int>(nullable: false),
+                    peakReactivePower = table.Column<int>(nullable: false),
+                    voltage = table.Column<decimal>(nullable: false),
+                    current = table.Column<decimal>(nullable: false),
+                    powerFactor = table.Column<decimal>(nullable: false),
+                    frequency = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MeterRecordings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MeterRecordings_Meters_MeterId",
+                        column: x => x.MeterId,
+                        principalTable: "Meters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MeterRecordings_Dates_TimeDateId",
+                        column: x => x.TimeDateId,
+                        principalTable: "Dates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SensorRecordings_TimeDateId",
-                table: "SensorRecordings",
-                column: "TimeDateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MeterRecordings_TimeDateId",
-                table: "MeterRecordings",
-                column: "TimeDateId");
+            migrationBuilder.CreateTable(
+                name: "SensorRecordings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    SensoringStationId = table.Column<int>(nullable: false),
+                    TimeDateId = table.Column<int>(nullable: false),
+                    Temperature = table.Column<double>(nullable: false),
+                    Illumination = table.Column<double>(nullable: false),
+                    Distance = table.Column<double>(nullable: false),
+                    Presence = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SensorRecordings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SensorRecordings_SensoringStations_SensoringStationId",
+                        column: x => x.SensoringStationId,
+                        principalTable: "SensoringStations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SensorRecordings_Dates_TimeDateId",
+                        column: x => x.TimeDateId,
+                        principalTable: "Dates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -257,45 +305,29 @@ namespace PSRESData.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_MeterRecordings_Dates_TimeDateId",
+            migrationBuilder.CreateIndex(
+                name: "IX_MeterRecordings_MeterId",
                 table: "MeterRecordings",
-                column: "TimeDateId",
-                principalTable: "Dates",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "MeterId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_SensorRecordings_SensoringStations_SensoringStationId",
-                table: "SensorRecordings",
-                column: "SensoringStationId",
-                principalTable: "SensoringStations",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.CreateIndex(
+                name: "IX_MeterRecordings_TimeDateId",
+                table: "MeterRecordings",
+                column: "TimeDateId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_SensorRecordings_Dates_TimeDateId",
+            migrationBuilder.CreateIndex(
+                name: "IX_SensorRecordings_SensoringStationId",
                 table: "SensorRecordings",
-                column: "TimeDateId",
-                principalTable: "Dates",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "SensoringStationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SensorRecordings_TimeDateId",
+                table: "SensorRecordings",
+                column: "TimeDateId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_MeterRecordings_Dates_TimeDateId",
-                table: "MeterRecordings");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SensorRecordings_SensoringStations_SensoringStationId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SensorRecordings_Dates_TimeDateId",
-                table: "SensorRecordings");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -312,84 +344,25 @@ namespace PSRESData.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "MeterRecordings");
+
+            migrationBuilder.DropTable(
+                name: "SensorRecordings");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropIndex(
-                name: "IX_SensorRecordings_SensoringStationId",
-                table: "SensorRecordings");
+            migrationBuilder.DropTable(
+                name: "Meters");
 
-            migrationBuilder.DropIndex(
-                name: "IX_SensorRecordings_TimeDateId",
-                table: "SensorRecordings");
+            migrationBuilder.DropTable(
+                name: "SensoringStations");
 
-            migrationBuilder.DropIndex(
-                name: "IX_MeterRecordings_TimeDateId",
-                table: "MeterRecordings");
-
-            migrationBuilder.DropColumn(
-                name: "TimeDateId",
-                table: "SensorRecordings");
-
-            migrationBuilder.DropColumn(
-                name: "TimeDateId",
-                table: "MeterRecordings");
-
-            migrationBuilder.AddColumn<int>(
-                name: "SensoringStationEntityId",
-                table: "SensorRecordings",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "TimeDateEntityId",
-                table: "SensorRecordings",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "datetimeId",
-                table: "MeterRecordings",
-                nullable: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SensorRecordings_SensoringStationEntityId",
-                table: "SensorRecordings",
-                column: "SensoringStationEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SensorRecordings_TimeDateEntityId",
-                table: "SensorRecordings",
-                column: "TimeDateEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MeterRecordings_datetimeId",
-                table: "MeterRecordings",
-                column: "datetimeId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_MeterRecordings_Dates_datetimeId",
-                table: "MeterRecordings",
-                column: "datetimeId",
-                principalTable: "Dates",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_SensorRecordings_SensoringStations_SensoringStationEntityId",
-                table: "SensorRecordings",
-                column: "SensoringStationEntityId",
-                principalTable: "SensoringStations",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_SensorRecordings_Dates_TimeDateEntityId",
-                table: "SensorRecordings",
-                column: "TimeDateEntityId",
-                principalTable: "Dates",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.DropTable(
+                name: "Dates");
         }
     }
 }

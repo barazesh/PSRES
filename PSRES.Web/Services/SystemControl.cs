@@ -14,7 +14,8 @@ namespace PSRES.Web.Services
 {
     public class SystemControl : IController
     {
-        public SystemControl(IHostingEnvironment _hosting)
+        public SystemControl(IHostingEnvironment _hosting,
+                             PSRESContext context)
         {
             var lampfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\Lamps.json");
             var metersfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\meters.json");
@@ -37,12 +38,11 @@ namespace PSRES.Web.Services
             timer.Start();
 
             _Hosting = _hosting;
+            this.context = context;
         }
 
         private void OneMinuteMark(object sender, ElapsedEventArgs e)
         {
-            using (var context = new PSRESContext())
-            {
 
                 // add a new entry to timedate table 
                 var newtime = new TimeDateEntity()
@@ -73,7 +73,7 @@ namespace PSRES.Web.Services
                 //save changes
                 context.SaveChanges();
                 Console.WriteLine("Saved To DataBase");
-            }
+            
         }
 
         Parent[] Parents = new Parent[7];
@@ -200,7 +200,7 @@ namespace PSRES.Web.Services
 
         Meter[] Meters = new Meter[5];
         int selectedmeterid;
-
+        private readonly PSRESContext context;
 
         private void MeterDataHandler(int meterId)
         {
