@@ -1,0 +1,25 @@
+﻿
+.footeritem {
+    /*border:2px solid white;*/
+}
+
+.footeritem > img {
+
+    width: auto;
+    max-height: 150px;
+    margin: 2px;
+    vertical-align:middle;
+}
+
+.footeritem > a > img {
+    width: auto;
+    max-height:150px;
+    margin: 2px;
+    vertical-align:middle;
+}
+
+
+
+        
+
+    

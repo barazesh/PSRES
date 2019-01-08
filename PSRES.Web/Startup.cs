@@ -60,7 +60,7 @@ namespace PSRES.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseDeveloperExceptionPage();
+            //app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
 
             app.UseAuthentication();
@@ -72,7 +72,7 @@ namespace PSRES.Web
                     new { controller = "main", action = "Index" });
             });
 
-            using (var scope=app.ApplicationServices.CreateScope())
+            using (var scope = app.ApplicationServices.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetService<DataBaseSeeder>();
                 seeder.Seed().Wait();
