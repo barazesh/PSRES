@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace PSRESLogic
 {
@@ -16,6 +18,11 @@ namespace PSRESLogic
         public byte[] Position { get; set; }
         public byte PWMpin { get; set; }
         public byte LampId { get; set; }
+        public SerialPort port { get; set; }
+        public byte MaxIllumination { get; set; }
+        public byte Delay { get; set; }
+
+        private Timer delaytimer= new Timer();
 
 
         public byte[] Dim(byte dimValue)
@@ -40,21 +47,26 @@ namespace PSRESLogic
             return data;
         }
 
+        private void Delaytimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            port.Write(Dim(0), 0, 2);
+        }
+
         public void StateChangedHandler(bool presence)
         {
-            byte dim;
-
-            if (presence)
+            if (delaytimer.Enabled==false)//timer is not already running
             {
-                dim = 100;
-
+                port.Write(Dim(MaxIllumination), 0, 2);
+                delaytimer.Interval = Delay * 1000;
+                delaytimer.Start();
             }
             else
             {
-                dim = 0;
+                delaytimer.Stop();
+                delaytimer.Interval = Delay * 1000;
+                delaytimer.Start();
             }
 
-            //TTLPort.Write(Dim(dim), 0, 2);
         }
 
         public byte[] changeFreqency(byte frequency)
@@ -111,16 +123,21 @@ namespace PSRESLogic
         public Lamp(int parent)
         {
             Parent = (byte)parent;
+            delaytimer.AutoReset = false;
+            delaytimer.Elapsed += Delaytimer_Elapsed;
         }
 
         public Lamp(byte parent)
         {
             Parent = parent;
+            delaytimer.AutoReset = false;
+            delaytimer.Elapsed += Delaytimer_Elapsed;
 
         }
         public Lamp()
         {
-
+            delaytimer.AutoReset = false;
+            delaytimer.Elapsed += Delaytimer_Elapsed;
         }
 
 

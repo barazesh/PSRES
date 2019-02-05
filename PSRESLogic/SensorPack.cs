@@ -50,7 +50,7 @@ namespace PSRESLogic
         {
             bool newpresence = v >= 128;
 
-            if (newpresence!=Presence.LastOrDefault() )
+            if (newpresence!=Presence.LastOrDefault() && newpresence==true)
             {
                 onPreseneChanged(newpresence);
             }

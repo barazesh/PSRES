@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coreconsole", "coreconsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "consoletest", "consoletest\consoletest.csproj", "{CB0B305A-E753-4334-BC3E-0BC7F65F04FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTLSensorReader", "TTLSensorReader\TTLSensorReader.csproj", "{C108B77B-2F3B-46F9-ACD7-1B96A9EEDD98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{CB0B305A-E753-4334-BC3E-0BC7F65F04FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB0B305A-E753-4334-BC3E-0BC7F65F04FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB0B305A-E753-4334-BC3E-0BC7F65F04FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C108B77B-2F3B-46F9-ACD7-1B96A9EEDD98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C108B77B-2F3B-46F9-ACD7-1B96A9EEDD98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C108B77B-2F3B-46F9-ACD7-1B96A9EEDD98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C108B77B-2F3B-46F9-ACD7-1B96A9EEDD98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{26BE0C43-147C-437C-B797-5B343178FF40} = {0D0FD390-7FC3-425B-A8BD-5A3396A97AE5}
 		{376E6C67-2844-4D74-9B07-8FBFDCDB655C} = {ADE81946-9DC3-415F-9B65-5CEB195CE7A4}
 		{CB0B305A-E753-4334-BC3E-0BC7F65F04FD} = {ADE81946-9DC3-415F-9B65-5CEB195CE7A4}
+		{C108B77B-2F3B-46F9-ACD7-1B96A9EEDD98} = {ADE81946-9DC3-415F-9B65-5CEB195CE7A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F16FE849-FAA8-4793-9DAB-A1A7D4C99444}

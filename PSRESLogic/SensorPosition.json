@@ -1,0 +1,51 @@
+[
+  {
+    "Position": 1,
+    "Zone": 1,
+    "Parent": 1,
+    "IDC": 1
+  },
+  {
+    "Position": 2,
+    "Zone": 1,
+    "Parent": 1,
+    "IDC": 2
+  },
+  {
+    "Position": 3,
+    "Zone": 1,
+    "Parent": 1,
+    "IDC": 3
+  },
+  {
+    "Position": 4,
+    "Zone": 1,
+    "Parent": 3,
+    "IDC": 1
+  },
+  {
+    "Position": 5,
+    "Zone": 1,
+    "Parent": 2,
+    "IDC": 2
+  },
+  {
+    "Position": 6,
+    "Zone": 1,
+    "Parent": 2,
+    "IDC": 1
+  },
+  {
+    "Position": 7,
+    "Zone": 1,
+    "Parent": 3,
+    "IDC": 3
+  },
+  {
+    "Position": 8,
+    "Zone": 1,
+    "Parent": 2,
+    "IDC": 3
+  }
+
+]
