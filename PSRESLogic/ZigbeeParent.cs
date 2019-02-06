@@ -10,9 +10,8 @@ namespace PSRESLogic
 {
     public class ZigbeeParent : Parent
     {
-        private Timer timer = new Timer();
 
-        public ZigbeeParent(byte parentnumber) : base(parentnumber)
+        public ZigbeeParent(byte parentnumber, int delay) : base(parentnumber, delay)
         {
             readRequestMessage = new byte[6];
             readRequestMessage[0] = 0xFD;
@@ -20,16 +19,9 @@ namespace PSRESLogic
 
             readRequestMessage[4] = (byte)((parentNumber << 6) + 56);
             readRequestMessage[5] = (byte)~readRequestMessage[0];
-            
-            timer.Elapsed += timerelapsed;
-            timer.AutoReset = false;
+           
         }
 
-
-        private void timerelapsed(object sender, ElapsedEventArgs e)
-        {
-            onDataReady(true);
-        }
 
         public override void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e)
         {

@@ -5,7 +5,7 @@ using System.Timers;
 
 namespace PSRESLogic
 {
-    public delegate void SensorDataReadyHandler(bool recived);
+    public delegate void SensorDataReadyHandler();
 
     public abstract class Parent
     {
@@ -18,6 +18,8 @@ namespace PSRESLogic
 
         public byte[] buffer = new byte[18];
         protected byte[] readRequestMessage;
+        protected Timer timer = new Timer();
+
         public event SensorDataReadyHandler SensorDataReady;
         
 
@@ -35,7 +37,10 @@ namespace PSRESLogic
 
         public abstract void sensorDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e);
 
-
+        protected void timerelapsed(object sender, ElapsedEventArgs e)
+        {
+            onDataReady();
+        }
         protected void TranslateRecivedData(byte[] databuffer)
         {
             byte[] subbuffer = new byte[6];
@@ -46,12 +51,12 @@ namespace PSRESLogic
             }
         }
 
-        protected virtual void onDataReady(bool recived)
+        protected virtual void onDataReady()
         {
-            (SensorDataReady as SensorDataReadyHandler)?.Invoke(recived);
+            (SensorDataReady as SensorDataReadyHandler)?.Invoke();
         }
 
-        public Parent(byte parentnumber)
+        public Parent(byte parentnumber, int delay)
         {
             parentNumber = parentnumber;
 
@@ -59,6 +64,11 @@ namespace PSRESLogic
             {
                 Sensor[i] = new SensorPack();
             }
+
+            timer.Elapsed += timerelapsed;
+            timer.AutoReset = false;
+            timer.Interval = delay;
         }
+
     }
 }

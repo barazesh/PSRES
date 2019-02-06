@@ -10,7 +10,7 @@ namespace PSRESLogic
     public class TTLParent : Parent
     {
 
-        public TTLParent(byte parentnumber) : base(parentnumber)
+        public TTLParent(byte parentnumber, int Delay) : base(parentnumber, Delay)
         {
             readRequestMessage= new byte[2];
             readRequestMessage[0] = (byte)((parentNumber << 6) + 56);
@@ -25,7 +25,7 @@ namespace PSRESLogic
             sp.Read(buffer, 0, 18);
 
             TranslateRecivedData(buffer);
-            onDataReady(true);
+            timer.Start();
         }
     }
     }

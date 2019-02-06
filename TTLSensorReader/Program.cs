@@ -4,6 +4,7 @@ using PSRESLogic;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace TTLSensorReader
 {
@@ -16,18 +17,32 @@ namespace TTLSensorReader
         static int l = 0;
 
         private static int parentIndex;
+        private static bool write2File= false;
 
         static void Main(string[] args)
         {
-            for (int i = 0; i < parents.Length; i++)
-            {
-                parents[i] = new TTLParent((byte)(i + 1));
-                parents[i].SensorDataReady += Program_SensorDataReady;
-            }
             Console.WriteLine("Hello World!");
 
-            Console.WriteLine("enter the delay in seconds");
-            byte delay = byte.Parse(Console.ReadLine());
+            Console.WriteLine("enter the delay for lamps in seconds");
+            byte lampdelay = byte.Parse(Console.ReadLine());
+
+            Console.WriteLine("enter the delay for reading sensors in milliseconds");
+            int sensordelay = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < parents.Length; i++)
+            {
+                parents[i] = new TTLParent((byte)(i + 1), sensordelay);
+                parents[i].SensorDataReady += Program_SensorDataReady;
+            }
+
+            Console.WriteLine("Do you want to write sensor data to file:");
+            Console.Write("Y for yes        Anything else for No");
+            string inputtext = Console.ReadLine().ToLower();
+            if (inputtext=="y")
+            {
+                write2File = true;
+            }
+
 
             //initiate the lamps
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -35,7 +50,7 @@ namespace TTLSensorReader
             foreach (Lamp lamp in Lamps)
             {
                 lamp.MaxIllumination = 100;
-                lamp.Delay = delay;
+                lamp.Delay = lampdelay;
                 lamp.port = TTLPort;
             }
             AssignLampstoSensors();
@@ -82,8 +97,15 @@ namespace TTLSensorReader
             }
         }
 
-        private static void Program_SensorDataReady(bool recived)
+        private static void Program_SensorDataReady()
         {
+            if (write2File)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    logsensordata(parents[parentIndex].Sensor[0],10*parentIndex+i);
+                }
+            }
             TTLPort.DataReceived -= parents[parentIndex].sensorDataReceivedEventHandler;
 
             parentIndex++;
@@ -94,6 +116,23 @@ namespace TTLSensorReader
 
             TTLPort.DataReceived += parents[parentIndex].sensorDataReceivedEventHandler;
             parents[parentIndex].readSensorData(TTLPort);
+        }
+
+        private static void logsensordata(SensorPack sensorPack, int position)
+        {
+            StringBuilder sb = new StringBuilder(4);
+            InstantSensorData data = sensorPack.GetLatestReading();
+            sb.Append(DateTime.Now.Hour.ToString()+",");
+            sb.Append(DateTime.Now.Minute.ToString() + ",");
+            sb.Append(DateTime.Now.Second.ToString() + ",");
+            sb.Append(DateTime.Now.Millisecond.ToString() + ",");
+            sb.Append(position.ToString() + ",");
+            sb.Append(data.Temperature.ToString() + ",");
+            sb.Append(data.Illumination.ToString() + ",");
+            sb.Append(data.Distance.ToString() + ",");
+            sb.AppendLine(data.Presence.ToString());
+
+            File.AppendAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Sensordata.csv", sb.ToString());
         }
     }
 }

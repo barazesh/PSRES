@@ -52,7 +52,7 @@ namespace PSRESLogic
             port.Write(Dim(0), 0, 2);
         }
 
-        public void StateChangedHandler(bool presence)
+        public void StateChangedHandler()
         {
             if (delaytimer.Enabled==false)//timer is not already running
             {
