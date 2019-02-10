@@ -1,4 +1,4 @@
-[
+ [
  {
    "LampId": 1,
   "Position": [ 14 ],
@@ -99,14 +99,14 @@
  },
  {
    "LampId": 15,
-  "Position": [ 6 ],
+  "Position": [ 5,6 ],
    "zone": 1,
    "parent": 2,
    "PWMpin": 2
  },
  {
    "LampId": 16,
-  "Position": [ 2, 3 ],
+  "Position": [ 2, 3,5 ],
    "zone": 1,
    "parent": 1,
    "PWMpin": 3
@@ -127,14 +127,14 @@
  },
  {
    "LampId": 19,
-  "Position": [ 6 ],
+  "Position": [ 5,6 ],
    "zone": 1,
    "parent": 2,
    "PWMpin": 5
  },
  {
    "LampId": 20,
-  "Position": [ 3 ],
+  "Position": [ 3,5 ],
    "zone": 1,
    "parent": 2,
    "PWMpin": 4
