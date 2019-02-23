@@ -20,12 +20,16 @@ namespace PSRES.Web.Services
             var lampfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\Lamps.json");
             var metersfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\meters.json");
             //var parentsfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\parents.json");
+            var sensorpositionfilepath = Path.Combine(_hosting.ContentRootPath, @"Services\SensorPosition.json");
 
 
 
-            Lamps = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(lampfilepath));
+
+              Lamps = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(lampfilepath));
             //Parents = JsonConvert.DeserializeObject<Parent[]>(File.ReadAllText(parentsfilepath));
             Meters = JsonConvert.DeserializeObject<Meter[]>(File.ReadAllText(metersfilepath));
+            SensorPositions = JsonConvert.DeserializeObject<SensorPosition[]>(File.ReadAllText(metersfilepath));
+
 
             foreach (var meter in Meters)
             {
@@ -239,17 +243,18 @@ namespace PSRES.Web.Services
         #endregion
 
         #region Sensors
+        SensorPosition[] sensorPosition = new SensorPosition[20];
 
-        public SensorViewModel GetrealTimeSensorsData(int zone, int parentNumber)
+        public SensorViewModel GetrealTimeSensorsData(int id)
         {
             SensorViewModel sensor = new SensorViewModel();
-            Parent parent = Parents.Where(p =>
-                            p.Zone == zone 
-                            && p.parentNumber == parentNumber).First();
-            for (int i = 0; i < 3; i++)
-            {
-                sensor.Sensor[i] = parent.Sensor[i].GetLatestData();
-            }
+            //Parent parent = Parents.Where(p =>
+            //                p.Zone == zone 
+            //                && p.parentNumber == parentNumber).First();
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    sensor.Sensor[i] = parent.Sensor[i].GetLatestData();
+            //}
 
             return sensor;
         }

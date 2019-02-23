@@ -10,6 +10,6 @@ namespace PSRES.Web.Services
         void Dim(int index, byte dutycycle);
         void Dim(byte dutycycle);
         MeterViewModel[] GetrealTimeMetersData();
-        SensorViewModel GetrealTimeSensorsData(int zone, int parentNumber);
+        SensorViewModel GetrealTimeSensorsData(int id);
     }
 }

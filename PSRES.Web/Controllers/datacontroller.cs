@@ -33,7 +33,7 @@ namespace PSRES.Web.Controllers
         public IActionResult Sensors(SensorViewModel model)
         {
             
-            return View(systemControl.GetrealTimeSensorsData(model.Zone,model.parentNumber));
+            return View(systemControl.GetrealTimeSensorsData(model.Id));
         }
 
         public IActionResult Meters()

@@ -61,13 +61,21 @@ namespace PSRESLogic
             }
         }
 
+        //private bool DetectNewPresence()
+        //{
+        //    bool PresenceSensorDetection=(latestData.Presence == true && Presence.LastOrDefault() == false);
+
+        //    bool DistanceSensorDetection = (latestData.Distance > 10 && latestData.Distance < 120);
+
+        //    return (DistanceSensorDetection || PresenceSensorDetection);
+
+        //}
+
         private bool DetectNewPresence()
         {
-            bool PresenceSensorDetection=(latestData.Presence == true && Presence.LastOrDefault() == false);
 
-            bool DistanceSensorDetection = (latestData.Distance > 10 && latestData.Distance < 120);
+            return latestData.Presence;
 
-            return (DistanceSensorDetection || PresenceSensorDetection);
         }
 
         private bool EvaluateData()

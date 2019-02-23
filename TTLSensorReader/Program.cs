@@ -103,7 +103,7 @@ namespace TTLSensorReader
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    logsensordata(parents[parentIndex].Sensor[0],10*parentIndex+i);
+                    logsensordata(parents[parentIndex].Sensor[i],10*(parentIndex+1)+i+1);
                 }
             }
             TTLPort.DataReceived -= parents[parentIndex].sensorDataReceivedEventHandler;
