@@ -17,10 +17,16 @@ namespace PSRESLogic
         private byte ParentId;
         public InstantSensorData latestData { get; private set; }
 
-        public event PresenceChangedHandler PresenceChanged;
-        protected virtual void onPreseneChanged()
+        public event PresenceChangedHandler ShowUp;
+        protected virtual void onShowUp()
         {
-            (PresenceChanged as PresenceChangedHandler)?.Invoke();
+            (ShowUp as PresenceChangedHandler)?.Invoke();
+        }
+
+        public event PresenceChangedHandler Leave;
+        protected virtual void onLeave()
+        {
+            (Leave as PresenceChangedHandler)?.Invoke();
         }
 
         public InstantSensorData GetLatestReading()
@@ -49,9 +55,13 @@ namespace PSRESLogic
             TranslatePresence(recieveddata[4]);
             if (EvaluateData())
             {
-                if (DetectNewPresence())
+                if (DetectShowUp())
                 {
-                    onPreseneChanged();
+                    onShowUp();
+                }
+                else if(DetectLeave())
+                {
+                    onLeave();
                 }
 
                 Presence.Add(latestData.Presence);
@@ -61,26 +71,29 @@ namespace PSRESLogic
             }
         }
 
-        //private bool DetectNewPresence()
-        //{
-        //    bool PresenceSensorDetection=(latestData.Presence == true && Presence.LastOrDefault() == false);
+        private bool DetectLeave()
+        {
+            bool PresenceSensorDetection = (latestData.Presence == false && Presence.LastOrDefault() == true);
 
-        //    bool DistanceSensorDetection = (latestData.Distance > 10 && latestData.Distance < 120);
+            bool DistanceSensorDetection = (latestData.Distance > 120 && Distance.LastOrDefault() < 120)&&false;
 
-        //    return (DistanceSensorDetection || PresenceSensorDetection);
+            return (DistanceSensorDetection || PresenceSensorDetection);
+        }
 
-        //}
 
-        private bool DetectNewPresence()
+        private bool DetectShowUp()
         {
 
-            return latestData.Presence;
+            bool PresenceSensorDetection = (latestData.Presence == true && Presence.LastOrDefault() == false);
 
+            bool DistanceSensorDetection = (latestData.Distance < 120 && Distance.LastOrDefault() > 120)&&false;
+
+            return (DistanceSensorDetection || PresenceSensorDetection);
         }
 
         private bool EvaluateData()
         {
-            bool distanceElligible = (latestData.Distance < 270);
+            bool distanceElligible = (latestData.Distance < 270 && latestData.Distance > 2);
 
             bool temperatureElligible = (latestData.Temperature < 60);
 

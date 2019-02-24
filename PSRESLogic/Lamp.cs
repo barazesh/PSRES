@@ -52,22 +52,24 @@ namespace PSRESLogic
             port.Write(Dim(0), 0, 2);
         }
 
-        public void StateChangedHandler()
+        public void ShowUpHandler()
         {
-            if (delaytimer.Enabled==false)//timer is not already running
+            if (delaytimer.Enabled == false)//timer is not already running
             {
                 port.Write(Dim(MaxIllumination), 0, 2);
-                delaytimer.Interval = Delay * 1000;
-                delaytimer.Start();
             }
             else
             {
                 delaytimer.Stop();
-                delaytimer.Interval = Delay * 1000;
-                delaytimer.Start();
             }
-
         }
+
+        public void LeaveHandler()
+        {
+            delaytimer.Interval = Delay * 1000;
+            delaytimer.Start();
+        }
+
 
         public byte[] changeFreqency(byte frequency)
         {
