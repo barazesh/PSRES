@@ -26,6 +26,13 @@ namespace TTLSensorReader
             Console.WriteLine("enter the delay for lamps in seconds");
             byte lampdelay = byte.Parse(Console.ReadLine());
 
+
+            Console.WriteLine("enter the maximum illumination for lamps in percents");
+            byte maxillumination = byte.Parse(Console.ReadLine());
+
+            Console.WriteLine("enter the minimum illumination for lamps in percents");
+            byte minillumination = byte.Parse(Console.ReadLine());
+
             Console.WriteLine("enter the delay for reading sensors in milliseconds");
             int sensordelay = int.Parse(Console.ReadLine());
 
@@ -36,7 +43,7 @@ namespace TTLSensorReader
             }
 
             Console.WriteLine("Do you want to write sensor data to file:");
-            Console.Write("Y for yes        Anything else for No");
+            Console.WriteLine("Y for yes        Anything else for No");
             string inputtext = Console.ReadLine().ToLower();
             if (inputtext=="y")
             {
@@ -49,7 +56,8 @@ namespace TTLSensorReader
             Lamps = JsonConvert.DeserializeObject<Lamp[]>(File.ReadAllText(path + @"\Lamps.json"));
             foreach (Lamp lamp in Lamps)
             {
-                lamp.MaxIllumination = 100;
+                lamp.MaxIllumination = maxillumination;
+                lamp.MinIllumination = minillumination;
                 lamp.Delay = lampdelay;
                 lamp.port = TTLPort;
             }

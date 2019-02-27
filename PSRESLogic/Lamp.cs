@@ -20,6 +20,7 @@ namespace PSRESLogic
         public byte LampId { get; set; }
         public SerialPort port { get; set; }
         public byte MaxIllumination { get; set; }
+        public byte MinIllumination { get; set; }
         public byte Delay { get; set; }
 
         private Timer delaytimer= new Timer();
@@ -49,7 +50,7 @@ namespace PSRESLogic
 
         private void Delaytimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            port.Write(Dim(0), 0, 2);
+            port.Write(Dim(MinIllumination), 0, 2);
         }
 
         public void ShowUpHandler()
@@ -60,6 +61,8 @@ namespace PSRESLogic
             }
             else
             {
+                port.Write(Dim(MaxIllumination), 0, 2);
+                delaytimer.Enabled = false;
                 delaytimer.Stop();
             }
         }
@@ -67,6 +70,7 @@ namespace PSRESLogic
         public void LeaveHandler()
         {
             delaytimer.Interval = Delay * 1000;
+            delaytimer.Enabled = true;
             delaytimer.Start();
         }
 
