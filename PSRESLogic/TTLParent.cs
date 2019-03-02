@@ -23,9 +23,13 @@ namespace PSRESLogic
             SerialPort sp = (SerialPort)sender;
 
             sp.Read(buffer, 0, 18);
+            sp.DiscardInBuffer();
+            sp.DiscardOutBuffer();
 
             TranslateRecivedData(buffer);
-            timer.Start();
+
+            //timer.Start();
+            onDataReady();
         }
     }
     }

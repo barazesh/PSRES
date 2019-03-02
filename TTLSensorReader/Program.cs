@@ -100,8 +100,9 @@ namespace TTLSensorReader
                 var lampsquery = from lamp in Lamps where lamp.Position.Contains(sensor.Position) select lamp;
                 foreach (var l in lampsquery)
                 {
-                    parents[sensor.Parent - 1].Sensor[sensor.IDC - 1].ShowUp += l.ShowUpHandler;
-                    parents[sensor.Parent - 1].Sensor[sensor.IDC - 1].Leave += l.LeaveHandler;
+                    parents[sensor.Parent - 1].Sensor[sensor.IDC - 1].RelatedLamps.Add(l);
+                    //parents[sensor.Parent - 1].Sensor[sensor.IDC - 1].ShowUp += l.ShowUpHandler;
+                    //parents[sensor.Parent - 1].Sensor[sensor.IDC - 1].Leave += l.LeaveHandler;
 
                 }
             }

@@ -62,7 +62,7 @@ namespace PSRESLogic
 
             for (int i = 0; i < Sensor.Length; i++)
             {
-                Sensor[i] = new SensorPack();
+                Sensor[i] = new SensorPack(parentnumber,(byte)(i+1));
             }
 
             timer.Elapsed += timerelapsed;

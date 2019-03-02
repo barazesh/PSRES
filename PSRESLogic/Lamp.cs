@@ -53,6 +53,8 @@ namespace PSRESLogic
             port.Write(Dim(MinIllumination), 0, 2);
         }
 
+        
+
         public void ShowUpHandler()
         {
             if (delaytimer.Enabled == false)//timer is not already running
@@ -65,6 +67,16 @@ namespace PSRESLogic
                 delaytimer.Enabled = false;
                 delaytimer.Stop();
             }
+        }
+
+        internal void lightUp()
+        {
+            port.Write(Dim(MaxIllumination), 0, 2);
+        }
+
+        internal void lightDown()
+        {
+            port.Write(Dim(MinIllumination), 0, 2);
         }
 
         public void LeaveHandler()

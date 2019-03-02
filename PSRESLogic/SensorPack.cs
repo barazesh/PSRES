@@ -12,6 +12,9 @@ namespace PSRESLogic
         private List<double> Illumination = new List<double>();
         private List<double> Distance = new List<double>();
         private List<bool> Presence = new List<bool>();
+
+        public List<Lamp> RelatedLamps = new List<Lamp>();
+
         private byte Position;
         private byte IDC;
         private byte ParentId;
@@ -57,11 +60,23 @@ namespace PSRESLogic
             {
                 if (DetectShowUp())
                 {
-                    onShowUp();
+                    foreach (Lamp lamp in RelatedLamps)
+                    {
+                        lamp.lightUp();
+                        //lamp.port.Write(lamp.Dim(lamp.MaxIllumination), 0, 2);
+                    }
+                    //onShowUp();
+                    Console.WriteLine("show-up event fired on parent {0} IDC {1}", ParentId, IDC);
                 }
                 else if(DetectLeave())
                 {
-                    onLeave();
+                    foreach (Lamp lamp in RelatedLamps)
+                    {
+                        lamp.lightDown();
+                        //lamp.port.Write(lamp.Dim(lamp.MinIllumination), 0, 2);
+                    }
+                    //onLeave();
+                    Console.WriteLine("leave event fired on parent {0} IDC {1}", ParentId, IDC);
                 }
 
                 Presence.Add(latestData.Presence);
@@ -147,9 +162,12 @@ namespace PSRESLogic
             latestData.Temperature = temperature;
         }
 
-        public SensorPack()
+        public SensorPack(byte parent, byte idc)
         {
             latestData = new InstantSensorData();
+            ParentId = parent;
+            IDC = idc;
         }
+
     }
 }
