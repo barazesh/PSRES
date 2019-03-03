@@ -12,6 +12,7 @@ namespace PSRESLogic
         private List<double> Illumination = new List<double>();
         private List<double> Distance = new List<double>();
         private List<bool> Presence = new List<bool>();
+        public int Depth { get; set; }
 
         public List<Lamp> RelatedLamps = new List<Lamp>();
 
@@ -58,7 +59,7 @@ namespace PSRESLogic
             TranslatePresence(recieveddata[4]);
             if (EvaluateData())
             {
-                if (DetectShowUp())
+                if (DetectShowUp(Depth))
                 {
                     foreach (Lamp lamp in RelatedLamps)
                     {
@@ -68,7 +69,7 @@ namespace PSRESLogic
                     //onShowUp();
                     Console.WriteLine("show-up event fired on parent {0} IDC {1}", ParentId, IDC);
                 }
-                else if(DetectLeave())
+                else if(DetectLeave(Depth))
                 {
                     foreach (Lamp lamp in RelatedLamps)
                     {
@@ -86,22 +87,68 @@ namespace PSRESLogic
             }
         }
 
-        private bool DetectLeave()
-        {
-            bool PresenceSensorDetection = (latestData.Presence == false && Presence.LastOrDefault() == true);
 
-            bool DistanceSensorDetection = (latestData.Distance > 120 && Distance.LastOrDefault() < 120)&&false;
+        private bool DetectLeave(int counter)
+        {
+
+
+            bool previuosPresence;
+            if (Presence.Count > counter)
+            {
+                previuosPresence = Presence.GetRange(Presence.Count - counter, counter).All(p => p == true);
+            }
+            else
+            {
+                previuosPresence = Presence.All(p => p == true);
+            }
+
+            bool previousDistance;
+            if (Distance.Count > counter)
+            {
+                previousDistance = Distance.GetRange(Distance.Count - counter, counter).All(d => d < 120);
+            }
+            else
+            {
+                previousDistance = Distance.All(d => d < 120);
+            }
+
+
+            bool PresenceSensorDetection = (latestData.Presence == false && previuosPresence);
+
+            bool DistanceSensorDetection = (latestData.Distance > 120 && previousDistance) && false;
 
             return (DistanceSensorDetection || PresenceSensorDetection);
         }
 
 
-        private bool DetectShowUp()
+        private bool DetectShowUp(int counter)
         {
 
-            bool PresenceSensorDetection = (latestData.Presence == true && Presence.LastOrDefault() == false);
 
-            bool DistanceSensorDetection = (latestData.Distance < 120 && Distance.LastOrDefault() > 120)&&false;
+            bool previuosPresence;
+            if (Presence.Count > counter)
+            {
+                previuosPresence = Presence.GetRange(Presence.Count - counter, counter).All(p => p==false);
+            }
+            else
+            {
+                previuosPresence = Presence.All(p => p == false);
+            }
+
+            bool previousDistance;
+            if (Distance.Count > counter)
+            {
+                previousDistance = Distance.GetRange(Distance.Count - counter, counter).All(d => d>120);
+            }
+            else
+            {
+                previousDistance = Distance.All(d => d > 120);
+            }
+
+
+            bool PresenceSensorDetection = (latestData.Presence == true && previuosPresence);
+
+            bool DistanceSensorDetection = (latestData.Distance < 120 && previousDistance)&&false;
 
             return (DistanceSensorDetection || PresenceSensorDetection);
         }

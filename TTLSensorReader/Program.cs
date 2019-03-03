@@ -36,10 +36,18 @@ namespace TTLSensorReader
             Console.WriteLine("enter the delay for reading sensors in milliseconds");
             int sensordelay = int.Parse(Console.ReadLine());
 
+            Console.WriteLine("enter the depth for going back in sensor records");
+            int sensordepth = int.Parse(Console.ReadLine());
+
             for (int i = 0; i < parents.Length; i++)
             {
                 parents[i] = new TTLParent((byte)(i + 1), sensordelay);
                 parents[i].SensorDataReady += Program_SensorDataReady;
+                foreach (SensorPack sensor in parents[i].Sensor)
+                {
+                    sensor.Depth = sensordepth;
+
+                }
             }
 
             Console.WriteLine("Do you want to write sensor data to file:");
@@ -65,29 +73,8 @@ namespace TTLSensorReader
 
             TTLPort.DataReceived += parents[0].sensorDataReceivedEventHandler;
             parents[0].readSensorData(TTLPort);
-            while (false)
-            {
 
-
-                Console.WriteLine("enter the lamp number");
-                bool wronginput = !int.TryParse(Console.ReadLine(), out l);
-                while (wronginput)
-                {
-                    Console.WriteLine("**WARNING!**Please Enter an integer number");
-                    wronginput = !int.TryParse(Console.ReadLine(), out l);
-                }
-                byte duty = 0;
-
-
-                Console.WriteLine("enter the light in percents");
-                wronginput = !byte.TryParse(Console.ReadLine(), out duty);
-                while (wronginput)
-                {
-                    Console.WriteLine("**WARNING!**Please Enter an integer number");
-                    wronginput = !byte.TryParse(Console.ReadLine(), out duty);
-                }
-                TTLPort.Write(Lamps[l-1].Dim(duty), 0, 2);
-            }
+            Console.WriteLine("Press any key to close...");
             Console.ReadKey();
         }
 
